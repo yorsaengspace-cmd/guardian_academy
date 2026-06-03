@@ -1,0 +1,870 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Guardian Academy — แพลตฟอร์มเรียนรู้ไซเบอร์ครบวงจร</title>
+<style>
+  :root{
+    --bg:#060814;--glass:rgba(16,22,42,.72);--glass2:rgba(22,30,56,.55);
+    --line:rgba(90,130,200,.25);--line2:rgba(120,160,230,.45);
+    --txt:#e8f0ff;--dim:#8a9bc0;--dim2:#4a5878;
+    --green:#2bffb0;--red:#ff4d6d;--amber:#ffc046;--cyan:#3de1ff;--purple:#c06bff;--pink:#ff6bd6;
+    --accent:#3de1ff;--accent-rgb:61,225,255;--accent2:#6b8bff;
+    --mono:'SF Mono','JetBrains Mono','Cascadia Code','Courier New',monospace;
+    --display:'Segoe UI','SF Pro Display','Helvetica Neue',system-ui,sans-serif;
+    --thai:'IBM Plex Sans Thai','Leelawadee UI','Sukhumvit Set','Tahoma',sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+  html{font-size:16px}html,body{min-height:100%}
+  body{background:var(--bg);color:var(--txt);font-family:var(--thai);display:flex;align-items:center;justify-content:center;min-height:100vh;padding:16px;overflow-x:hidden;position:relative}
+  #bgCanvas{position:fixed;inset:0;z-index:-3}
+  body::before{content:"";position:fixed;inset:0;z-index:-2;transition:background .8s;
+    background:radial-gradient(ellipse 80% 50% at 50% -10%,rgba(var(--accent-rgb),.16),transparent 60%),radial-gradient(ellipse 60% 50% at 50% 110%,rgba(107,139,255,.12),transparent 60%),linear-gradient(180deg,#070a18 0%,#060814 60%,#04060f 100%)}
+  #stage{width:100%;max-width:940px;perspective:1600px}
+  #app{position:relative;border-radius:20px;overflow:hidden;background:var(--glass);backdrop-filter:blur(20px) saturate(1.3);border:1px solid var(--line2);box-shadow:0 0 0 1px rgba(var(--accent-rgb),.08),0 0 80px rgba(var(--accent-rgb),.08),0 40px 100px rgba(0,0,0,.6),inset 0 1px 0 rgba(255,255,255,.08)}
+  #app.shake{animation:shake .4s cubic-bezier(.36,.07,.19,.97)}
+  @keyframes shake{10%,90%{transform:translateX(-2px)}20%,80%{transform:translateX(4px)}30%,50%,70%{transform:translateX(-7px)}40%,60%{transform:translateX(7px)}}
+  .topglow{position:absolute;top:0;left:0;right:0;height:2px;z-index:5;background:linear-gradient(90deg,transparent,var(--accent),var(--accent2),transparent);opacity:.8;animation:sweep 4s ease-in-out infinite}
+  @keyframes sweep{0%,100%{opacity:.3;transform:translateX(-30%)}50%{opacity:.9;transform:translateX(30%)}}
+  .mono{font-family:var(--mono)}
+  .gradtext{background:linear-gradient(135deg,#fff 10%,var(--accent) 50%,var(--accent2) 90%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+  .fade{animation:fade .5s cubic-bezier(.2,.8,.2,1) both}
+  @keyframes fade{from{opacity:0;transform:translateY(16px) scale(.99)}to{opacity:1;transform:none}}
+  .pop{animation:pop .4s cubic-bezier(.34,1.56,.64,1) both}
+  @keyframes pop{from{opacity:0;transform:scale(.7)}to{opacity:1;transform:scale(1)}}
+  .reveal{animation:reveal .8s cubic-bezier(.34,1.56,.64,1) both}
+  @keyframes reveal{0%{opacity:0;transform:scale(.3) rotate(-12deg)}60%{transform:scale(1.15) rotate(4deg)}100%{opacity:1;transform:scale(1)}}
+  .stagger>*{opacity:0;animation:fade .5s cubic-bezier(.2,.8,.2,1) forwards}
+  .stagger>*:nth-child(1){animation-delay:.05s}.stagger>*:nth-child(2){animation-delay:.13s}.stagger>*:nth-child(3){animation-delay:.21s}.stagger>*:nth-child(4){animation-delay:.29s}.stagger>*:nth-child(5){animation-delay:.37s}.stagger>*:nth-child(6){animation-delay:.45s}.stagger>*:nth-child(7){animation-delay:.53s}
+  .screen{padding:34px 32px}@media(max-width:560px){.screen{padding:22px 16px}}
+  .btn{font-family:var(--mono);cursor:pointer;border-radius:12px;letter-spacing:.5px;transition:transform .15s cubic-bezier(.34,1.56,.64,1),box-shadow .25s,background .25s;user-select:none;position:relative;overflow:hidden;border:none}
+  .btn::after{content:"";position:absolute;inset:0;background:linear-gradient(120deg,transparent 30%,rgba(255,255,255,.18),transparent 70%);transform:translateX(-120%);transition:transform .6s}
+  .btn:hover::after{transform:translateX(120%)}.btn:active{transform:scale(.96)}.btn:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+  .btn-main{display:block;width:100%;padding:16px;font-size:.94rem;font-weight:700;color:#041018;background:linear-gradient(135deg,var(--accent),var(--accent2));box-shadow:0 8px 28px rgba(var(--accent-rgb),.35),inset 0 1px 0 rgba(255,255,255,.4)}
+  .btn-main:hover{transform:translateY(-2px);box-shadow:0 14px 38px rgba(var(--accent-rgb),.5)}
+  .btn-ghost{display:block;width:100%;padding:13px;font-size:.81rem;font-weight:600;color:var(--dim);background:var(--glass2);border:1px solid var(--line)}
+  .btn-ghost:hover{color:var(--txt);border-color:var(--line2);background:rgba(40,55,95,.5)}
+  .kicker{font-family:var(--mono);font-size:.69rem;letter-spacing:5px;color:var(--accent);text-align:center;text-transform:uppercase;opacity:.85;margin-bottom:6px}
+  .logo{font-family:var(--display);font-weight:800;text-align:center;line-height:.92;font-size:clamp(40px,10vw,74px);letter-spacing:-2px;margin:8px 0;filter:drop-shadow(0 4px 30px rgba(var(--accent-rgb),.4))}
+  .tagline{text-align:center;font-family:var(--mono);font-size:.75rem;letter-spacing:3px;color:var(--dim);margin:12px 0 22px}
+  .glasscard{background:var(--glass2);border:1px solid var(--line);border-radius:16px;padding:18px 20px;margin-bottom:16px;position:relative;overflow:hidden}
+  .glasscard::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:linear-gradient(var(--accent),var(--accent2))}
+  .glasscard h3{font-family:var(--mono);color:var(--accent);font-size:.69rem;letter-spacing:2px;margin-bottom:10px;text-transform:uppercase}
+  .glasscard p{font-size:.875rem;line-height:1.75;color:var(--dim)}.glasscard b{color:var(--txt)}
+  .field-lbl{font-family:var(--mono);font-size:.63rem;color:var(--dim);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:7px;display:block}
+  .inp{font-family:var(--thai);width:100%;padding:13px 15px;border:1px solid var(--line);border-radius:12px;background:rgba(8,12,26,.6);color:var(--txt);font-size:.875rem;transition:.2s;margin-bottom:14px}
+  .inp:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(var(--accent-rgb),.15)}.inp::placeholder{color:var(--dim2)}
+  .seg{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+  .seg .opt{flex:1;min-width:74px;font-family:var(--mono);font-size:.72rem;padding:11px;border-radius:11px;cursor:pointer;text-align:center;background:rgba(8,12,26,.5);border:1px solid var(--line);color:var(--dim);transition:.2s}
+  .seg .opt:hover{border-color:var(--line2)}.seg .opt.on{background:linear-gradient(135deg,rgba(var(--accent-rgb),.2),rgba(107,139,255,.12));border-color:var(--accent);color:var(--accent);box-shadow:0 4px 16px rgba(var(--accent-rgb),.2)}
+  .chk{display:flex;align-items:flex-start;gap:11px;cursor:pointer;padding:10px;border-radius:11px;border:1px solid var(--line);background:rgba(8,12,26,.4);transition:.2s;margin-bottom:10px}
+  .chk:hover{border-color:var(--line2)}.chk.on{border-color:var(--green);background:rgba(43,255,176,.06)}
+  .chk .box{width:22px;height:22px;border-radius:7px;border:2px solid var(--dim);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:14px;transition:.2s;margin-top:1px}
+  .chk.on .box{border-color:var(--green);background:var(--green);color:#04140d}.chk .lbl{font-size:.81rem;line-height:1.55}
+  .nav-tabs{display:flex;gap:8px;flex-wrap:wrap}
+  .nav-tabs .tab{flex:1;min-width:88px;font-family:var(--mono);font-size:.69rem;padding:10px;border-radius:10px;cursor:pointer;text-align:center;background:var(--glass2);border:1px solid var(--line);color:var(--dim);transition:.2s}
+  .nav-tabs .tab:hover{border-color:var(--line2);color:var(--txt)}
+  .lvlcard{display:flex;align-items:center;gap:16px;padding:18px 20px;border-radius:16px;cursor:pointer;margin-bottom:13px;border:1px solid var(--line);background:var(--glass2);transition:.25s cubic-bezier(.2,.8,.2,1);position:relative;overflow:hidden}
+  .lvlcard::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--c);box-shadow:0 0 18px var(--c)}
+  .lvlcard:hover{transform:translateX(6px) scale(1.01);border-color:var(--c);box-shadow:0 8px 30px rgba(0,0,0,.4)}
+  .lvlcard.lock{opacity:.4;cursor:not-allowed;filter:grayscale(.7)}.lvlcard.lock:hover{transform:none}.lvlcard.boss{border-style:dashed}
+  .lvlcard .ico{font-size:34px;min-width:52px;text-align:center;filter:drop-shadow(0 0 12px var(--c))}
+  .lvlcard h4{font-family:var(--display);font-size:1.1rem;font-weight:700;margin-bottom:3px}.lvlcard .sub{font-size:.75rem;color:var(--dim)}
+  .lvlcard .rk{margin-left:auto;font-family:var(--mono);font-size:.81rem;font-weight:700;padding:6px 12px;border-radius:10px;border:1px solid var(--line2);color:var(--dim)}
+  .lvlcard .rk.has{color:var(--c);border-color:var(--c)}
+  .hud{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:12px 18px;background:rgba(6,9,20,.65);border-bottom:1px solid var(--line);font-family:var(--mono);font-size:.66rem}
+  .hud .tag{color:var(--accent);font-weight:700;letter-spacing:.5px}.hud .spacer{flex:1}
+  .meter{display:flex;align-items:center;gap:6px}.meter .lab{color:var(--dim);font-size:.56rem}
+  .bar{width:74px;height:8px;background:rgba(8,16,28,.8);border-radius:6px;overflow:hidden;position:relative}
+  .bar>i{display:block;height:100%;border-radius:6px;transition:width .5s cubic-bezier(.2,.8,.2,1);position:relative;overflow:hidden}
+  .bar>i::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.4),transparent);animation:shimmer 2s linear infinite}
+  @keyframes shimmer{from{transform:translateX(-100%)}to{transform:translateX(100%)}}
+  .pct{font-weight:700;font-size:.75rem}
+  .chip{display:flex;align-items:center;gap:4px;padding:4px 9px;border-radius:8px;background:rgba(8,16,28,.6);border:1px solid var(--line)}
+  .chip.tok{color:var(--cyan)}.chip.streak{color:var(--amber)}
+  .streak.hot{animation:flame .5s infinite alternate;text-shadow:0 0 10px var(--amber)}
+  @keyframes flame{to{transform:scale(1.12)}}
+  .iconbtn{cursor:pointer;background:none;border:none;color:var(--dim);font-size:.9rem;transition:.2s;padding:3px}
+  .iconbtn:hover{color:var(--accent);transform:scale(1.15)}
+  .timer{font-weight:700;font-size:.9rem;color:var(--amber);min-width:46px;text-align:right}.timer.low{color:var(--red);animation:pulse .6s infinite}
+  @keyframes pulse{50%{opacity:.4}}
+  .game{display:grid;grid-template-columns:1.5fr 1fr;min-height:380px}@media(max-width:680px){.game{grid-template-columns:1fr}}
+  .evidence{border-right:1px solid var(--line);padding:18px;display:flex;flex-direction:column;gap:11px}@media(max-width:680px){.evidence{border-right:none;border-bottom:1px solid var(--line)}}
+  .plabel{font-family:var(--mono);font-size:.63rem;letter-spacing:1.5px;color:var(--accent);text-transform:uppercase;display:flex;align-items:center;gap:6px}
+  .plabel::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--accent);box-shadow:0 0 8px var(--accent);animation:pulse 2s infinite}
+  .sc-title{font-family:var(--display);font-size:1.04rem;font-weight:700}.sc-sub{font-size:.78rem;color:var(--dim);line-height:1.6}
+  .viewport{position:relative;background:radial-gradient(circle at 50% 40%,#0a1424,#040810);border:1px solid var(--line);border-radius:14px;min-height:190px;display:flex;align-items:center;justify-content:center;overflow:hidden;box-shadow:inset 0 0 40px rgba(var(--accent-rgb),.08)}
+  .viewport .scan{position:absolute;left:0;right:0;height:60px;background:linear-gradient(transparent,rgba(var(--accent-rgb),.12),transparent);animation:scanY 3s ease-in-out infinite}
+  @keyframes scanY{0%{top:-60px}100%{top:100%}}
+  .corner{position:absolute;width:15px;height:15px;border:2px solid var(--accent);opacity:.7}
+  .corner.tl{top:9px;left:9px;border-right:0;border-bottom:0}.corner.tr{top:9px;right:9px;border-left:0;border-bottom:0}.corner.bl{bottom:9px;left:9px;border-right:0;border-top:0}.corner.br{bottom:9px;right:9px;border-left:0;border-top:0}
+  .anomaly{opacity:0;transition:opacity .4s}.viewport.inspect .anomaly{opacity:1}
+  .uimg{max-width:100%;max-height:180px;border-radius:8px;position:relative;z-index:1}
+  .datacard{background:rgba(8,14,28,.6);border:1px solid var(--line);border-radius:12px;padding:13px;font-size:.78rem}
+  .datarow{display:flex;gap:8px;padding:5px 0;border-bottom:1px solid rgba(90,130,200,.1)}.datarow:last-child{border:0}
+  .datarow .k{color:var(--dim);min-width:84px;font-family:var(--mono);font-size:.66rem}.datarow .v{color:var(--txt);flex:1}
+  .msgbox{background:rgba(4,8,16,.7);border-radius:9px;padding:9px 11px;color:#bcd4e8;font-size:.78rem;line-height:1.6;margin:7px 0}
+  .urlbox{background:#04080f;border:1px solid var(--line);border-radius:8px;padding:9px;font-family:var(--mono);font-size:.69rem;word-break:break-all;line-height:1.8}
+  .u-dim{color:#5a7088}.u-warn{color:var(--amber);border-bottom:1px dashed var(--amber)}.u-bad{color:var(--red);background:rgba(255,77,109,.12);padding:1px 4px;border-radius:3px}.u-ok{color:var(--green)}
+  .verifyrow{display:flex;gap:7px;flex-wrap:wrap}
+  .vbtn{flex:1;min-width:96px;font-family:var(--mono);font-size:.66rem;padding:9px 6px;border-radius:10px;cursor:pointer;background:rgba(8,16,28,.6);border:1px solid var(--line);color:var(--accent);transition:.2s;text-align:center}
+  .vbtn:hover{background:rgba(var(--accent-rgb),.1);border-color:var(--accent)}.vbtn.active{background:rgba(var(--accent-rgb),.16);border-color:var(--accent)}
+  .vbtn:disabled{opacity:.35;cursor:not-allowed}.vbtn .cost{display:block;font-size:.56rem;opacity:.7;margin-top:2px}
+  .vbtn.src{color:var(--green);border-color:rgba(43,255,176,.3)}.vbtn.src:hover{background:rgba(43,255,176,.1)}
+  .clues{display:flex;flex-wrap:wrap;gap:6px;min-height:16px}
+  .clue{font-size:.63rem;padding:4px 9px;border-radius:6px;font-family:var(--mono);background:rgba(255,77,109,.1);border:1px solid rgba(255,77,109,.4);color:#ff8fa3;opacity:0;transform:translateY(6px) scale(.9);transition:.35s cubic-bezier(.34,1.56,.64,1)}
+  .clue.show{opacity:1;transform:none}
+  .srcbox{background:rgba(43,255,176,.08);border:1px solid rgba(43,255,176,.4);border-radius:9px;padding:9px 11px;font-size:.72rem;color:#bff5e2;line-height:1.55;animation:bub .4s both}
+  .chat{padding:18px;display:flex;flex-direction:column;gap:9px;min-height:380px}
+  .chat .plabel{color:var(--green)}.chat .plabel::before{background:var(--green);box-shadow:0 0 8px var(--green)}
+  .chatwin{flex:1;background:rgba(4,12,10,.5);border:1px solid rgba(43,255,176,.2);border-radius:14px;padding:11px;display:flex;flex-direction:column;gap:8px;overflow-y:auto;max-height:250px;min-height:150px}
+  .chatwin::-webkit-scrollbar{width:5px}.chatwin::-webkit-scrollbar-thumb{background:rgba(43,255,176,.3);border-radius:3px}
+  .bub{max-width:90%;padding:8px 12px;border-radius:13px;font-size:.76rem;line-height:1.5;animation:bub .35s cubic-bezier(.2,.8,.2,1) both}
+  @keyframes bub{from{opacity:0;transform:translateY(8px) scale(.96)}to{opacity:1;transform:none}}
+  .bub.bot{align-self:flex-start;background:rgba(43,255,176,.1);border:1px solid rgba(43,255,176,.25);color:#c8f5e4;border-bottom-left-radius:4px}
+  .bub.me{align-self:flex-end;background:rgba(var(--accent-rgb),.14);border:1px solid rgba(var(--accent-rgb),.3);color:#d6f3ff;border-bottom-right-radius:4px}
+  .bub .who{font-family:var(--mono);font-size:.56rem;opacity:.7;margin-bottom:3px}
+  .typing{align-self:flex-start;display:flex;gap:4px;padding:10px 13px;background:rgba(43,255,176,.08);border-radius:13px}
+  .typing span{width:6px;height:6px;border-radius:50%;background:var(--green);animation:typ 1.2s infinite}
+  .typing span:nth-child(2){animation-delay:.2s}.typing span:nth-child(3){animation-delay:.4s}
+  @keyframes typ{0%,60%,100%{opacity:.3}30%{opacity:1;transform:translateY(-4px)}}
+  .chatform{display:flex;gap:7px}
+  .chatin{flex:1;font-family:var(--thai);padding:10px 13px;border:1px solid rgba(43,255,176,.25);border-radius:11px;background:rgba(4,12,10,.6);color:var(--txt);font-size:.78rem}
+  .chatin:focus{outline:none;border-color:var(--green)}
+  .chatsend{font-family:var(--mono);padding:0 15px;border-radius:11px;cursor:pointer;border:1px solid var(--green);background:rgba(43,255,176,.12);color:var(--green);font-weight:700}
+  .quickbtn{font-family:var(--mono);font-size:.63rem;padding:6px 9px;border-radius:8px;cursor:pointer;background:rgba(43,255,176,.08);border:1px solid rgba(43,255,176,.25);color:#9fe6cf;white-space:nowrap}
+  .quickbtn:hover{background:rgba(43,255,176,.18)}
+  .actions{background:rgba(6,9,20,.65);border-top:1px solid var(--line);padding:15px 18px;display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap}
+  .actions .prompt{font-family:var(--mono);font-size:.69rem;color:var(--dim);letter-spacing:1px;width:100%;text-align:center;text-transform:uppercase}
+  .abtn{font-family:var(--mono);padding:12px 22px;font-size:.81rem;font-weight:700;letter-spacing:.5px;border-radius:12px;cursor:pointer;transition:.18s cubic-bezier(.34,1.56,.64,1);border:2px solid;background:transparent;display:flex;align-items:center;gap:6px}
+  .abtn:hover{transform:translateY(-3px)}.abtn:active{transform:translateY(0)}.abtn:focus-visible{outline:3px solid currentColor;outline-offset:2px}
+  .abtn .kb{font-size:.56rem;opacity:.6;border:1px solid currentColor;border-radius:4px;padding:0 4px}
+  .a-green{border-color:var(--green);color:var(--green)}.a-green:hover{background:rgba(43,255,176,.12)}
+  .a-red{border-color:var(--red);color:var(--red)}.a-red:hover{background:rgba(255,77,109,.12)}
+  .a-amber{border-color:var(--amber);color:var(--amber)}.a-amber:hover{background:rgba(255,192,70,.12)}
+  .lockwrap{padding:30px 28px;text-align:center}
+  .lockq{font-family:var(--display);font-size:1.2rem;font-weight:700;margin-bottom:6px}
+  .locksub{font-size:.78rem;color:var(--dim);margin-bottom:18px}
+  .eopt{display:flex;align-items:center;gap:11px;width:100%;text-align:left;padding:13px 15px;border-radius:12px;margin-bottom:9px;background:var(--glass2);border:1px solid var(--line);color:var(--txt);font-family:var(--thai);font-size:.82rem;cursor:pointer;transition:.2s}
+  .eopt:hover{border-color:var(--accent);transform:translateX(4px)}.eopt:focus-visible{outline:3px solid var(--accent)}
+  .eopt .ek{font-family:var(--mono);font-weight:700;color:var(--accent);border:1px solid var(--line2);border-radius:6px;padding:2px 8px;font-size:.72rem}
+  .eopt.right{border-color:var(--green);background:rgba(43,255,176,.1)}.eopt.wrong{border-color:var(--red);background:rgba(255,77,109,.1)}
+  .feedback{padding:32px 28px;text-align:center}
+  .fbv{font-family:var(--display);font-size:1.8rem;font-weight:800;margin-bottom:8px}
+  .fbv.ok{color:var(--green);text-shadow:0 0 30px rgba(43,255,176,.4)}.fbv.no{color:var(--red);text-shadow:0 0 30px rgba(255,77,109,.4)}
+  .fbtruth{font-family:var(--mono);font-size:.81rem;color:var(--amber);margin-bottom:10px}
+  .fbmeters{display:flex;gap:10px;justify-content:center;margin-bottom:14px;flex-wrap:wrap}
+  .fbm{font-family:var(--mono);font-size:.75rem;padding:6px 12px;border-radius:9px;border:1px solid var(--line)}
+  .fbex{background:var(--glass2);border:1px solid var(--line);border-radius:14px;padding:16px 18px;font-size:.875rem;line-height:1.75;text-align:left;margin-bottom:20px;position:relative;overflow:hidden}
+  .fbex::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--accent)}.fbex b{color:var(--accent)}
+  .casc{background:rgba(255,77,109,.08);border:1px solid rgba(255,77,109,.4);border-radius:14px;padding:18px 20px;text-align:left;margin-bottom:18px}
+  .casc h3{font-family:var(--mono);color:var(--red);font-size:.75rem;letter-spacing:1px;margin-bottom:8px}
+  .casc p{font-size:.84rem;line-height:1.7;color:var(--txt);margin-bottom:12px}
+  .end{padding:36px 28px;text-align:center}
+  .rankbig{font-family:var(--display);font-size:5.2rem;font-weight:800;line-height:1;margin:8px 0;letter-spacing:-3px}
+  .endt{font-family:var(--mono);font-size:.94rem;letter-spacing:3px;margin-bottom:16px;text-transform:uppercase}
+  .statgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:20px 0}
+  .stat{background:var(--glass2);border:1px solid var(--line);border-radius:14px;padding:15px 6px}
+  .stat .n{font-family:var(--display);font-size:1.5rem;font-weight:800;color:var(--accent)}.stat .l{font-size:.66rem;color:var(--dim);margin-top:4px}
+  .badgegrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(90px,1fr));gap:11px;margin-top:6px}
+  .badge{background:var(--glass2);border:1px solid var(--line);border-radius:14px;padding:13px 6px;text-align:center;transition:.25s}
+  .badge.got{border-color:var(--amber);box-shadow:0 0 20px rgba(255,192,70,.18);background:rgba(255,192,70,.06)}.badge.got:hover{transform:translateY(-4px)}
+  .badge .em{font-size:28px;filter:grayscale(1) opacity(.3)}.badge.got .em{filter:none}
+  .badge .bn{font-size:.63rem;color:var(--dim);margin-top:5px}.badge.got .bn{color:var(--txt)}.badge .bd{font-size:.54rem;color:var(--dim2);margin-top:2px;line-height:1.3}
+  .lbrow{display:flex;align-items:center;gap:12px;padding:12px 15px;border-radius:13px;margin-bottom:8px;background:var(--glass2);border:1px solid var(--line)}
+  .lbrow.me{border-color:var(--accent);background:rgba(var(--accent-rgb),.08)}
+  .lbrow .pos{font-family:var(--display);font-weight:800;font-size:1.1rem;min-width:34px;text-align:center;color:var(--dim)}
+  .lbrow .nm{font-weight:700;font-size:.9rem}.lbrow .meta{font-family:var(--mono);font-size:.6rem;color:var(--dim)}.lbrow .sc{font-family:var(--display);font-weight:800;font-size:1.1rem;color:var(--accent)}
+  .podium{display:flex;justify-content:center;align-items:flex-end;gap:9px;margin:10px 0 22px}
+  .pod{text-align:center;border-radius:12px 12px 0 0;padding:13px 11px 11px;min-width:80px;background:linear-gradient(180deg,var(--glass2),rgba(8,12,26,.3));border:1px solid var(--line);border-bottom:0}
+  .pod .av{font-size:26px}.pod .pn{font-size:.72rem;font-weight:700;margin-top:5px;max-width:74px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.pod .ps{font-family:var(--mono);font-size:.66rem;color:var(--accent)}
+  .pod.p1{height:124px;border-color:#ffd700}.pod.p2{height:100px;border-color:#c0c8d8}.pod.p3{height:82px;border-color:#cd7f32}
+  .cert{border:2px solid var(--amber);border-radius:18px;padding:26px 20px;margin:10px 0 20px;background:radial-gradient(ellipse at 50% 0%,rgba(255,192,70,.12),transparent 70%);position:relative;overflow:hidden}
+  .cert::before,.cert::after{content:"✦";position:absolute;color:rgba(255,192,70,.3);font-size:20px}.cert::before{top:12px;left:14px}.cert::after{bottom:12px;right:14px}
+  .cert .seal{font-family:var(--mono);font-size:.75rem;letter-spacing:4px;color:var(--amber)}
+  .cert .big{font-family:var(--display);font-size:clamp(24px,6vw,38px);font-weight:800;color:#fff;margin:10px 0;text-shadow:0 0 30px rgba(255,192,70,.5)}
+  .qopt{display:flex;align-items:center;gap:11px;width:100%;text-align:left;padding:14px 16px;border-radius:13px;margin-bottom:9px;background:var(--glass2);border:1px solid var(--line);color:var(--txt);font-family:var(--thai);font-size:.84rem;cursor:pointer;transition:.2s}
+  .qopt:hover{border-color:var(--accent);transform:translateX(4px)}.qopt.right{border-color:var(--green);background:rgba(43,255,176,.1)}.qopt.wrong{border-color:var(--red);background:rgba(255,77,109,.1)}
+  .qopt .qk{font-family:var(--mono);font-weight:700;color:var(--accent);border:1px solid var(--line2);border-radius:7px;padding:3px 9px}
+  .qbar{height:6px;border-radius:4px;background:rgba(8,16,28,.8);overflow:hidden;margin-bottom:20px}.qbar>i{display:block;height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));transition:width .4s}
+  #toast{position:fixed;top:20px;left:50%;transform:translateX(-50%) translateY(-130px);z-index:300;background:linear-gradient(135deg,rgba(255,192,70,.96),rgba(255,150,40,.96));color:#1a1000;padding:13px 22px;border-radius:14px;font-family:var(--display);font-weight:700;font-size:.86rem;box-shadow:0 12px 40px rgba(255,150,40,.4);transition:transform .5s cubic-bezier(.34,1.56,.64,1);display:flex;align-items:center;gap:10px;max-width:90vw}
+  #toast.show{transform:translateX(-50%) translateY(0)}#toast .te{font-size:24px}
+  #fxCanvas{position:fixed;inset:0;z-index:250;pointer-events:none}
+  .thumbs{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+  .thumb{width:78px;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:rgba(8,12,26,.5)}
+  .thumb img{width:100%;height:54px;object-fit:cover;display:block}.thumb .tg{display:flex;font-family:var(--mono);font-size:.54rem}
+  .thumb .tg span{flex:1;text-align:center;padding:4px 0;cursor:pointer;color:var(--dim)}.thumb .tg .on.r{background:rgba(43,255,176,.2);color:var(--green)}.thumb .tg .on.f{background:rgba(255,77,109,.2);color:var(--red)}
+  details summary{cursor:pointer;font-family:var(--mono);font-size:.69rem;color:var(--dim);padding:6px 0;list-style:none}details summary::-webkit-details-marker{display:none}
+  /* Academy phases + lessons + radar + confidence */
+  .phasecard{display:flex;align-items:center;gap:16px;padding:18px 20px;border-radius:16px;cursor:pointer;margin-bottom:13px;border:1px solid var(--line);background:var(--glass2);transition:.25s;position:relative;overflow:hidden}
+  .phasecard::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--c)}
+  .phasecard:hover{transform:translateX(6px);border-color:var(--c)}.phasecard.lock{opacity:.4;cursor:not-allowed}.phasecard.lock:hover{transform:none}
+  .phasecard .num{font-family:var(--display);font-size:2rem;font-weight:800;min-width:52px;text-align:center;color:var(--c)}
+  .phasecard h4{font-weight:700;margin-bottom:2px}.phasecard .sub{font-size:.72rem;color:var(--dim)}
+  .phasecard .check{margin-left:auto;font-size:1.3rem}
+  .lessoncard{background:var(--glass2);border:1px solid var(--line);border-radius:14px;padding:18px;margin-bottom:14px;cursor:pointer;transition:.25s;position:relative}
+  .lessoncard:hover{border-color:var(--accent);transform:translateX(4px)}
+  .lessoncard.done{border-color:var(--green);background:rgba(43,255,176,.04)}
+  .lessoncard .lic{font-size:24px;margin-right:10px}.lessoncard .lnm{font-weight:700}.lessoncard .ldone{margin-left:auto;color:var(--green)}
+  .lpage{padding:26px 24px}.lpage .hook{background:linear-gradient(135deg,rgba(var(--accent-rgb),.12),rgba(107,139,255,.08));border:1px solid var(--line2);border-radius:14px;padding:18px;margin-bottom:18px;font-size:.94rem;line-height:1.7;text-align:center}
+  .lpage .pts{list-style:none;margin-bottom:18px}.lpage .pts li{padding:8px 0;border-bottom:1px solid var(--line);font-size:.875rem;line-height:1.7}.lpage .pts li:last-child{border:0}
+  .lpage .exbox{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:18px}
+  .lpage .exgood,.lpage .exbad{border-radius:12px;padding:14px;font-size:.78rem;line-height:1.6}
+  .lpage .exgood{background:rgba(43,255,176,.08);border:1px solid rgba(43,255,176,.3);color:#c8f5e4}
+  .lpage .exbad{background:rgba(255,77,109,.08);border:1px solid rgba(255,77,109,.3);color:#ffc0c8}
+  @media(max-width:560px){.lpage .exbox{grid-template-columns:1fr}}
+  .conf-row{width:100%;padding:0 8px 10px;display:flex;align-items:center;gap:10px}
+  .conf-row label{font-family:var(--mono);font-size:.66rem;color:var(--dim);white-space:nowrap}
+  .conf-row input[type=range]{flex:1;accent-color:var(--accent);height:6px}
+  .conf-row .cv{font-family:var(--display);font-weight:800;font-size:1rem;color:var(--accent);min-width:36px;text-align:right}
+  .radar-wrap{display:flex;justify-content:center;margin:18px 0}
+  .tb-npc{display:flex;gap:12px;align-items:flex-start;margin-bottom:16px}
+  .tb-npc .av{font-size:36px;flex-shrink:0}.tb-npc .bubble{background:rgba(43,255,176,.08);border:1px solid rgba(43,255,176,.3);border-radius:14px;padding:14px;font-size:.875rem;line-height:1.7;color:#c8f5e4}
+  .plog{width:100%;border-collapse:separate;border-spacing:0;font-size:.72rem}
+  .plog th{font-family:var(--mono);font-size:.6rem;color:var(--dim);padding:6px 8px;border-bottom:1px solid var(--line);text-align:left}
+  .plog td{padding:6px 8px;border-bottom:1px solid rgba(90,130,200,.1)}
+  .plog tr.ok td{color:var(--green)}.plog tr.no td{color:var(--red)}
+  @media print{body{background:#fff}#bgCanvas,body::before,#toast,#fxCanvas,.topglow,.btn,.nav-tabs{display:none!important}#app{box-shadow:none;border:none;backdrop-filter:none}.cert .big,.gradtext{-webkit-text-fill-color:#1a1000;color:#1a1000}*{color:#1a1000!important}}
+</style>
+</head>
+<body>
+<canvas id="bgCanvas"></canvas>
+<div id="stage"><div id="app"></div></div>
+<canvas id="fxCanvas"></canvas>
+<div id="toast"><span class="te"></span><span class="tt"></span></div>
+<script>
+"use strict";
+/* ====== CONFIG ====== */
+const CONFIG={meterStart:100,healOnCorrect:4,pen:{fn:22,fp:14},timeoutPen:8,
+  baseScore:10,bonusTimeDiv:6,comboStep:3,comboInc:0.5,evidenceBonus:6,
+  tokens:{easy:16,normal:12,hard:9},cost:{inspect:1,cross:2,hint:1},
+  time:{easy:60,normal:45,hard:30},mult:{easy:0.6,normal:1,hard:1.4}};
+
+/* ====== PARTICLES ====== */
+(function(){const cv=document.getElementById("bgCanvas"),ctx=cv.getContext("2d");let W,H,pts=[];
+  function rs(){W=cv.width=innerWidth;H=cv.height=innerHeight;}rs();addEventListener("resize",rs);
+  const N=Math.min(70,Math.floor(innerWidth/22));for(let i=0;i<N;i++)pts.push({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*.3,vy:(Math.random()-.5)*.3,r:Math.random()*1.6+.4});
+  function rgb(){return getComputedStyle(document.documentElement).getPropertyValue("--accent-rgb").trim()||"61,225,255";}
+  function tick(){ctx.clearRect(0,0,W,H);const c=rgb();for(let i=0;i<pts.length;i++){const p=pts[i];p.x+=p.vx;p.y+=p.vy;if(p.x<0||p.x>W)p.vx*=-1;if(p.y<0||p.y>H)p.vy*=-1;ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,7);ctx.fillStyle="rgba("+c+",.5)";ctx.fill();for(let j=i+1;j<pts.length;j++){const q=pts[j],dx=p.x-q.x,dy=p.y-q.y,d=dx*dx+dy*dy;if(d<11000){ctx.beginPath();ctx.moveTo(p.x,p.y);ctx.lineTo(q.x,q.y);ctx.strokeStyle="rgba("+c+","+(.12*(1-d/11000))+")";ctx.lineWidth=.5;ctx.stroke();}}}requestAnimationFrame(tick);}tick();})();
+
+/* ====== FX ====== */
+function fxParticles(cx,cy,n,spread){const c=document.getElementById("fxCanvas"),x=c.getContext("2d");let W=c.width=innerWidth,H=c.height=innerHeight;
+  const cols=["#3de1ff","#2bffb0","#ffc046","#ff4d6d","#c06bff","#ff6bd6"];let P=[];
+  for(let i=0;i<n;i++){const a=Math.random()*Math.PI*2,sp=Math.random()*spread+2;P.push({x:cx,y:cy,vx:Math.cos(a)*sp,vy:Math.sin(a)*sp-(spread>8?6:2),g:.35,r:Math.random()*6+2,c:cols[i%cols.length],a:1,rot:Math.random()*6,vr:(Math.random()-.5)*.35});}
+  let t=0;function loop(){x.clearRect(0,0,W,H);t++;P.forEach(p=>{p.vy+=p.g;p.x+=p.vx;p.y+=p.vy;p.rot+=p.vr;p.a-=.012;x.save();x.translate(p.x,p.y);x.rotate(p.rot);x.globalAlpha=Math.max(0,p.a);x.fillStyle=p.c;x.fillRect(-p.r/2,-p.r/2,p.r,p.r*.6);x.restore();});if(t<120)requestAnimationFrame(loop);else x.clearRect(0,0,W,H);}loop();}
+function confetti(){fxParticles(innerWidth/2,innerHeight*.32,150,14);}
+function shake(){app.classList.remove("shake");void app.offsetWidth;app.classList.add("shake");}
+
+/* ====== AUDIO ====== */
+let actx=null,bgmId=null;
+function ac(){if(!actx){try{actx=new(window.AudioContext||window.webkitAudioContext)();}catch(e){}}return actx;}
+function beep(f,d,t,v,delay){const a=ac();if(!a)return;const tm=a.currentTime+(delay||0);const o=a.createOscillator(),g=a.createGain();o.type=t||"square";o.frequency.setValueAtTime(f,tm);g.gain.setValueAtTime(0,tm);g.gain.linearRampToValueAtTime(v||.1,tm+.01);g.gain.exponentialRampToValueAtTime(.0001,tm+d);o.connect(g);g.connect(a.destination);o.start(tm);o.stop(tm+d+.02);}
+function playBGM(){if(!state.sound)return;stopBGM();function loop(){const p=[[110,.18,"square",.04],[165,.12,"triangle",.03],[147,.12,"triangle",.025],[165,.18,"triangle",.03],[110,.18,"square",.04],[196,.12,"triangle",.03],[175,.12,"triangle",.025],[220,.18,"triangle",.03]];let tm=0;p.forEach(b=>{setTimeout(()=>beep(b[0],b[1],b[2],b[3]),tm);tm+=b[1]*1000+90;});bgmId=setTimeout(loop,2700);}loop();}
+function stopBGM(){if(bgmId)clearTimeout(bgmId);bgmId=null;}
+function sfx(n){if(!state.sound)return;
+  if(n==="click")beep(440,.05,"square",.06);else if(n==="hint"){beep(520,.08,"triangle",.08);beep(720,.1,"triangle",.07,.08);}
+  else if(n==="inspect"){beep(300,.05,"sawtooth",.05);beep(620,.06,"sawtooth",.04,.05);}else if(n==="correct")[523,659,784,1046].forEach((f,i)=>beep(f,.16,"triangle",.09,i*.07));
+  else if(n==="wrong"){beep(160,.3,"sawtooth",.11);beep(110,.35,"sawtooth",.1,.1);}else if(n==="breach")[400,300,200,120].forEach((f,i)=>beep(f,.18,"sawtooth",.11,i*.1));
+  else if(n==="win")[523,659,784,1046,1318].forEach((f,i)=>beep(f,.22,"triangle",.1,i*.1));else if(n==="badge")[784,1046,1318,1568].forEach((f,i)=>beep(f,.18,"triangle",.1,i*.08));
+  else if(n==="msg")beep(880,.05,"sine",.04);else if(n==="combo")beep(660+state.streak*40,.1,"square",.07);}
+
+/* ====== DATA ====== */
+const mechBtn={b2:[["✓ REAL","a-green","REAL"],["✗ DEEPFAKE","a-red","DEEPFAKE"]],
+  phish:[["✓ ALLOW","a-green","ALLOW"],["✗ BLOCK","a-red","BLOCK"]],
+  v3:[["✓ COMPLIANT","a-green","COMPLIANT"],["⚠ NEEDS CONSENT","a-amber","NEEDS_CONSENT"],["✗ VIOLATION","a-red","VIOLATION"]]};
+const sevRank={COMPLIANT:0,NEEDS_CONSENT:1,VIOLATION:2};
+const LV={
+1:{name:"DEEPFAKE MATRIX",sub:"จับผิดสื่อ AI ดัดแปลง",ico:"🎭",mech:"b2",rgb:"61,225,255",c:"#3de1ff",d:[
+  {ty:"ภาพวิดีโอ",ti:"ใบหน้าที่ถูกเปลี่ยน",sb:"นักการเมือง 'ประกาศ' ยกเลิก VAT — แชร์ใน LINE",an:"DEEPFAKE",cl:["ไม่มีสำนักข่าวอื่นรายงาน","ขอบขมับเบลอ","ม่านตาไม่เท่ากัน"],hi:["เริ่มจากแหล่งที่มา: ข่าวใหญ่จริงสำนักข่าวหลักควรรายงานพร้อมกันไหม?","ค่อยดูภาพ: รอยต่อขอบผมเบลอไหม?","AI ใหม่ลบ artifact ได้ แต่แหล่งปลอมยาก — เชื่อแหล่งนี้แค่ไหน?"],ex:"<b>Face-swap Deepfake</b> — Lateral Reading คือคำตอบ: ไม่มีแหล่งทางการยืนยัน + artifact (ขอบเบลอ ม่านตาไม่สมมาตร) เป็นตัวช่วยรอง",dr:()=>'<ellipse cx="65" cy="82" rx="50" ry="58" fill="#c39e76"/><ellipse cx="65" cy="24" rx="46" ry="24" fill="#7a5230"/><rect x="30" y="60" width="24" height="15" rx="3" fill="#0a0505"/><circle cx="41" cy="68" r="6" fill="#3a2818"/><rect x="76" y="61" width="22" height="13" rx="3" fill="#0a0505"/><circle cx="87" cy="68" r="4" fill="#3a2818"/><path d="M44 102 Q65 110 86 100" stroke="#7a5440" stroke-width="2.5" fill="none"/><g class="anomaly"><rect x="26" y="40" width="22" height="40" fill="none" stroke="#ff4d6d" stroke-dasharray="4,3" rx="3"/><circle cx="41" cy="68" r="9" fill="none" stroke="#ffc046"/><circle cx="87" cy="68" r="6" fill="none" stroke="#ffc046"/></g>'},
+  {ty:"คลิปเสียง",ti:"เสียงครูที่คุณรู้จัก",sb:"เสียง 'ครู' ขอโอนค่าทัศนศึกษา 'ด่วนวันนี้'",an:"DEEPFAKE",cl:["ช่องทางผิดปกติ ไม่ผ่านโรงเรียน","พูด 25 วิ ไม่หายใจ","ไม่มี ambient noise"],hi:["ครูจริงขอโอนเงินผ่านคลิปเสียง หรือผ่านช่องทางทางการ?","กด INSPECT ดูคลื่น — 25 วิ ไม่หายใจได้ไหม?","วิธีชัวร์สุดคือโทรกลับยืนยัน — คลิปนี้น่าเชื่อแค่ไหน?"],ex:"<b>Voice Clone + Social Engineering</b> — ยืนยันแหล่งก่อน (โทรกลับช่องทางทางการ) เบาะแสเสริม: ไม่มีช่องหายใจ + เร่งด่วนคือกลลวง",dr:()=>{let b="";for(let i=0;i<46;i++){const x=8+i*2.6,h=10+Math.abs(Math.sin(i*.9))*9;b+='<rect x="'+x+'" y="'+(75-h/2)+'" width="1.6" height="'+h+'" fill="#2bffb0" opacity=".8"/>';}return '<rect x="4" y="40" width="122" height="70" rx="4" fill="#020a08" stroke="#0a4030"/>'+b+'<g class="anomaly"><rect x="6" y="42" width="120" height="66" fill="none" stroke="#ff4d6d" stroke-dasharray="4,3"/></g>';}},
+  {ty:"ภาพถ่าย",ti:"ภาพนี้จริงนะ?",sb:"ภาพงาน Tech Expo นักธุรกิจ โพสต์โดยเพจ verified",an:"REAL",cl:["มีหลายแหล่งยืนยันงานจริง","แสง-เงาสอดคล้อง","ไม่พบ artifact"],hi:["ค้นว่ามีแหล่งอื่นรายงานงานนี้ไหม — ยืนยันได้หลายที่บอกอะไร?","INSPECT หาของผิดปกติ — ถ้าไม่เจอ + แหล่งน่าเชื่อ บอกอะไร?","จับแพะ (จริงเป็นปลอม) ก็สร้าง misinformation — มั่นใจแค่ไหน?"],ex:"<b>ภาพจริง (REAL)</b> — ความสงสัยต้องมีหลักฐาน เมื่อหลายแหล่งยืนยัน + ไม่พบ artifact ควรตัดสินจริง การระแวงทุกอย่างก็เป็นปัญหา",dr:()=>'<rect x="14" y="36" width="102" height="78" rx="6" fill="#0a1620"/><ellipse cx="56" cy="78" rx="22" ry="28" fill="#caa884"/><circle cx="49" cy="74" r="2.5" fill="#1a1008"/><circle cx="63" cy="74" r="2.5" fill="#1a1008"/><path d="M49 88 Q56 92 63 88" stroke="#6a4a35" stroke-width="1.5" fill="none"/><circle cx="98" cy="48" r="6" fill="#ffe08a" opacity=".5"/>'},
+  {ty:"คลิปโฆษณา",ti:"ดาราที่ไม่เคยโฆษณา",sb:"ดาราแนะนำ Crypto 'รับรองกำไร 300% ใน 2 สัปดาห์'",an:"DEEPFAKE",cl:["ดาราไม่เคยประกาศเรื่องนี้","กระพริบตา 2 ครั้ง/15วิ","'กำไร 300%' = red flag"],hi:["ตรวจแหล่ง: ดาราเคยประกาศร่วมโครงการนี้ในช่องทางทางการไหม?","INSPECT นับกระพริบตา — 15 วิ กี่ครั้ง?","'กำไร 300%' สมเหตุสมผลไหม? รวมกับแหล่งตรวจไม่ได้บอกอะไร?"],ex:"<b>Face-swap หลอกลงทุน</b> — ตรวจแหล่ง (ดาราไม่เคยประกาศ) + 'กำไร 300%' คือ red flag การเงิน เสริม: กระพริบต่ำ + ปากไม่ sync",dr:()=>'<ellipse cx="65" cy="80" rx="38" ry="44" fill="#d2ab82"/><ellipse cx="65" cy="44" rx="34" ry="18" fill="#2a1a10"/><rect x="44" y="66" width="18" height="6" rx="3" fill="#0a0505"/><rect x="68" y="66" width="18" height="6" rx="3" fill="#0a0505"/><g class="anomaly"><rect x="44" y="62" width="42" height="14" fill="none" stroke="#ffc046" stroke-dasharray="3,2" rx="2"/></g>'},
+  {ty:"คลิปวิดีโอ",ti:"คลิปในกลุ่มไลน์ห้อง",sb:"นักเรียน 'ยอมรับโกงข้อสอบ' ส่งจากบัญชีไม่รู้จัก",an:"DEEPFAKE",cl:["แหล่งไม่ระบุตัวตน","ขอบหูเบลอ","ปากไม่ sync"],hi:["ใครส่ง? บัญชีไม่มีตัวตน ไม่รู้ที่มา — เชื่อได้ไหม?","INSPECT ดูใบหูและคอตอนหันหน้า","ถ้าปลอมแล้วถูกแชร์ ทำลายชีวิตเพื่อน — คนแชร์ต่อผิดอะไร?"],ex:"<b>Deepfake เพื่อ Cyberbullying</b> — แหล่งนิรนามคือ red flag เสริม: หูเบลอ ปากไม่ sync และการสร้าง/แชร์ละเมิด PDPA + พ.ร.บ.คอมพ์ฯ ม.16",dr:()=>'<ellipse cx="62" cy="80" rx="36" ry="42" fill="#c49a72"/><ellipse cx="62" cy="46" rx="32" ry="17" fill="#1a120a"/><ellipse cx="28" cy="78" rx="6" ry="9" fill="#b88a62"/><rect x="44" y="68" width="15" height="6" rx="3" fill="#0a0505"/><rect x="66" y="68" width="15" height="6" rx="3" fill="#0a0505"/><g class="anomaly"><ellipse cx="28" cy="78" rx="9" ry="12" fill="none" stroke="#ff4d6d" stroke-dasharray="3,2"/></g>'}]},
+2:{name:"PHISHING GATEKEEPER",sub:"คัดกรอง URL/SMS ลวงโลก",ico:"🎣",mech:"phish",rgb:"43,255,176",c:"#2bffb0",d:[
+  {sndr:"+66 ไม่รู้จัก",ti:"เงินรางวัลธนาคาร",msg:"🎉 รับเงิน 5,000 บาท กดยืนยันภายใน 24 ชม.",url:[["https://","dim"],["scb-secure","warn"],[".","dim"],["verify-login","bad"],[".xyz","bad"],["/confirm","dim"]],ph:true,truedom:"verify-login.xyz (ไม่ใช่ธนาคาร)",cl:["domain จริง = verify-login.xyz","TLD .xyz ผิด","เร่งด่วน 24 ชม."],hi:["อ่าน URL ขวาไปซ้าย — ส่วนติด .xyz คือ domain จริง","ธนาคารใช้ TLD .xyz ไหม?","'24 ชม.' ทำให้รู้สึกยังไง?"],ex:"<b>Phishing → BLOCK (TP)</b> — domain จริง verify-login.xyz + TLD .xyz + เร่งด่วน"},
+  {sndr:"noreply@lazada.co.th",ti:"อีเมลยืนยันคำสั่งซื้อ",msg:"คำสั่งซื้อ #TH88142 ยืนยันแล้ว ติดตามพัสดุ",url:[["https://","dim"],["www.lazada.co.th","ok"],["/order/TH88142","dim"]],ph:false,truedom:"lazada.co.th (ร้านจริง)",cl:["domain ตรงร้านจริง",".co.th ถูก","ไม่ขอข้อมูล sensitive"],hi:["อย่าเพิ่งบล็อก! lazada.co.th ตรงเว็บจริงไหม?","ขอรหัสผ่าน/OTP ไหม?","บล็อกของจริงทำผู้ใช้เดือดร้อน"],ex:"<b>ปลอดภัย → ALLOW (TN)</b> — domain ตรง .co.th ถูก บล็อกของจริง = False Positive ทำลายความน่าเชื่อถือ"},
+  {sndr:"security@accounts-g00gle.com",ti:"g00gle ให้รีเซ็ตรหัส",msg:"ตรวจพบเข้าสู่ระบบผิดปกติ ยืนยันทันที",url:[["https://","dim"],["accounts-g00gle","bad"],[".com","dim"],["/reset","dim"]],ph:true,truedom:"ของจริงคือ accounts.google.com",cl:["g00gle ใช้เลข 0 แทน o","ใช้ - แทน .","Typosquatting"],hi:["ดู google — ตัวอักษรทุกตัวเป็นตัวหนังสือจริงไหม?","บางตัวเป็นเลขคล้ายตัวอักษร (Typosquatting)","Google จริงใช้ accounts.google.com"],ex:"<b>Phishing → BLOCK</b> — g00gle ใช้เลข 0 แทน o + ใช้ - แทน ."},
+  {sndr:"SMS อ้าง 'ไปรษณีย์ไทย'",ti:"พัสดุตกค้าง",msg:"พัสดุตกค้าง ชำระค่าธรรมเนียม 3 บาทที่ลิงก์",url:[["http://","bad"],["thaipost-delivery","warn"],[".top","bad"],["/pay","dim"]],ph:true,truedom:"ของจริงคือ thailandpost.co.th",cl:["http:// ไม่เข้ารหัส","TLD .top","ขอเงินน้อยหลอกเลขบัตร"],hi:["ดูตัวหน้าสุด — https หรือ http?","ไปรษณีย์ใช้ domain .top ไหม?","ทำไมขอแค่ 3 บาท?"],ex:"<b>Smishing → BLOCK</b> — http:// + .top + ขอเงินน้อยเพื่อล้วงเลขบัตร"},
+  {sndr:"kruwit@school.ac.th",ti:"ลิงก์ประชุมจากครู",msg:"นักเรียน เข้าห้องเรียนออนไลน์ 13:00 ที่ Google Meet",url:[["https://","dim"],["meet.google.com","ok"],["/abc-defg-hij","dim"]],ph:false,truedom:"meet.google.com (Google จริง)",cl:["meet.google.com จริง",".ac.th สถาบัน","บริบทสมเหตุสมผล"],hi:["ลิงก์มีตัวสุ่มดูแปลก — meet.google.com เป็นบริการจริงไหม?","รหัสห้อง abc-defg-hij ปกติของ Meet ไหม?","'แปลก' ≠ 'อันตราย'"],ex:"<b>ปลอดภัย → ALLOW</b> — meet.google.com จริง: แปลก ≠ อันตราย บล็อกคือ False Positive"},
+  {sndr:"อ้างเป็น PayPal",ti:"IDN Homograph (ขั้นสูง)",msg:"บัญชีถูกระงับ ยืนยันตัวตนเพื่อปลดล็อก",url:[["https://","dim"],["раypal","bad"],[".com","dim"],["/verify","dim"]],ph:true,truedom:"ของจริง paypal.com (ตัวนี้ใช้ซีริลลิก)",cl:["р а เป็นซีริลลิก!","ตาเปล่าแยกไม่ออก","Homograph Attack"],hi:["URL เหมือน paypal.com เป๊ะ — มีอักษรภาษาอื่นที่หน้าตาเหมือนไหม?","Homograph ใช้ซีริลลิกที่คล้ายอังกฤษ","วิธีกัน: พิมพ์ URL เอง"],ex:"<b>IDN Homograph → BLOCK</b> — р а เป็นซีริลลิกหน้าตาเหมือน p, a"}]},
+3:{name:"PDPA FIREWALL",sub:"ตัดสินคดีข้อมูล + Consent",ico:"⚖️",mech:"v3",rgb:"192,107,255",c:"#c06bff",d:[
+  {ctrl:"ร้านชานมไข่มุก",dat:"เบอร์โทร (ตอนสมัครสะสมแต้ม)",pur:"นำไปยิง SMS โฆษณา",con:"ขอแค่ 'เพื่อสะสมแต้ม'",bad:true,ti:"ร้านชานมเก็บเบอร์แล้วยิงโฆษณา",vd:"NEEDS_CONSENT",basis:"ต้องขอ consent สำหรับวัตถุประสงค์ใหม่ (ม.19/ม.21)",cl:["ใช้ผิดวัตถุประสงค์เดิม (ม.21)","ไม่ได้ขอเรื่องโฆษณา"],hi:["ขอเบอร์ 'เพื่อสะสมแต้ม' — ส่งโฆษณาคือวัตถุประสงค์เดียวกันไหม?","นึกถึงเสา 'เฉพาะเจาะจง' (ม.19)","ใช้เพื่อวัตถุประสงค์ใหม่ต้องขออะไร?"],ex:"<b>NEEDS CONSENT</b> — ม.21 ใช้ข้อมูลต้องตรงวัตถุประสงค์ที่แจ้ง การใช้เพื่อโฆษณาต้องขอความยินยอมแยก"},
+  {ctrl:"โรงพยาบาล",dat:"ประวัติการรักษา (ไม่ระบุตัวตนแล้ว)",pur:"ส่งมหาวิทยาลัยทำวิจัยสถิติ",con:"ขอจากผู้ป่วยถูก + ลบข้อมูลระบุตัวตน",bad:false,ti:"โรงพยาบาลส่งข้อมูลทำวิจัย",vd:"COMPLIANT",basis:"Anonymization อยู่นอกขอบเขต PDPA (ม.6) + มี consent",cl:["anonymized แล้ว (นอกขอบเขต ม.6)","มี consent ครบ"],hi:["ข้อมูล 'ไม่ระบุตัวตน' ยังเป็นข้อมูลส่วนบุคคลตาม ม.6 ไหม?","ขอความยินยอมผู้ป่วยก่อนไหม?","consent ครบ + ลบข้อมูลระบุตัว → ทำได้ไหม?"],ex:"<b>COMPLIANT</b> — anonymization จนระบุตัวไม่ได้ ไม่ถือเป็นข้อมูลส่วนบุคคล (ม.6) + มี consent"},
+  {ctrl:"โรงเรียน",dat:"รูปถ่าย + ชื่อเต็ม + เกรด นักเรียน",pur:"โพสต์เพจ Facebook สาธารณะ",con:"❌ ไม่ได้ขอจากนักเรียน/ผู้ปกครอง",bad:true,ti:"โรงเรียนโพสต์รูป+เกรดนักเรียน",vd:"VIOLATION",basis:"ไม่มีฐานกฎหมาย + ผู้เยาว์ต้องขอผู้ปกครอง (ม.20)",cl:["เผยแพร่สาธารณะไม่มีฐาน","ผู้เยาว์ (ม.20)"],hi:["เจตนาดี ≠ ถูกกฎหมาย — โรงเรียนถามก่อนไหม?","'เกรด' ควรให้คนทั้งโลกเห็นไหม?","ผู้เยาว์ต้องขอผู้ปกครอง (ม.20)"],ex:"<b>VIOLATION</b> — เผยแพร่สู่สาธารณะโดยไม่มีฐานกฎหมาย + ไม่ขอ consent + ผู้เยาว์ต้องขอผู้ปกครอง (ม.20)"},
+  {ctrl:"แอปเกมฟรี",dat:"รายชื่อผู้ติดต่อ + ตำแหน่ง",pur:"วิเคราะห์พฤติกรรม + ขายให้โฆษณา",con:"ติ๊กถูกมาให้ + 'ไม่ยอม=เล่นไม่ได้'",bad:true,ti:"แอปกดยอมรับ ติ๊กถูกมาให้แล้ว",vd:"NEEDS_CONSENT",basis:"consent ไม่สมบูรณ์ตามเงื่อนไข ม.19",cl:["ติ๊กล่วงหน้า (ขาดชัดแจ้ง)","บังคับ (ขาดเสรี ม.19)"],hi:["ดู 4 เสา (ม.19) — ช่องติ๊กไว้แล้วผิดเสาไหน?","'ไม่ยอม=เล่นไม่ได้' ขัด 'เสรี' ไหม?","consent ขาด 'ชัดแจ้ง'+'เสรี' ต้องทำอะไร?"],ex:"<b>NEEDS CONSENT</b> — consent ไม่สมบูรณ์ตาม ม.19: ขาดชัดแจ้ง (ติ๊กให้) + เสรี (บังคับ) ต้องขอใหม่"},
+  {ctrl:"ร้านค้าออนไลน์",dat:"ชื่อ-ที่อยู่-ประวัติสั่งซื้อ",pur:"เก็บออกใบกำกับภาษีตามกฎหมาย",con:"ไม่ได้ขอ consent",bad:false,ti:"ร้านค้าเก็บประวัติเพื่อภาษี",vd:"COMPLIANT",basis:"ฐานหน้าที่ตามกฎหมาย (ม.24)",cl:["มีฐานหน้าที่ตามกฎหมาย (ม.24)"],hi:["อย่าเพิ่งตัดสินผิดเพราะ 'ไม่ขอ consent' — ม.24 มีฐานอื่น","ต้องเก็บเพื่อภาษีตามสรรพากร — ขอ consent ไหม?","การปฏิบัติตามกฎหมายใช้แทน consent ได้"],ex:"<b>COMPLIANT (Trap!)</b> — ม.24 ประมวลผลได้โดยไม่ต้องขอ consent หากมีฐานอื่น เช่นหน้าที่ตามกฎหมาย (ภาษี)"},
+  {ctrl:"เพื่อนนักเรียน",dat:"แคปแชต + ชื่อ + เบอร์ เพื่อน",pur:"แชร์ลงกลุ่มไลน์เพื่อ 'ประจาน'",con:"❌ เจ้าตัวไม่รู้และไม่ยินยอม",bad:true,ti:"เพื่อนแชร์แชตส่วนตัวลงกลุ่ม",vd:"VIOLATION",basis:"ไม่มีฐาน + ละเมิดสิทธิเจ้าของข้อมูล",cl:["เผยแพร่ข้อมูลผู้อื่นโดยไม่ยินยอม","อาจหมิ่นประมาท"],hi:["PDPA ใช้แค่บริษัทใหญ่จริงไหม?","แชต เบอร์ รูป เพื่อน เป็นของใคร?","ถ้าเราถูกแชร์จะรู้สึกยังไง?"],ex:"<b>VIOLATION</b> — เผยแพร่ข้อมูลผู้อื่นโดยไม่ยินยอม + อาจหมิ่นประมาท/พ.ร.บ.คอมพ์ฯ เชื่อม Cyberbullying ด่าน 1"}]},
+4:{name:"FINAL: THE CASCADE",sub:"เหตุการณ์เชื่อมโยง 3 ศาสตร์",ico:"👑",mech:"boss",rgb:"255,107,214",c:"#ff6bd6",stages:[
+  {mech:"b2",ty:"คลิปไวรัล",ti:"[บอส 1/3] ผอ.ประกาศปิดเทอม?",sb:"คลิป 'ผอ.โรงเรียน' ประกาศปิดเทอมก่อนกำหนด ระบาดในกลุ่มผู้ปกครอง",an:"DEEPFAKE",cl:["ไม่มีประกาศในเว็บ/เพจทางการ","เสียงไม่มีจังหวะหายใจ","ปากไม่ sync"],hi:["ตรวจช่องทางทางการของโรงเรียนก่อน — มีประกาศไหม?","INSPECT ฟังจังหวะหายใจในคลิป","ข่าวสำคัญแบบนี้ควรมาทางไหน?"],ex:"<b>ด่านบอส 1 — Deepfake</b> ตรวจแหล่งทางการก่อน: ไม่มีประกาศจริง = สัญญาณปลอมชัดเจน",dr:()=>'<ellipse cx="65" cy="80" rx="40" ry="46" fill="#cbb089"/><ellipse cx="65" cy="42" rx="36" ry="18" fill="#3a3a45"/><rect x="44" y="66" width="18" height="6" rx="3" fill="#0a0505"/><rect x="68" y="66" width="18" height="6" rx="3" fill="#0a0505"/><g class="anomaly"><rect x="40" y="60" width="50" height="18" fill="none" stroke="#ff4d6d" stroke-dasharray="3,2" rx="3"/></g>'},
+  {mech:"phish",ti:"[บอส 2/3] ลิงก์ในคลิป",sndr:"แนบมากับคลิปไวรัล",msg:"ลงทะเบียนรับเงินเยียวยาช่วงปิดเทอม คลิกด่วน!",url:[["http://","bad"],["moe-relief","warn"],[".click","bad"],["/register","dim"]],ph:true,truedom:"ของจริงคือ moe.go.th (กระทรวงศึกษาฯ)",cl:["http:// + TLD .click","กระทรวงใช้ .go.th","ฉวยโอกาสจากข่าวปลอม"],hi:["http หรือ https? กระทรวงใช้ TLD อะไร?","มิจฉาชีพมักฉวยกระแสข่าว — สังเกตจังหวะนี้","domain จริงของกระทรวงคือ?"],ex:"<b>ด่านบอส 2 — Phishing</b> มิจฉาชีพต่อยอดจากข่าวลวง: http + .click + อ้างหน่วยงานรัฐ ของจริง .go.th"},
+  {mech:"v3",ti:"[บอส 3/3] คุณจะเตือนเพื่อน?",ctrl:"ตัวคุณเอง",dat:"ภาพ ผอ. + ชื่อ-นามสกุล 'คนที่คุณเดาว่าสร้างคลิป'",pur:"โพสต์กล่าวหาในกลุ่ม เพื่อเตือนภัย",con:"❌ ไม่มีหลักฐาน + ไม่ขอความยินยอม",bad:true,vd:"VIOLATION",basis:"กล่าวหาโดยไม่มีหลักฐาน + เผยข้อมูลส่วนบุคคล",cl:["กล่าวหาโดยไม่มีหลักฐาน","เผยข้อมูลส่วนบุคคลผู้อื่น"],hi:["เตือนภัยทำได้ แต่ระบุชื่อ 'คนที่เดา' ทำได้ไหม?","คุณมีหลักฐานว่าใครสร้างจริงหรือเปล่า?","เตือนภัยโดยไม่ละเมิดใคร ทำยังไง?"],ex:"<b>ด่านบอส 3 — PDPA</b> เตือนภัยดี แต่การโพสต์กล่าวหาคนที่ 'เดา' พร้อมข้อมูลส่วนตัว = VIOLATION (+อาจหมิ่นประมาท) ที่ถูกคือเตือนแบบไม่ระบุตัวบุคคล + แจ้งโรงเรียน/ตำรวจ"}]}};
+
+const CASCADE={
+  fn1:{t:"ภัยลุกลาม: ข่าวลวงแพร่!",p:"คุณเชื่อว่าคลิปเป็นของจริง — ตอนนี้ถูกแชร์ต่อ 2,400 ครั้งใน 1 ชั่วโมง มีคนตื่นตระหนก คุณจะทำอย่างไร?",o:[["โพสต์ชี้แจงพร้อมลิงก์แหล่งทางการ",true],["ลบโพสต์เงียบๆ ไม่บอกใคร",false]],ex:"การแก้ข่าวต้องโปร่งใส + อ้างแหล่ง การลบเงียบทำให้ข่าวลวงยังลอยอยู่"},
+  fn2:{t:"ภัยลุกลาม: บัญชีถูกแฮ็ก!",p:"คุณปล่อยลิงก์ phishing ผ่าน — บัญชีถูกแฮ็ก ส่งลิงก์ต่อให้เพื่อน 30 คน! คุณจะทำอะไรก่อน?",o:[["แจ้งเพื่อน + เปลี่ยนรหัส + เปิด 2FA",true],["รอดูว่าจะเกิดอะไรขึ้น",false]],ex:"เมื่อถูกแฮ็ก: แจ้งเตือนผู้เกี่ยวข้องทันที เปลี่ยนรหัส เปิด 2FA เพื่อตัดวงจรการลุกลาม"},
+  fn3:{t:"ภัยลุกลาม: ข้อมูลรั่ว!",p:"คุณตัดสินว่าไม่ผิด — ข้อมูลถูกนำไปใช้ต่อ มีผู้เสียหายร้องเรียน คุณจะทำอย่างไร?",o:[["แจ้งเหตุ + ระงับการใช้ข้อมูลทันที",true],["อ้างว่าไม่ใช่ความรับผิดชอบ",false]],ex:"PDPA ม.37 ผู้ควบคุมข้อมูลต้องมีมาตรการรับมือเหตุละเมิด และแจ้งเหตุภายใน 72 ชม."}};
+
+const BADGES=[
+  {id:"eagle",em:"🦅",nm:"ตาเหยี่ยว",ds:"ผ่านด่าน Deepfake Rank S"},
+  {id:"gate",em:"🛡️",nm:"ผู้พิทักษ์ประตู",ds:"Phishing ไม่มี FN เลย"},
+  {id:"privacy",em:"⚖️",nm:"ผู้พิทักษ์ข้อมูล",ds:"ผ่านด่าน PDPA Rank S"},
+  {id:"reason",em:"🎯",nm:"นักเหตุผล",ds:"ล็อกหลักฐานถูกทุกข้อ"},
+  {id:"frugal",em:"💎",nm:"ประหยัด",ds:"จบด่านโดยเหลือ token"},
+  {id:"speed",em:"⚡",nm:"สายฟ้า",ds:"ตอบถูกเหลือเวลา >30 วิ"},
+  {id:"combo",em:"🔥",nm:"คอมโบมาสเตอร์",ds:"ทำ Streak ถึง x3"},
+  {id:"comeback",em:"💪",nm:"พลิกเกม",ds:"ชนะหลังมาตรวัดต่ำกว่า 30"},
+  {id:"balance",em:"☯️",nm:"สมดุล",ds:"จบด่านมาตรวัดทั้งคู่ ≥80"},
+  {id:"buddy",em:"🤝",nm:"คู่หู AI",ds:"คุยกับน้องคำนวณ 5 ครั้ง"},
+  {id:"scholar",em:"📚",nm:"นักเรียนรู้",ds:"ทำแบบทดสอบ ก่อน-หลัง"},
+  {id:"boss",em:"👑",nm:"ผู้พิชิต",ds:"ผ่านด่านบอส"}];
+
+const QUIZ=[
+  {q:"เจอคลิป Deepfake ที่เนียนมากจนหา artifact ไม่เจอ วิธีตรวจสอบที่ดีที่สุดคือ?",o:["เชื่อไปก่อนเพราะดูเหมือนจริง","หาแหล่งข่าวอื่นยืนยัน + ค้นที่มา (Lateral Reading)","ดูยอดแชร์ ถ้าเยอะแปลว่าจริง"],a:1},
+  {q:"URL ใดน่าสงสัยว่าเป็น Phishing มากที่สุด?",o:["https://mail.google.com","https://accounts-g00gle.com","https://www.google.com"],a:1},
+  {q:"'https' ต่างจาก 'http' อย่างไร?",o:["https โหลดเร็วกว่า","https เข้ารหัสข้อมูลระหว่างทาง","ไม่ต่างกัน"],a:1},
+  {q:"Consent ที่ถูกต้องตาม PDPA ต้องเป็นอย่างไร?",o:["ติ๊กถูกมาให้ล่วงหน้า","เจ้าของข้อมูลยินยอมเอง ชัดแจ้ง เสรี ถอนได้","ยินยอมครั้งเดียวใช้ได้ทุกเรื่อง"],a:1},
+  {q:"ร้านขอเบอร์ 'เพื่อสะสมแต้ม' แล้วนำไปยิง SMS โฆษณา ถือว่า?",o:["ทำได้ เพราะมีเบอร์อยู่แล้ว","ต้องขอความยินยอมใหม่ เป็นวัตถุประสงค์ใหม่","ผิดร้ายแรงต้องติดคุก"],a:1},
+  {q:"เพื่อนแคปแชตส่วนตัวของเราไปแชร์ประจาน ถือว่า?",o:["ไม่ผิด PDPA ใช้กับบริษัทเท่านั้น","ละเมิด PDPA และอาจหมิ่นประมาท","ผิดเฉพาะถ้าเสียหายมาก"],a:1}];
+/* ====== LESSONS (Phase 2 Micro-lessons) ====== */
+const LESSONS=[
+{id:"lateral",nm:"Lateral Reading",ico:"🌐",cat:"deepfake",
+  hook:"AI สร้าง Deepfake เนียนจนจับ artifact ไม่ได้แล้ว — แต่มีวิธีที่ดีกว่าและใช้ได้ตลอดชีวิต",
+  pts:["🔍 <b>Lateral Reading</b> = เปิดแท็บใหม่ค้นว่า 'มีแหล่งอื่นรายงานเรื่องเดียวกันไหม?'","📰 ถ้าข่าวจริง → สำนักข่าวหลักต้องรายงานพร้อมกัน ถ้ามีแค่แหล่งเดียว → สงสัยไว้ก่อน","🖼️ <b>Reverse Image Search</b> = ลากรูปไปค้นใน Google Images ดูว่าเคยถูกใช้ที่อื่นไหม","⚠️ Artifact (ขอบเบลอ ม่านตา) เป็นแค่ <b>ตัวช่วยรอง</b> เพราะ AI ใหม่แก้ได้แล้ว"],
+  good:"✅ เห็นคลิปนักการเมือง → เปิด Google ค้น → ไม่มีสำนักข่าวไหนรายงาน → สรุป: น่าสงสัยมาก",
+  bad:"❌ เห็นคลิปนักการเมือง → ดูแล้วเหมือนจริง ยอดแชร์เยอะ → แชร์ต่อเลย",
+  check:{q:"วิธีตรวจสอบคลิปที่น่าสงสัยที่ดีที่สุดคือ?",o:["จ้องหา artifact ในภาพ","ค้นว่ามีแหล่งอื่นรายงานไหม (Lateral Reading)","ดูยอด like ถ้าเยอะน่าจะจริง"],a:1}},
+{id:"artifact",nm:"ร่องรอย Deepfake",ico:"👁️",cat:"deepfake",
+  hook:"คนธรรมดากระพริบตา 15-20 ครั้ง/นาที แต่ Deepfake บางตัวกระพริบแค่ 2 ครั้ง — สังเกตเห็นไหม?",
+  pts:["👁️ <b>ม่านตา</b> — สมมาตรไหม? แสงสะท้อนตรงกันทั้งสองข้างไหม?","🖼️ <b>ขอบหน้า/เส้นผม</b> — รอยต่อระหว่างหน้าปลอมกับพื้นหลังมักเบลอ","🎤 <b>Lip-sync</b> — ปากกับเสียงตรงกันไหม? ลองดูตอนพูด 'ป' 'บ' 'ม'","🌊 <b>เสียงปลอม</b> — ไม่มีจังหวะหายใจ ทำนองราบเรียบเกิน ไม่มี noise พื้นหลัง"],
+  good:"✅ ดูม่านตา → ข้างซ้ายกลมข้างขวารี → artifact! + ตรวจแหล่งที่มาไม่พบ → Deepfake",
+  bad:"❌ ดูแล้วหน้าเหมือนจริง → เชื่อเลย (ไม่ได้ตรวจแหล่ง)",
+  check:{q:"Deepfake รุ่นใหม่ทำอะไรได้แล้ว?",o:["ลบ artifact (ขอบเบลอ ม่านตา) ได้เกือบหมด","สร้างแหล่งข่าวปลอมได้","แก้ทุกอย่างได้ ตรวจจับไม่ได้เลย"],a:0}},
+{id:"url",nm:"กายวิภาค URL",ico:"🔗",cat:"phishing",
+  hook:"มิจฉาชีพสร้างลิงก์ปลอมได้ภายใน 5 นาที — แต่ถ้าคุณอ่าน URL เป็น จะไม่มีวันโดนหลอก",
+  pts:["📖 <b>อ่านจากขวาไปซ้าย</b> — domain จริงอยู่ส่วนติดกับ TLD (.com/.th) เช่น secure-bank.<b>scam.xyz</b> → จริงคือ scam.xyz","🏷️ <b>TLD</b> (.com .co.th .go.th) — ธนาคาร/รัฐจะไม่ใช้ .xyz .top .click","🔒 <b>https vs http</b> — https เข้ารหัส แต่มิจฉาชีพก็ขอ https ได้ → ดู domain ด้วย","⚡ <b>เร่งด่วน/ขู่</b> = Social Engineering กดดันให้กดโดยไม่คิด → ยิ่งเร่ง ยิ่งต้องช้า"],
+  good:"✅ เห็น scb-secure.verify-login.xyz → อ่านขวา: จริงคือ verify-login.xyz → ไม่ใช่ธนาคาร → BLOCK",
+  bad:"❌ เห็น scb-secure → 'มีชื่อ SCB' → กดเลย",
+  check:{q:"domain จริงของ URL: https://secure.bank-verify.xyz/login คือ?",o:["secure.bank","bank-verify.xyz","xyz/login"],a:1}},
+{id:"typo",nm:"Typosquatting & Homograph",ico:"🔤",cat:"phishing",
+  hook:"раypal.com ← ลิงก์นี้ดู 'เหมือน' PayPal เป๊ะ แต่ตัว р กับ а เป็นอักษร 'ซีริลลิก' ไม่ใช่อังกฤษ!",
+  pts:["🔡 <b>Typosquatting</b> — เปลี่ยนตัวอักษรเล็กน้อย: g00gle (เลข 0), paypa1 (เลข 1), arnaz0n","🌍 <b>IDN Homograph</b> — ใช้อักษรภาษาอื่นที่หน้าตาเหมือน: ซีริลลิก р = p, а = a","🛡️ <b>วิธีกัน</b> — พิมพ์ URL เอง อย่ากดลิงก์ที่ส่งมา + ตรวจทุกตัวอักษรช้าๆ"],
+  good:"✅ เห็น accounts-g00gle.com → ตรวจทุกตัว → เลข 0 ไม่ใช่ตัว o → Typosquatting → BLOCK",
+  bad:"❌ เห็น g00gle.com → อ่านเร็วๆ ดูเหมือน google → กดเลย",
+  check:{q:"URL: accounts-g00gle.com ใช้เทคนิคอะไร?",o:["IDN Homograph","Social Engineering","Typosquatting (เลข 0 แทนตัว o)"],a:2}},
+{id:"pdpa",nm:"PDPA & 4 เสา Consent",ico:"⚖️",cat:"pdpa",
+  hook:"PDPA ไม่ได้ใช้กับแค่บริษัทใหญ่ — ถ้าเพื่อนแคปแชตคุณไปแชร์ประจาน ก็ละเมิด PDPA เหมือนกัน",
+  pts:["📋 <b>PDPA</b> = พ.ร.บ.คุ้มครองข้อมูลส่วนบุคคล 2562 — ใครเก็บ/ใช้/เปิดเผยข้อมูลเราต้องมี 'ฐาน' รองรับ","🏛️ <b>4 เสา Consent (ม.19)</b>: เสรี (ไม่บังคับ) · ชัดแจ้ง (กดเอง ไม่ติ๊กให้) · เฉพาะเจาะจง (บอกวัตถุประสงค์ชัด) · ถอนได้ (ง่ายเท่าตอนให้)","⚖️ <b>ฐานอื่นที่ไม่ต้องขอ consent (ม.24)</b>: หน้าที่ตามกฎหมาย (ภาษี) · สัญญา · ประโยชน์ต่อชีวิต","🔓 <b>Anonymization (ม.6)</b> — ข้อมูลที่ระบุตัวไม่ได้ ไม่ถือเป็นข้อมูลส่วนบุคคล"],
+  good:"✅ แอปขอเบอร์เพื่อสะสมแต้ม แล้วยิงโฆษณา → วัตถุประสงค์ใหม่ ต้องขอ consent ใหม่ (ม.21)",
+  bad:"❌ แอปมีเบอร์อยู่แล้ว → ส่งโฆษณาได้เลยสิ เก็บไว้แล้วนี่",
+  check:{q:"ช่องยินยอมที่ 'ติ๊กมาให้แล้ว' ขัดเสาข้อใด?",o:["เสรี","เฉพาะเจาะจง","ชัดแจ้ง (ต้องกดเอง ไม่ติ๊กให้)"],a:2}},
+{id:"fpfn",nm:"คิดวิเคราะห์ ≠ ระแวง",ico:"☯️",cat:"meta",
+  hook:"บล็อกทุกอย่างที่ดูน่าสงสัย ฟังดูปลอดภัย — แต่จริงๆ แล้วมันสร้างปัญหาใหม่ที่ร้ายแรงพอกัน",
+  pts:["🛡️ <b>False Negative (FN)</b> = ปล่อยภัยหลุด → เสียหาย เช่น กดลิงก์ phishing","🤝 <b>False Positive (FP)</b> = กล่าวหา/บล็อกของจริง → ทำลายความน่าเชื่อถือ เช่น กล่าวหาคลิปจริงว่าปลอม = สร้าง misinformation","⚖️ <b>ต้องบาลานซ์</b> — ใช้ 'หลักฐาน' ตัดสิน ไม่ใช่ 'สัญชาตญาณ' หรือ 'ความกลัว'","🎯 ในเกม: มาตรวัด Safety ลดเมื่อ FN / Trust ลดเมื่อ FP → ต้องรักษาทั้งคู่"],
+  good:"✅ เห็นลิงก์ meet.google.com → ตรวจ domain จริง → ของแท้ → ปล่อยผ่าน (ไม่บล็อกมัว)",
+  bad:"❌ เห็นลิงก์ที่มีตัวสุ่ม → ดูแปลก → บล็อกหมดเลยให้ปลอดภัย → False Positive!",
+  check:{q:"การบล็อกลิงก์ของจริงเพราะดูแปลก เรียกว่า?",o:["False Negative","True Positive","False Positive (กล่าวหาของจริงผิด)"],a:2}}];
+
+/* ====== TEACH-BACK (Phase 4) ====== */
+const TEACHBACK=[
+  {npc:"เพื่อน",q:"ทำไม g00gle ถึงอันตราย มันก็เหมือน google นี่?",o:["เพราะมีตัวเลข 0 แทนตัว o ซ่อนอยู่ เรียกว่า Typosquatting — ดูเหมือนเว็บจริงแต่เป็นเว็บปลอม","เพราะ google เป็นเว็บอันตราย","เพราะ URL ยาวเกินไป"],a:0},
+  {npc:"น้อง",q:"PDPA ใช้กับแค่บริษัทใหญ่ใช่ไหม? ฉันเป็นเด็ก ไม่เกี่ยว",o:["ใช่ PDPA ใช้กับบริษัทเท่านั้น","ไม่ใช่ PDPA คุ้มครองข้อมูลส่วนบุคคลของทุกคน ถ้าเพื่อนเอาแชตเราไปแชร์ก็ละเมิดได้","PDPA ใช้กับผู้ใหญ่เท่านั้น"],a:1},
+  {npc:"แม่",q:"มีข้อความบอกว่าพัสดุตกค้าง จ่าย 3 บาท ถูกจังเลย จ่ายดีไหม?",o:["จ่ายเลย แค่ 3 บาท","อย่าจ่าย! เขาขอ 3 บาทเพื่อหลอกเอาเลขบัตรเครดิต ตรวจ URL ก่อน ของจริงคือ thailandpost.co.th","โทรไปถามไปรษณีย์ก่อนค่อยจ่าย"],a:1},
+  {npc:"เพื่อน",q:"เห็นคลิปดาราแนะนำลงทุนได้กำไร 300% — ลงดีไหม?",o:["ลงเลย ดาราแนะนำต้องดี","ตรวจก่อน! ดาราเคยประกาศในช่องทางทางการไหม? + กำไร 300% คือ red flag การเงิน อาจเป็น Deepfake","ดูยอดวิวก่อน ถ้าเยอะน่าจะจริง"],a:1},
+  {npc:"น้อง",q:"แอปขอให้กดยินยอมแต่ติ๊กมาให้แล้ว ไม่กดเล่นไม่ได้ — ก็กดไปสิ?",o:["กดเลย ติ๊กมาให้แล้วสะดวกดี","อย่ากด! consent ต้องเป็น 'เสรี' (ไม่บังคับ) และ 'ชัดแจ้ง' (กดเอง) ตาม ม.19 ที่ติ๊กมาให้ + บังคับ = ไม่สมบูรณ์","ไม่รู้ ลองกดดู"],a:1}];
+
+/* ====== STATE ====== */
+const state={sound:true,diffKey:"normal",player:"",consent:false,custom:[],fontScale:16,
+  unlocked:{1:true,2:false,3:false,4:false},ranks:{},totalScore:0,citizens:0,badges:new Set(),chatCount:0,
+  preScore:null,postScore:null,qIdx:0,qScore:0,qMode:"pre",cascData:null,
+  phase:{1:true,2:false,3:false,4:false},discoverDone:false,lessonsCompleted:new Set(),confidence:50,playLog:[],teachScore:null,
+  lvl:1,idx:0,bossStage:0,list:[],safety:100,trust:100,score:0,tokens:0,streak:0,maxStreak:0,
+  tLeft:45,answered:false,inspect:false,crossed:false,hints:0,timerId:null,
+  correct:0,reason:0,inspectAll:true,noHint:true,fnCount:0,lowMeter:100,pending:null,screen:"boot"};
+const app=document.getElementById("app");
+function D(){return CONFIG.mult[state.diffKey];}
+function clamp(v){return Math.max(0,Math.min(100,v));}
+function pen(b){return Math.round(b*D());}
+function setAccent(rgb,c){document.documentElement.style.setProperty("--accent-rgb",rgb);document.documentElement.style.setProperty("--accent",c);}
+function rankOf(i){return i>=90?"S":i>=70?"A":i>=50?"B":i>0?"C":"F";}
+function rankColor(r){return r==="S"?"var(--cyan)":r==="A"?"var(--green)":r==="B"?"var(--amber)":"var(--red)";}
+function meterColor(v){return v>=60?"var(--green)":v>=30?"var(--amber)":"var(--red)";}
+function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));const t=a[i];a[i]=a[j];a[j]=t;}return a;}
+function comboMult(){return 1+Math.floor(state.streak/CONFIG.comboStep)*CONFIG.comboInc;}
+function isBoss(){return state.lvl===4;}
+function cur(){return isBoss()?LV[4].stages[state.bossStage]:state.list[state.idx];}
+function curMech(){return isBoss()?LV[4].stages[state.bossStage].mech:LV[state.lvl].mech;}
+function curLen(){return isBoss()?LV[4].stages.length:state.list.length;}
+function curIdx(){return isBoss()?state.bossStage:state.idx;}
+function getList(lvl){let b=LV[lvl].d.slice();if(lvl===1&&state.custom.length)b=b.concat(state.custom);return b;}
+
+/* ====== TOAST/BADGE ====== */
+let tq=[],tb=false;
+function toast(em,txt){tq.push([em,txt]);if(!tb)nextT();}
+function nextT(){if(!tq.length){tb=false;return;}tb=true;const a=tq.shift(),t=document.getElementById("toast");t.querySelector(".te").textContent=a[0];t.querySelector(".tt").textContent=a[1];t.classList.add("show");sfx("badge");setTimeout(()=>{t.classList.remove("show");setTimeout(nextT,400);},2200);}
+function award(id){if(state.badges.has(id))return;const b=BADGES.find(x=>x.id===id);if(!b)return;state.badges.add(id);toast(b.em,"ปลดล็อก: "+b.nm);}
+
+/* ====== AI BRAIN ====== */
+const KB=[
+  {k:["สวัสดี","หวัดดี","hello","hi","ทัก"],r:["สวัสดีครับ! ผมน้องคำนวณ ถามได้เลย 🤖","ว่าไงครับ ติดตรงไหนบอกได้ (แต่ไม่เฉลยนะ 😄)"]},
+  {k:["ขอบคุณ","ขอบใจ","thank"],r:["ยินดีครับ สู้ๆ 💪","ไม่เป็นไรครับ"]},
+  {k:["เธอคือใคร","ใครพูด","who are you"],r:["ผมคือน้องคำนวณ AI ผู้ช่วยวิเคราะห์ หน้าที่คือช่วยตั้งคำถามให้คุณคิด ไม่ใช่เฉลยครับ"]},
+  {k:["เฉลย","คำตอบคือ","ตอบอะไร","อันไหนถูก","ใช่ไหม","ถูกไหม"],r:["ผมเฉลยตรงๆ ไม่ได้ครับ 😅 ลองพิมพ์ 'ใบ้หน่อย' หรือถามเทคนิค","ลองบอกผมว่าคุณสังเกตเห็นอะไร แล้วคิดด้วยกัน"]},
+  {k:["ใบ้","ช่วย","ไม่รู้","งง","help","ทำไง","hint"],r:["__HINT__"]},
+  {k:["lateral","ตรวจสอบแหล่ง","แหล่งข่าว","reverse","ค้นรูป","ยืนยัน","สำนักข่าว","แหล่งที่มา","ที่มา"],r:["เทคนิคที่ดีสุดคือ Lateral Reading: เปิดแท็บใหม่ค้นว่าสำนักข่าวอื่นรายงานไหม ใครคือต้นทาง reverse image search — เพราะ AI ใหม่ลบ artifact ได้ แต่แหล่งปลอมยาก (ในเกมกดปุ่ม 🌐 ตรวจแหล่ง)"]},
+  {k:["deepfake","ดีปเฟค","สื่อปลอม","ภาพปลอม","คลิปปลอม"],r:["Deepfake = AI ดัดแปลงหน้า/เสียง วิธีจับ: (1) ตรวจแหล่งที่มาก่อน (2) แล้วดู artifact: ขอบหน้า ม่านตา ปาก-เสียง แสง-เงา เป็นตัวช่วยรอง"]},
+  {k:["gan","แกน","ai สร้าง"],r:["GAN = Generator สู้ Discriminator จนปลอมเนียน รุ่นใหม่เนียนจน artifact หายเกือบหมด จึงต้องพึ่งตรวจแหล่งด้วย"]},
+  {k:["ม่านตา","ตา","กระพริบ","blink"],r:["ตาเป็นจุดอ่อนรุ่นเก่า: ม่านตาสมมาตรไหม กระพริบน้อยผิดปกติไหม (ปกติ ~15-20/นาที) แต่รุ่นใหม่แก้แล้ว อย่าพึ่งจุดเดียว"]},
+  {k:["เสียง","voice","คลื่นเสียง","หายใจ","tts"],r:["เสียงปลอม: ไม่มีจังหวะหายใจ ทำนองราบเรียบ ไม่มี noise แต่ชัวร์สุดคือโทรกลับช่องทางทางการ"]},
+  {k:["ปาก","lip","sync"],r:["Lip-sync: ดูตอนพูด 'ป' 'บ' 'ม' ปากตรงเสียงไหม ช้า/เร็วกว่าไหม"]},
+  {k:["phishing","ฟิชชิ่ง","ลิงก์","หลอก","สแปม"],r:["Phishing เช็ค: domain จริงติด TLD (อ่านขวาไปซ้าย), สะกดถูกไหม, https/http, มีเร่งด่วน/ขู่ไหม"]},
+  {k:["url","domain","โดเมน","อ่านลิงก์"],r:["อ่าน URL: domain จริงอยู่ส่วนติด .com/.th ขวาสุดก่อน path เช่น secure-bank.scam.xyz → จริงคือ scam.xyz!"]},
+  {k:["typosquat","เลข 0","g00gle","สะกดผิด"],r:["Typosquatting = โดเมนสะกดคล้าย เช่น g00gle (เลข 0), paypa1 (เลข 1) ตรวจทุกตัวช้าๆ"]},
+  {k:["homograph","ซีริลลิก","idn","อักษรเหมือน"],r:["IDN Homograph: ใช้อักษรภาษาอื่น (ซีริลลิก р а) คล้ายอังกฤษ (p a) วิธีกัน: พิมพ์ URL เอง"]},
+  {k:["https","http","เข้ารหัส"],r:["https = เข้ารหัส, http = โล่งๆ อันตราย แต่ https ไม่ได้แปลว่าน่าเชื่อถือเสมอ ต้องดู domain ด้วย"]},
+  {k:["social","เร่งด่วน","ขู่","ด่วน","กดดัน"],r:["Social Engineering = หลอกด้วยจิตวิทยา (เร่งด่วน/ขู่/ล่อ) เป้าหมายให้ panic แล้วกดโดยไม่คิด เจอแบบนี้ให้ยิ่งช้าลง"]},
+  {k:["pdpa","พีดีพีเอ","กฎหมายข้อมูล","ข้อมูลส่วนบุคคล"],r:["PDPA = พ.ร.บ.คุ้มครองข้อมูลส่วนบุคคล จะเก็บ/ใช้/เปิดเผยต้องมีฐานรองรับ เช่นความยินยอม (ม.19) หรือฐานอื่น (ม.24)"]},
+  {k:["consent","ความยินยอม","ยินยอม","เสา","pillar"],r:["Consent ตาม ม.19 ต้องครบ 4 เสา: เสรี / ชัดแจ้ง (กดเอง) / เฉพาะเจาะจง / ถอนได้ ขาดข้อใด = ไม่สมบูรณ์"]},
+  {k:["anonym","ไม่ระบุตัวตน","ลบชื่อ","นิรนาม"],r:["Anonymization = ทำให้ระบุตัวไม่ได้ เมื่อระบุไม่ได้ ไม่ถือเป็นข้อมูลส่วนบุคคลตาม ม.6 ใช้ได้โดยไม่ต้องขอ consent"]},
+  {k:["ฐานกฎหมาย","ภาษี","สรรพากร","ฐานอื่น","ไม่ต้องขอ"],r:["ม.24 ไม่ได้บังคับ consent ทุกกรณี มีฐานอื่นแทนได้ เช่นหน้าที่ตามกฎหมาย (ภาษี), สัญญา บางเคสดูเหมือนผิดอาจ COMPLIANT"]},
+  {k:["cyberbully","ประจาน","แชร์แชต","หมิ่นประมาท","กลั่นแกล้ง"],r:["แชร์ข้อมูล/รูป/แชตคนอื่นประจาน = ละเมิด PDPA + อาจหมิ่นประมาท สำคัญ: PDPA ใช้กับ 'ตัวเรา' ด้วย"]},
+  {k:["เล่นยังไง","วิธีเล่น","กติกา","token","มาตรวัด","streak"],r:["มี 2 มาตรวัด: ปลอดภัย (ปล่อยภัยหลุดจะลด) กับ น่าเชื่อถือ (กล่าวหา/บล็อกของจริงจะลด) ต้องบาลานซ์! ใช้ token จำกัดเพื่อ INSPECT/ตรวจแหล่ง ตอบถูกติดกันได้ Streak คูณคะแนน"]},
+  {k:["fn","fp","false","บล็อกผิด"],r:["FN (ปล่อยภัยหลุด) = ปลอดภัยลดหนัก, FP (กล่าวหา/บล็อกของจริง) = น่าเชื่อถือลด ทั้งคู่คือความผิดพลาด — คิดวิเคราะห์ ≠ ระแวงทุกอย่าง"]}];
+function nrm(s){return s.toLowerCase().replace(/\s+/g,"");}
+function brain(text){const t=nrm(text);let best=null,bs=0;for(const tp of KB){let sc=0;for(const kw of tp.k)if(t.includes(nrm(kw)))sc++;if(sc>bs){bs=sc;best=tp;}}
+  if(!best||bs===0)return ["ผมไม่แน่ใจว่าถามอะไร 🤔 ลองถาม 'ตรวจ deepfake ยังไง', 'อ่าน url ยังไง', '4 เสา consent', หรือพิมพ์ 'ใบ้หน่อย'","ลองถามเรื่องเทคนิคในด่านนี้ หรือพิมพ์ 'ช่วยหน่อย' ผมจะใบ้ให้"][Math.floor(Math.random()*2)];
+  const r=best.r[Math.floor(Math.random()*best.r.length)];
+  if(r==="__HINT__"){if(state.tokens<CONFIG.cost.hint)return "token หมดแล้วครับ 😅 ลองทบทวนเบาะแสที่มีแล้วตัดสินใจเลย!";
+    const s=cur();if(state.hints>=s.hi.length)return "ผมใบ้ครบแล้วครับ ทบทวนหลักฐานแล้วตัดสินใจเลย!";
+    state.tokens-=CONFIG.cost.hint;updTokens();const h=s.hi[state.hints];state.hints++;state.noHint=false;
+    return "💡 (ใช้ 1 token) คำใบ้: "+h;}
+  return r;}
+/* ====== BOOT ====== */
+function boot(){state.screen="boot";setAccent("61,225,255","#3de1ff");
+  app.innerHTML='<div class="topglow"></div><div class="screen fade">'
+    +'<div class="kicker">Guardian Shift · v3.0</div><div class="logo gradtext">CYBER GUARDIAN</div>'
+    +'<div class="tagline">รู้ทันสื่อ · ปลอดภัยไซเบอร์ · เคารพข้อมูล</div>'
+    +'<span class="field-lbl">โปรไฟล์ผู้เล่น</span><input class="inp" id="pName" placeholder="ชื่อของคุณ (สำหรับกระดานคะแนน)" maxlength="16">'
+    +'<div class="glasscard"><h3>🔐 การคุ้มครองข้อมูล (ตัวอย่าง PDPA จริง)</h3><p>เกมเก็บเฉพาะ <b>ชื่อ</b> ไว้ใน <b>เครื่องนี้เท่านั้น</b> เพื่อแสดงคะแนน ไม่ส่งออกที่ใด และ <b>ลบได้ทุกเมื่อ</b></p>'
+    +'<div class="chk" id="consent" tabindex="0" role="checkbox" aria-checked="false"><div class="box">✓</div><div class="lbl">ฉันยินยอมให้เก็บชื่อไว้ในเครื่องนี้ (เสรี ชัดแจ้ง เฉพาะเจาะจง ถอนได้)</div></div>'
+    +'<button class="btn btn-ghost" style="font-size:.69rem;padding:9px" onclick="wipeMe()">🗑️ ลบข้อมูลของฉัน</button></div>'
+    +'<span class="field-lbl">ระดับความยาก</span><div class="seg" id="diff"><div class="opt" data-d="easy">ง่าย·60วิ·🔅16</div><div class="opt on" data-d="normal">ปกติ·45วิ·🔅12</div><div class="opt" data-d="hard">ยาก·30วิ·🔅9</div></div>'
+    +'<span class="field-lbl">เสียง · ขนาดอักษร</span><div class="seg"><div class="opt on" id="sndOn" onclick="setSnd(true)">🔊 เปิด</div><div class="opt" id="sndOff" onclick="setSnd(false)">🔇 ปิด</div><div class="opt" onclick="setFont(-1)">A−</div><div class="opt" onclick="setFont(1)">A＋</div></div>'
+    +'<details><summary>▸ สำหรับครู: เพิ่มรูปฝึก Deepfake เอง</summary><p style="font-size:.69rem;color:var(--dim);margin:6px 0">อัปโหลดรูป + กำหนดเฉลย → เพิ่มเป็นข้อในด่าน 1</p><label class="btn btn-ghost" style="font-size:.69rem;padding:9px" for="upl">＋ อัปโหลดรูป</label><input id="upl" type="file" accept="image/*" multiple style="display:none"><div class="thumbs" id="thumbs"></div></details>'
+    +'<div style="height:14px"></div><button class="btn btn-main" id="go">▶ เริ่มภารกิจ</button><div style="height:9px"></div>'
+    +'<div class="nav-tabs"><div class="tab" onclick="leaderboard()">🏆 กระดานคะแนน</div><div class="tab" onclick="badgesScreen()">🎖️ เหรียญตรา</div><div class="tab" onclick="howto()">❓ วิธีเล่น</div></div></div>';
+  document.getElementById("diff").onclick=function(e){const o=e.target.closest(".opt");if(!o)return;[].forEach.call(e.currentTarget.children,c=>c.classList.remove("on"));o.classList.add("on");sfx("click");state.diffKey=o.dataset.d;};
+  const con=document.getElementById("consent");con.onclick=function(){state.consent=!state.consent;con.classList.toggle("on",state.consent);con.setAttribute("aria-checked",state.consent);sfx("click");};
+  con.onkeydown=function(e){if(e.key===" "||e.key==="Enter"){e.preventDefault();con.click();}};
+  document.getElementById("upl").onchange=onUpload;renderThumbs();document.getElementById("go").onclick=startFlow;}
+function setSnd(v){state.sound=v;document.getElementById("sndOn").classList.toggle("on",v);document.getElementById("sndOff").classList.toggle("on",!v);if(v)sfx("click");}
+function setFont(d){state.fontScale=Math.max(14,Math.min(20,state.fontScale+d));document.documentElement.style.fontSize=state.fontScale+"px";sfx("click");}
+function onUpload(ev){[].forEach.call(ev.target.files,file=>{const r=new FileReader();r.onload=function(){state.custom.push({isCustom:true,ty:"ภาพอัปโหลด",ti:"ภาพของครู #"+(state.custom.length+1),sb:"ภาพที่ครูอัปโหลดเพื่อฝึก",an:"DEEPFAKE",img:r.result,cl:["ตรวจแหล่งที่มาก่อน","ขอบหน้า/เส้นผม","แสง-เงา"],hi:["ภาพนี้มาจากไหน มีที่อื่นยืนยันไหม?","ขอบใบหน้าเรียบหรือเบลอผิดปกติ?","แสงตรงกับฉากหลังไหม?"],ex:"ครูกำหนดคำตอบเอง ใช้ฝึกตรวจแหล่งที่มา + สังเกต artifact"});renderThumbs();};r.readAsDataURL(file);});ev.target.value="";}
+function renderThumbs(){const b=document.getElementById("thumbs");if(!b)return;b.innerHTML=state.custom.map((c,i)=>'<div class="thumb"><img src="'+c.img+'" alt=""><div class="tg" data-i="'+i+'"><span class="r '+(c.an==="REAL"?"on":"")+'" data-v="REAL">REAL</span><span class="f '+(c.an==="DEEPFAKE"?"on":"")+'" data-v="DEEPFAKE">FAKE</span></div></div>').join("");[].forEach.call(b.querySelectorAll(".tg"),tg=>tg.onclick=function(e){const s=e.target.closest("span");if(!s)return;state.custom[+tg.dataset.i].an=s.dataset.v;sfx("click");renderThumbs();});}
+function wipeMe(){const nm=(document.getElementById("pName").value||"").trim();if(!nm){toast("ℹ️","พิมพ์ชื่อก่อนเพื่อระบุข้อมูลที่ลบ");return;}if(confirm('ลบข้อมูลของ "'+nm+'"?')){try{localStorage.removeItem("cg_p_"+nm);localStorage.setItem("cg_lb",JSON.stringify(getLB().filter(e=>e.name!==nm)));}catch(e){}toast("✓","ลบแล้ว (สิทธิถอนความยินยอม)");}}
+function startFlow(){ac();const nm=(document.getElementById("pName").value||"").trim();if(!state.consent){toast("🔐","กรุณายินยอมก่อนเริ่ม — นี่คือตัวอย่าง consent ตาม PDPA!");return;}
+  state.player=nm||"ผู้เล่น";state.unlocked={1:true,2:false,3:false,4:false};state.ranks={};state.totalScore=0;state.citizens=0;state.badges=new Set();state.preScore=null;state.postScore=null;
+  loadProfile();sfx("click");playBGM();preTestPrompt();}
+
+function howto(){state.screen="menu";
+  app.innerHTML='<div class="topglow"></div><div class="screen fade"><div class="kicker">How to Play</div><div class="logo gradtext" style="font-size:30px">❓ วิธีเล่น</div>'
+    +'<div class="glasscard"><h3>2 มาตรวัดที่ต้องบาลานซ์</h3><p>🛡️ <b>ความปลอดภัย</b> — ลดเมื่อ "ปล่อยภัยหลุด" (เชื่อของปลอม/ปล่อย phishing)<br>🤝 <b>ความน่าเชื่อถือ</b> — ลดเมื่อ "กล่าวหา/บล็อกของจริงเกินเหตุ"<br>ตัวใดหมด = แพ้! บทเรียน: คิดวิเคราะห์ ≠ ระแวงทุกอย่าง</p></div>'
+    +'<div class="glasscard"><h3>ทรัพยากร เวลาตรวจสอบ (token)</h3><p>มี token จำกัดต่อด่าน ใช้กับ 🔍 INSPECT (1), 🌐 ตรวจแหล่ง (2), 💡 คำใบ้ (1) — เลือกตรวจให้คุ้ม! (พิมพ์ถามน้องคำนวณเองฟรี)</p></div>'
+    +'<div class="glasscard"><h3>ล็อกหลักฐาน + Streak</h3><p>หลังตัดสิน เลือก "หลักฐานชี้ขาด" ถูก = โบนัส 🎯 · ตอบถูกติดกันได้ Streak 🔥 คูณคะแนน · เล่นด้วยคีย์บอร์ดได้ (1/2/3, i, c, Enter)</p></div>'
+    +'<button class="btn btn-ghost" onclick="boot()">‹ กลับ</button></div>';}
+
+/* ====== PRE-TEST + QUIZ ====== */
+function preTestPrompt(){state.screen="menu";
+  app.innerHTML='<div class="topglow"></div><div class="screen fade" style="text-align:center"><div class="kicker">Learning Check</div><div class="logo gradtext" style="font-size:32px">📝 แบบทดสอบก่อนเรียน</div>'
+    +'<div class="glasscard" style="text-align:left"><p>ทำแบบทดสอบสั้น 6 ข้อ <b>ก่อนเล่น</b> แล้วทำอีกครั้งหลังเล่น เพื่อวัดพัฒนาการ (ครูใช้เป็นหลักฐานการเรียนรู้)</p></div>'
+    +'<button class="btn btn-main" onclick="startQuiz(\'pre\')">▶ ทำแบบทดสอบ (แนะนำ)</button><div style="height:9px"></div><button class="btn btn-ghost" onclick="map()">ข้ามไปเล่นเลย ›</button></div>';}
+function startQuiz(m){state.screen="quiz";state.qMode=m;state.qIdx=0;state.qScore=0;renderQuiz();}
+function renderQuiz(){state.screen="quiz";const q=QUIZ[state.qIdx];
+  app.innerHTML='<div class="topglow"></div><div class="screen fade"><div class="kicker">'+(state.qMode==="pre"?"ก่อนเรียน":"หลังเรียน")+' · ข้อ '+(state.qIdx+1)+'/'+QUIZ.length+'</div>'
+    +'<div class="qbar"><i style="width:'+((state.qIdx/QUIZ.length)*100)+'%"></i></div>'
+    +'<div class="glasscard" style="margin-bottom:18px"><p style="color:var(--txt);font-size:1rem;line-height:1.7">'+q.q+'</p></div>'
+    +'<div>'+q.o.map((o,i)=>'<button class="qopt" data-i="'+i+'" onclick="answerQuiz('+i+')"><span class="qk">'+(i+1)+'</span><span>'+o+'</span></button>').join("")+'</div></div>';}
+function answerQuiz(i){const q=QUIZ[state.qIdx],opts=document.querySelectorAll(".qopt");[].forEach.call(opts,o=>o.style.pointerEvents="none");
+  opts[i].classList.add(i===q.a?"right":"wrong");if(i!==q.a)opts[q.a].classList.add("right");if(i===q.a){state.qScore++;sfx("correct");}else sfx("wrong");
+  setTimeout(function(){state.qIdx++;if(state.qIdx>=QUIZ.length)endQuiz();else renderQuiz();},850);}
+function endQuiz(){if(state.qMode==="pre"){state.preScore=state.qScore;state.screen="menu";
+    app.innerHTML='<div class="topglow"></div><div class="end fade"><div class="kicker">Pre-Test Complete</div><div class="rankbig reveal" style="color:var(--accent)">'+state.qScore+'/'+QUIZ.length+'</div><div class="endt">ความรู้ก่อนเรียน</div><div class="glasscard"><p>เก็บคะแนนแล้ว เล่นจบทั้งหมดแล้วทำอีกครั้งเพื่อดูพัฒนาการ!</p></div><button class="btn btn-main" onclick="map()">▶ เริ่มเล่น</button></div>';}
+  else{state.postScore=state.qScore;if(state.preScore!==null)award("scholar");saveProfile();gainScreen();}}
+function gainScreen(){state.screen="menu";const pre=state.preScore,post=state.postScore,gain=pre!==null?post-pre:null;confetti();
+  app.innerHTML='<div class="topglow"></div><div class="end fade"><div class="kicker">Learning Gain</div><div class="logo gradtext" style="font-size:28px">📈 ผลการเรียนรู้</div>'
+    +'<div class="statgrid"><div class="stat pop"><div class="n">'+(pre!==null?pre+"/"+QUIZ.length:"–")+'</div><div class="l">ก่อนเรียน</div></div>'
+    +'<div class="stat pop" style="animation-delay:.1s"><div class="n" style="color:var(--green)">'+post+'/'+QUIZ.length+'</div><div class="l">หลังเรียน</div></div>'
+    +'<div class="stat pop" style="animation-delay:.2s"><div class="n" style="color:'+(gain>0?"var(--green)":"var(--dim)")+'">'+(gain!==null?(gain>=0?"+":"")+gain:"–")+'</div><div class="l">พัฒนาการ</div></div></div>'
+    +'<div class="glasscard"><p>'+(gain!==null?(gain>0?'เยี่ยม! คุณรู้เพิ่ม <b>'+gain+' ข้อ</b> 🎉 — หลักฐานว่าการเรียนรู้เกิดขึ้นจริง':gain===0?"คะแนนเท่าเดิม ลองทบทวนแล้วเล่นซ้ำ":"ลองทบทวนและเล่นซ้ำเพื่อความเข้าใจ"):'คุณได้ <b>'+post+'/'+QUIZ.length+'</b> ข้อ')+'</p></div>'
+    +'<button class="btn btn-main" onclick="map()">‹ กลับแผนที่</button></div>';}
+
+/* ====== MAP ====== */
+function map(){state.screen="menu";setAccent("61,225,255","#3de1ff");
+  if(state.ranks[1]&&state.ranks[2]&&state.ranks[3])state.unlocked[4]=true;
+  function card(id){const L=LV[id],open=state.unlocked[id],rk=state.ranks[id];
+    return '<div class="lvlcard '+(open?"":"lock")+' '+(id===4?"boss":"")+'" style="--c:'+L.c+'" '+(open?'onclick="lvlIntro('+id+')" role="button" tabindex="0" onkeydown="if(event.key===\'Enter\')lvlIntro('+id+')"':"")+'><div class="ico">'+(open?L.ico:"🔒")+'</div><div><h4>'+L.name+'</h4><div class="sub">'+L.sub+'</div></div><div class="rk '+(rk?"has":"")+'">'+(rk?rk:open?"พร้อม":id===4?"ผ่าน 1-3 ก่อน":"ล็อก")+'</div></div>';}
+  app.innerHTML='<div class="topglow"></div><div class="screen fade">'
+    +'<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px"><div><div class="mono" style="font-size:.63rem;color:var(--dim)">ผู้เล่น</div><div style="font-family:var(--display);font-weight:700;font-size:1.1rem">👤 '+state.player+'</div></div><div style="text-align:right"><div class="mono" style="font-size:.63rem;color:var(--dim)">คะแนนรวม</div><div class="gradtext" style="font-family:var(--display);font-weight:800;font-size:1.5rem">'+state.totalScore+'</div></div></div>'
+    +'<div class="stagger">'+card(1)+card(2)+card(3)+card(4)+'</div>'
+    +(state.ranks[4]?'<button class="btn btn-main" style="background:linear-gradient(135deg,var(--amber),#ff9628);color:#1a1000;margin-top:6px" onclick="certificate()">🎓 ใบประกาศนียบัตร</button><div style="height:9px"></div>'+(state.postScore===null?'<button class="btn btn-ghost" onclick="startQuiz(\'post\')">📝 แบบทดสอบหลังเรียน</button><div style="height:9px"></div>':""):"")
+    +'<div class="nav-tabs"><div class="tab" onclick="leaderboard()">🏆 อันดับ</div><div class="tab" onclick="badgesScreen()">🎖️ ('+state.badges.size+'/'+BADGES.length+')</div><div class="tab" onclick="howto()">❓</div><div class="tab" onclick="boot()">⚙️</div></div></div>';}
+
+function lvlIntro(id){if(!state.unlocked[id])return;sfx("click");const L=LV[id];setAccent(L.rgb,L.c);state.screen="menu";
+  const brief={1:'วิเคราะห์สื่อ 5 ชิ้น REAL/DEEPFAKE — เริ่มจากตรวจ <b>แหล่งที่มา</b> (🌐 ใช้ token) แล้ว INSPECT หา artifact เสริม',
+    2:'คัดกรอง packet 6 ชิ้น ALLOW/BLOCK — ปล่อยภัยหลุด = ปลอดภัยลดหนัก, บล็อกของจริง = น่าเชื่อถือลด',
+    3:'สวมบท DPO ตัดสิน 6 คดี 3 ทาง เทียบ 4 เสา consent (อ้าง PDPA จริง) — ตัดสินผ่อนเกินไป=ปลอดภัยลด, เข้มเกินไป=น่าเชื่อถือลด',
+    4:'<b>ด่านบอส!</b> เหตุการณ์เดียวยาว 3 ช่วง: คลิป Deepfake → ลิงก์ Phishing → ตัดสิน PDPA ใช้ทุกสกิล มาตรวัด & token ใช้ร่วมกันทั้งด่าน'}[id];
+  app.innerHTML='<div class="topglow"></div><div class="screen fade" style="text-align:center"><div class="kicker">'+(id===4?"Final Mission":"Mission 0"+id)+'</div>'
+    +'<div style="font-size:58px;margin:14px 0;filter:drop-shadow(0 0 24px '+L.c+')">'+L.ico+'</div><div class="logo gradtext" style="font-size:clamp(24px,6.5vw,42px)">'+L.name+'</div>'
+    +'<div class="glasscard" style="text-align:left;margin-top:16px"><p>'+brief+'</p></div>'
+    +'<button class="btn btn-main" onclick="initLevel('+id+')">▶ เริ่ม'+(id===4?"ด่านบอส":"ด่าน")+'</button><div style="height:9px"></div><button class="btn btn-ghost" onclick="map()">‹ กลับแผนที่</button></div>';}
+
+function initLevel(id){state.lvl=id;state.idx=0;state.bossStage=0;state.safety=CONFIG.meterStart;state.trust=CONFIG.meterStart;state.score=0;state.correct=0;state.reason=0;state.streak=0;state.maxStreak=0;state.inspectAll=true;state.noHint=true;state.fnCount=0;state.lowMeter=100;state.tokens=CONFIG.tokens[state.diffKey];state.list=id===4?[]:shuffle(getList(id));loadCard();}
+/* ====== LOAD CARD ====== */
+function loadCard(){state.screen=isBoss()?"boss":"card";const L=LV[state.lvl],s=cur(),mech=curMech();
+  state.tLeft=CONFIG.time[state.diffKey];state.hints=0;state.answered=false;state.inspect=false;state.crossed=false;
+  const sa=state.safety,tr=state.trust;
+  app.innerHTML='<div class="topglow"></div><div class="fade">'
+    +'<div class="hud"><span class="tag">'+L.ico+' '+(isBoss()?"BOSS "+(state.bossStage+1)+"/3":(curIdx()+1)+"/"+curLen())+'</span><span class="spacer"></span>'
+    +'<span class="meter" title="ความปลอดภัย"><span class="lab">🛡️</span><span class="bar"><i id="bSafe" style="width:'+sa+'%;background:'+meterColor(sa)+'"></i></span><span class="pct" id="pSafe" style="color:'+meterColor(sa)+'">'+sa+'</span></span>'
+    +'<span class="meter" title="ความน่าเชื่อถือ"><span class="lab">🤝</span><span class="bar"><i id="bTrust" style="width:'+tr+'%;background:'+meterColor(tr)+'"></i></span><span class="pct" id="pTrust" style="color:'+meterColor(tr)+'">'+tr+'</span></span>'
+    +'<span class="chip tok" title="เวลาตรวจสอบ"><span id="tok">🔅 '+state.tokens+'</span></span>'
+    +'<span class="chip streak '+(state.streak>=CONFIG.comboStep?"hot":"")+'" id="streakChip">🔥 x'+comboMult().toFixed(1)+'</span>'
+    +'<button class="iconbtn" id="muteBtn" onclick="toggleMute()">'+(state.sound?"🔊":"🔇")+'</button>'
+    +'<span class="timer" id="timer">0:'+String(state.tLeft).padStart(2,"0")+'</span></div>'
+    +'<div class="game"><div class="evidence"><div class="plabel">'+(mech==="phish"?"Packet Inspector":mech==="v3"?"Case File":"Evidence Scanner")+'</div><div class="sc-title">'+s.ti+'</div>'+evidence(s,mech)+'<div id="srcSlot"></div>'
+    +'<div class="verifyrow"><button class="vbtn" id="inspectBtn" onclick="doInspect()">🔍 INSPECT<span class="cost">−1 token</span></button><button class="vbtn src" id="crossBtn" onclick="doCross()">🌐 ตรวจแหล่ง<span class="cost">−2 token</span></button></div><div class="clues" id="clues"></div></div>'
+    +'<div class="chat"><div class="plabel">น้องคำนวณ AI</div><div class="chatwin" id="chatwin"></div>'
+    +'<div style="display:flex;gap:6px;overflow-x:auto;padding-bottom:2px"><button class="quickbtn" onclick="quickAsk(\'ใบ้หน่อย\')">💡 คำใบ้ (−1)</button><button class="quickbtn" onclick="quickAsk(\''+(mech==="b2"?"ตรวจ deepfake ยังไง":mech==="phish"?"อ่าน url ยังไง":"4 เสา consent")+'\')">📖 เทคนิค</button></div>'
+    +'<div class="chatform"><input class="chatin" id="chatin" placeholder="พิมพ์ถาม (ฟรี)..." onkeydown="if(event.key===\'Enter\')sendChat()"><button class="chatsend" onclick="sendChat()">▶</button></div></div></div>'
+    +'<div class="actions"><div class="conf-row"><label>ความมั่นใจ:</label><input type="range" id="confSlider" min="0" max="100" value="50" oninput="document.getElementById(\'confVal\').textContent=this.value;state.confidence=+this.value"><div class="cv" id="confVal">50</div><label>%</label></div><span class="prompt">'+(mech==="v3"?"คำตัดสินของ DPO":"ตัดสินใจ")+' <span style="opacity:.6">(กดเลขได้)</span></span>'
+    +mechBtn[mech].map((b,i)=>'<button class="abtn '+b[1]+'" onclick="answer(\''+b[2]+'\')"><span class="kb">'+(i+1)+'</span>'+b[0]+'</button>').join("")+'</div></div>';
+  botSay(isBoss()&&state.bossStage===0?"⚠️ ภารกิจสุดท้าย! เริ่มจากถามว่า 'แหล่งนี้น่าเชื่อแค่ไหน' — ใช้ทุกสกิลที่เรียนมา":"เริ่มจากถามตัวเองว่า 'แหล่งนี้น่าเชื่อแค่ไหน' แล้วค่อยดูหลักฐาน · ติดตรงไหนถามผมได้");
+  startTimer();}
+
+function evidence(s,mech){
+  if(mech==="b2"){const vis=s.isCustom?'<img class="uimg" src="'+s.img+'" alt="">':'<svg width="150" height="138" viewBox="0 0 130 130" style="position:relative;z-index:1">'+(s.dr?s.dr():"")+'</svg>';
+    return '<div class="sc-sub">['+s.ty+'] '+s.sb+'</div><div class="viewport" id="viewport"><div class="scan"></div><span class="corner tl"></span><span class="corner tr"></span><span class="corner bl"></span><span class="corner br"></span>'+vis+'</div>';}
+  if(mech==="phish"){const url=s.url.map(p=>'<span class="u-'+p[1]+'">'+p[0]+'</span>').join("");
+    return '<div class="datacard"><div class="datarow"><span class="k">ผู้ส่ง</span><span class="v" style="color:#ff9a6e">'+s.sndr+'</span></div><div class="msgbox">'+s.msg+'</div><div class="datarow"><span class="k">URL</span></div><div class="urlbox">'+url+'</div></div>';}
+  return '<div class="datacard"><div class="datarow"><span class="k">ผู้ควบคุม</span><span class="v">'+s.ctrl+'</span></div><div class="datarow"><span class="k">เก็บอะไร</span><span class="v">'+s.dat+'</span></div><div class="datarow"><span class="k">วัตถุประสงค์</span><span class="v">'+s.pur+'</span></div><div class="datarow"><span class="k">ความยินยอม</span><span class="v" style="color:'+(s.bad?"var(--red)":"var(--green)")+'">'+s.con+'</span></div></div>';}
+
+function botSay(t){const w=document.getElementById("chatwin");if(!w)return;const d=document.createElement("div");d.className="bub bot";d.innerHTML='<div class="who">น้องคำนวณ</div>'+t;w.appendChild(d);w.scrollTop=w.scrollHeight;sfx("msg");}
+function meSay(t){const w=document.getElementById("chatwin");if(!w)return;const d=document.createElement("div");d.className="bub me";d.textContent=t;w.appendChild(d);w.scrollTop=w.scrollHeight;}
+function think(cb){const w=document.getElementById("chatwin");if(!w){cb();return;}const t=document.createElement("div");t.className="typing";t.innerHTML="<span></span><span></span><span></span>";w.appendChild(t);w.scrollTop=w.scrollHeight;setTimeout(function(){t.remove();cb();},550+Math.random()*350);}
+function sendChat(){const inp=document.getElementById("chatin");if(!inp)return;const v=inp.value.trim();if(!v)return;inp.value="";meSay(v);state.chatCount++;if(state.chatCount>=5)award("buddy");think(()=>botSay(brain(v)));}
+function quickAsk(q){const inp=document.getElementById("chatin");if(inp)inp.value="";meSay(q);state.chatCount++;if(state.chatCount>=5)award("buddy");think(()=>botSay(brain(q)));}
+function toggleMute(){state.sound=!state.sound;const b=document.getElementById("muteBtn");if(b)b.textContent=state.sound?"🔊":"🔇";if(state.sound){sfx("click");playBGM();}else stopBGM();}
+function updTokens(){const t=document.getElementById("tok");if(t)t.textContent="🔅 "+state.tokens;}
+
+function doInspect(){if(state.answered||state.inspect)return;if(state.tokens<CONFIG.cost.inspect){toast("🔅","token หมด — ต้องตัดสินด้วยข้อมูลที่มี");return;}
+  state.tokens-=CONFIG.cost.inspect;updTokens();state.inspect=true;sfx("inspect");const s=cur(),btn=document.getElementById("inspectBtn"),box=document.getElementById("clues"),vp=document.getElementById("viewport");
+  if(vp)vp.classList.add("inspect");btn.classList.add("active");btn.disabled=true;
+  box.innerHTML=s.cl.map(c=>'<span class="clue">● '+c+'</span>').join("");[].forEach.call(box.children,(el,i)=>setTimeout(()=>el.classList.add("show"),100*i));}
+function doCross(){if(state.answered||state.crossed)return;if(state.tokens<CONFIG.cost.cross){toast("🔅","token ไม่พอ (ต้องใช้ 2)");return;}
+  state.tokens-=CONFIG.cost.cross;updTokens();state.crossed=true;sfx("inspect");const s=cur(),mech=curMech(),btn=document.getElementById("crossBtn");btn.classList.add("active");btn.disabled=true;
+  let txt;if(mech==="b2")txt=s.an==="DEEPFAKE"?"🌐 ตรวจแหล่ง: ไม่พบสำนักข่าว/ช่องทางทางการยืนยันเรื่องนี้เลย — น่าสงสัยอย่างยิ่ง":"🌐 ตรวจแหล่ง: พบหลายแหล่งน่าเชื่อถือรายงานตรงกัน — สนับสนุนว่าเป็นของจริง";
+  else if(mech==="phish")txt="🌐 ตรวจ Domain จริง: "+s.truedom;else txt="⚖️ ฐานทางกฎหมายที่เกี่ยวข้อง: "+s.basis;
+  document.getElementById("srcSlot").innerHTML='<div class="srcbox">'+txt+'</div>';}
+/* ====== ANSWER FLOW ====== */
+function evaluate(s,c,mech){
+  if(mech==="b2"){const ok=c===s.an;return{ok:ok,err:ok?null:(c==="REAL"?"fn":"fp"),truth:s.an==="REAL"?"ของจริง (REAL)":"สื่อปลอม (DEEPFAKE)",lab:ok?null:(c==="REAL"?"เชื่อสื่อปลอม → ภัยลุกลาม":"กล่าวหาของจริงผิด")};}
+  if(mech==="phish"){const truth=s.ph,bl=c==="BLOCK",ok=bl===truth;let err=null,lab=null;
+    if(!ok){if(!bl&&truth){err="fn";lab="FALSE NEGATIVE — ภัยทะลุระบบ!";}else{err="fp";lab="FALSE POSITIVE — บล็อกของจริงเกินเหตุ";}}
+    else lab=bl?"TRUE POSITIVE — สกัดภัยสำเร็จ":"TRUE NEGATIVE — ปล่อยของจริงถูก";
+    return{ok:ok,err:err,truth:truth?"Phishing (ภัย)":"ปลอดภัย",lab:lab};}
+  const ok=c===s.vd,nm={COMPLIANT:"ถูกต้องตามกฎหมาย",NEEDS_CONSENT:"ต้องขอความยินยอมก่อน",VIOLATION:"ละเมิด PDPA"};let err=null,lab=null;
+  if(!ok){if(sevRank[c]<sevRank[s.vd]){err="fn";lab="ตัดสินผ่อนเกินไป → ข้อมูลเสี่ยงรั่ว";}else{err="fp";lab="ตัดสินเข้มเกินไป → กระทบความน่าเชื่อถือ";}}
+  return{ok:ok,err:err,truth:nm[s.vd],lab:lab};}
+
+function answer(c){if(state.answered||(state.screen!=="card"&&state.screen!=="boss"))return;state.answered=true;clearInterval(state.timerId);
+  if(!state.inspect)state.inspectAll=false;const s=cur(),mech=curMech(),r=evaluate(s,c,mech);state.pending=r;
+  if(r.ok){state.streak++;state.maxStreak=Math.max(state.maxStreak,state.streak);state.correct++;if(state.streak>=CONFIG.comboStep)award("combo");
+    const mult=comboMult(),gain=Math.round((CONFIG.baseScore+Math.round(state.tLeft/CONFIG.bonusTimeDiv))*mult);state.score+=gain;
+    state.safety=clamp(state.safety+CONFIG.healOnCorrect);state.trust=clamp(state.trust+CONFIG.healOnCorrect);
+    sfx(state.streak>=2?"combo":"correct");if(mech!=="b2")state.citizens++;if(state.tLeft>30)award("speed");}
+  else{state.streak=0;shake();if(r.err==="fn"){state.safety=clamp(state.safety-pen(CONFIG.pen.fn));if(mech==="phish")state.fnCount++;sfx(state.safety<=0?"breach":"wrong");}
+    else{state.trust=clamp(state.trust-pen(CONFIG.pen.fp));sfx("wrong");}}
+  state.lowMeter=Math.min(state.lowMeter,state.safety,state.trust);
+  state.playLog.push({ti:cur().ti,choice:c,truth:r.truth,ok:r.ok,conf:state.confidence,time:CONFIG.time[state.diffKey]-state.tLeft,inspect:state.inspect,cross:state.crossed,hint:!state.noHint,evid:null,evidOk:null});
+  evidLock(r,s);}
+
+function timeoutAnswer(){if(state.answered)return;state.answered=true;clearInterval(state.timerId);state.streak=0;shake();
+  state.safety=clamp(state.safety-pen(CONFIG.timeoutPen));state.lowMeter=Math.min(state.lowMeter,state.safety,state.trust);sfx(state.safety<=0?"breach":"wrong");
+  const s=cur(),mech=curMech();const truth=mech==="b2"?(s.an==="REAL"?"ของจริง":"สื่อปลอม"):mech==="phish"?(s.ph?"Phishing":"ปลอดภัย"):({COMPLIANT:"ถูกต้อง",NEEDS_CONSENT:"ต้องขอ consent",VIOLATION:"ละเมิด"})[s.vd];
+  state.pending={ok:false,err:"fn",truth:truth,lab:"หมดเวลา!"};feedback(s);}
+
+function evidLock(r,s){state.screen="evidlock";
+  app.innerHTML='<div class="topglow"></div><div class="lockwrap fade"><div class="kicker" style="color:'+(r.ok?"var(--green)":"var(--red)")+'">'+(r.ok?"ตัดสินถูก":"ตัดสินพลาด")+'</div>'
+    +'<div class="lockq">🎯 หลักฐานชิ้นไหนชี้ขาด?</div><div class="locksub">เลือกเหตุผลที่ทำให้ตัดสินแบบนั้น (เลือกถูก = โบนัส)</div>'
+    +'<div id="eopts">'+s.cl.map((c,i)=>'<button class="eopt" data-i="'+i+'" onclick="lockEvidence('+i+')"><span class="ek">'+(i+1)+'</span><span>'+c+'</span></button>').join("")+'</div></div>';}
+function lockEvidence(i){const opts=document.querySelectorAll(".eopt");[].forEach.call(opts,o=>o.style.pointerEvents="none");const key=0;
+  opts[i].classList.add(i===key?"right":"wrong");if(i!==key)opts[key].classList.add("right");
+  if(i===key){state.reason++;state.score+=CONFIG.evidenceBonus;sfx("correct");const rc=opts[key].getBoundingClientRect();fxParticles(rc.left+rc.width/2,rc.top+rc.height/2,30,8);}else sfx("wrong");
+  if(state.playLog.length){const last=state.playLog[state.playLog.length-1];last.evid=i;last.evidOk=i===key;}
+  setTimeout(afterAnswer,900);}
+function afterAnswer(){const r=state.pending,dead=state.safety<=0||state.trust<=0;
+  if(!dead&&r&&!r.ok&&r.err==="fn"){const key="fn"+(isBoss()?(state.bossStage+1):state.lvl);if(CASCADE[key]){consequence(CASCADE[key]);return;}}
+  feedback(cur());}
+
+function consequence(cas){state.screen="cascade";state.cascData=cas;
+  app.innerHTML='<div class="topglow"></div><div class="feedback fade"><div class="casc"><h3>⚠ '+cas.t+'</h3><p>'+cas.p+'</p>'
+    +cas.o.map((o,i)=>'<button class="btn btn-ghost" style="text-align:left;margin-bottom:8px" onclick="mitigate('+i+','+o[1]+')">'+o[0]+'</button>').join("")+'</div></div>';}
+function mitigate(i,good){const cas=state.cascData;if(good){state.safety=clamp(state.safety+10);toast("💪","แก้ไขถูกทาง! +10 ความปลอดภัย");}else toast("⚠️","ทำให้สถานการณ์แย่ลง");sfx(good?"correct":"wrong");
+  app.innerHTML='<div class="topglow"></div><div class="feedback fade"><div class="fbv '+(good?"ok":"no")+'">'+(good?"✓ จัดการได้":"✗ พลาดอีกครั้ง")+'</div><div class="fbex" style="margin-top:10px"><b>// บทเรียนเรื่องผลพวง</b><br>'+cas.ex+'</div><button class="btn btn-main" onclick="feedback(cur())">ดูสรุป ›</button></div>';}
+
+function feedback(s){state.screen="feedback";const r=state.pending,dead=state.safety<=0||state.trust<=0,last=curIdx()>=curLen()-1;
+  app.innerHTML='<div class="topglow"></div><div class="feedback fade"><div class="fbv '+(r.ok?"ok":"no")+'">'+(r.ok?"✓ ถูกต้อง":"✗ ผิดพลาด")+'</div>'
+    +(r.lab?'<div class="fbtruth">'+r.lab+'</div>':"")+'<div class="fbtruth">คำตอบที่ถูก: '+r.truth+'</div>'
+    +'<div class="fbmeters"><span class="fbm" style="color:'+meterColor(state.safety)+'">🛡️ ปลอดภัย '+state.safety+'</span><span class="fbm" style="color:'+meterColor(state.trust)+'">🤝 น่าเชื่อถือ '+state.trust+'</span>'+(state.streak>1?'<span class="fbm" style="color:var(--amber)">🔥 Streak '+state.streak+'</span>':"")+'</div>'
+    +'<div class="fbex"><b>// บทวิเคราะห์</b><br>'+s.ex+'</div>'
+    +(dead?'<button class="btn btn-main" style="background:linear-gradient(135deg,var(--red),#c0304a);color:#fff" onclick="levelFail()">ดูผล ›</button>':'<button class="btn btn-main" onclick="'+(last?"levelDone()":"nextCard()")+'">'+(last?'จบด่าน › <span style=opacity:.6>[Enter]</span>':'ต่อไป › <span style=opacity:.6>[Enter]</span>')+'</button>')+'</div>';}
+function nextCard(){if(isBoss())state.bossStage++;else state.idx++;loadCard();}
+
+function levelDone(){state.screen="menu";const avg=Math.round((state.safety+state.trust)/2),rank=rankOf(avg);sfx("win");state.totalScore+=state.score;
+  if(!state.ranks[state.lvl]||"FCBAS".indexOf(rank)>"FCBAS".indexOf(state.ranks[state.lvl]))state.ranks[state.lvl]=rank;
+  if(state.lvl<3)state.unlocked[state.lvl+1]=true;if(state.ranks[1]&&state.ranks[2]&&state.ranks[3])state.unlocked[4]=true;
+  if(state.correct===curLen())award("flawless");if(state.reason===curLen())award("reason");
+  if(state.lvl===1&&rank==="S")award("eagle");if(state.lvl===2&&state.fnCount===0)award("gate");if(state.lvl===3&&rank==="S")award("privacy");
+  if(state.lvl===4)award("boss");if(state.noHint)award("solo");if(state.tokens>0)award("frugal");
+  if(state.maxStreak>=CONFIG.comboStep)award("combo");if(state.lowMeter<30&&avg>0)award("comeback");if(state.safety>=80&&state.trust>=80)award("balance");
+  if(rank==="S"||state.lvl===4)confetti();const L=LV[state.lvl],next=state.lvl+1;
+  app.innerHTML='<div class="topglow"></div><div class="end fade"><div class="kicker">'+(state.lvl===4?"Final":"Mission 0"+state.lvl)+' Report</div>'
+    +'<div class="rankbig reveal" style="color:'+rankColor(rank)+';text-shadow:0 0 40px '+rankColor(rank)+'">'+rank+'</div><div class="endt" style="color:'+L.c+'">'+L.name+' CLEARED</div>'
+    +'<div class="statgrid"><div class="stat pop"><div class="n">'+state.correct+'/'+curLen()+'</div><div class="l">ตอบถูก</div></div><div class="stat pop" style="animation-delay:.1s"><div class="n">'+state.reason+'/'+curLen()+'</div><div class="l">เหตุผลถูก</div></div><div class="stat pop" style="animation-delay:.2s"><div class="n">'+state.score+'</div><div class="l">คะแนน</div></div></div>'
+    +'<div class="statgrid"><div class="stat"><div class="n" style="color:'+meterColor(state.safety)+'">'+state.safety+'</div><div class="l">🛡️ ปลอดภัย</div></div><div class="stat"><div class="n" style="color:'+meterColor(state.trust)+'">'+state.trust+'</div><div class="l">🤝 น่าเชื่อถือ</div></div><div class="stat"><div class="n">x'+state.maxStreak+'</div><div class="l">🔥 Streak สูงสุด</div></div></div>'
+    +(state.lvl<4?'<button class="btn btn-main" onclick="'+(state.lvl<3?"lvlIntro("+next+")":"map()")+'">'+(state.lvl<3?"ไปด่าน "+next+" ›":(state.unlocked[4]?"ปลดล็อกด่านบอส! ›":"กลับแผนที่ ›"))+'</button><div style="height:9px"></div><button class="btn btn-ghost" onclick="map()">‹ แผนที่</button>':'<button class="btn btn-main" style="background:linear-gradient(135deg,var(--amber),#ff9628);color:#1a1000" onclick="certificate()">🎓 รับใบประกาศ ›</button>')+'</div>';
+  saveProfile();}
+
+function levelFail(){state.screen="menu";const L=LV[state.lvl],which=state.safety<=0?"🛡️ ความปลอดภัยหมด (ปล่อยภัยหลุดมากไป)":"🤝 ความน่าเชื่อถือหมด (กล่าวหา/บล็อกของจริงมากไป)";
+  app.innerHTML='<div class="topglow"></div><div class="end fade"><div class="rankbig reveal" style="color:var(--red);text-shadow:0 0 40px var(--red)">F</div><div class="endt" style="color:var(--red)">MISSION FAILED</div>'
+    +'<div class="glasscard"><p>'+which+'<br><br>บทเรียน: ต้อง <b>บาลานซ์</b> ทั้งสองด้าน — คิดวิเคราะห์โดยใช้ <b>หลักฐาน</b> ไม่ปล่อยปละ และไม่ระแวงเกินเหตุ ลองใช้ 🌐 ตรวจแหล่ง ให้คุ้ม token แล้วกลับมาใหม่!</p></div>'
+    +'<button class="btn btn-main" onclick="initLevel('+state.lvl+')">↺ เล่นด่านนี้ใหม่</button><div style="height:9px"></div><button class="btn btn-ghost" onclick="map()">‹ แผนที่</button></div>';saveProfile();}
+
+function certificate(){state.screen="menu";sfx("win");confetti();const av=["F","C","B","A","S"],keys=Object.keys(state.ranks),sc=Object.values(state.ranks).reduce((a,r)=>a+av.indexOf(r),0);const overall=keys.length?av[Math.round(sc/keys.length)]:"B";
+  app.innerHTML='<div class="topglow"></div><div class="end fade"><div class="cert"><div class="seal">★ OBEC CYBER ACADEMY ★</div><div class="big">CYBER GUARDIAN<br>CERTIFIED</div>'
+    +'<p style="font-size:.81rem;color:var(--dim);line-height:1.7">มอบให้ <b style="color:var(--txt)">'+state.player+'</b><br>ผู้พิชิตภารกิจรู้เท่าทันสื่อ ความปลอดภัยไซเบอร์ PDPA และด่านบอส</p>'
+    +'<div style="font-family:var(--display);font-size:44px;font-weight:800;color:var(--amber);margin-top:12px;text-shadow:0 0 24px rgba(255,192,70,.5)">RANK '+overall+'</div></div>'
+    +'<div class="statgrid"><div class="stat"><div class="n">'+(state.ranks[1]||"-")+'</div><div class="l">Deepfake</div></div><div class="stat"><div class="n">'+(state.ranks[2]||"-")+'</div><div class="l">Phishing</div></div><div class="stat"><div class="n">'+(state.ranks[3]||"-")+'</div><div class="l">PDPA</div></div></div>'
+    +'<div class="statgrid"><div class="stat"><div class="n" style="color:var(--pink)">'+(state.ranks[4]||"-")+'</div><div class="l">👑 บอส</div></div><div class="stat"><div class="n">'+state.totalScore+'</div><div class="l">คะแนนรวม</div></div><div class="stat"><div class="n">'+state.badges.size+'</div><div class="l">เหรียญ</div></div></div>'
+    +'<button class="btn btn-main" onclick="window.print()">🖨️ บันทึก / พิมพ์</button><div style="height:9px"></div>'
+    +(state.postScore===null?'<button class="btn btn-ghost" onclick="startQuiz(\'post\')">📝 แบบทดสอบหลังเรียน</button><div style="height:9px"></div>':"")
+    +'<button class="btn btn-ghost" onclick="leaderboard()">🏆 อันดับ</button></div>';saveProfile();}
+
+function badgesScreen(){state.screen="menu";
+  app.innerHTML='<div class="topglow"></div><div class="screen fade"><div class="kicker">Achievements</div><div class="logo gradtext" style="font-size:30px">🎖️ เหรียญตรา</div><div class="tagline">ปลดล็อก '+state.badges.size+' / '+BADGES.length+'</div>'
+    +'<div class="badgegrid stagger">'+BADGES.map(b=>'<div class="badge '+(state.badges.has(b.id)?"got":"")+'"><div class="em">'+b.em+'</div><div class="bn">'+b.nm+'</div><div class="bd">'+b.ds+'</div></div>').join("")+'</div><div style="height:16px"></div><button class="btn btn-ghost" onclick="map()">‹ กลับ</button></div>';}
+
+function leaderboard(){state.screen="menu";const lb=getLB().sort((a,b)=>b.score-a.score),top3=lb.slice(0,3),rest=lb.slice(0,12),medal=["🥇","🥈","🥉"];
+  let podium="";if(top3.length){const order=[1,0,2];podium='<div class="podium">'+order.map(i=>top3[i]?'<div class="pod p'+(i+1)+'"><div class="av">'+medal[i]+'</div><div class="pn">'+top3[i].name+'</div><div class="ps">'+top3[i].score+'</div></div>':"").join("")+'</div>';}
+  app.innerHTML='<div class="topglow"></div><div class="screen fade"><div class="kicker">Class Leaderboard</div><div class="logo gradtext" style="font-size:30px">🏆 กระดานคะแนน</div><div class="tagline">การแข่งขันในห้อง · บันทึกในเครื่องนี้</div>'
+    +(lb.length?podium:"")+(lb.length?'<div class="stagger">'+rest.map((e,i)=>'<div class="lbrow '+(e.name===state.player?"me":"")+'"><div class="pos">'+(i<3?medal[i]:"#"+(i+1))+'</div><div><div class="nm">'+e.name+'</div><div class="meta">'+(e.badges||0)+' เหรียญ · Rank '+(e.rank||"-")+'</div></div><div style="flex:1"></div><div class="sc">'+e.score+'</div></div>').join("")+'</div>':'<div class="glasscard"><p>ยังไม่มีคะแนน — เล่นจบด่านแล้วชื่อคุณจะขึ้นที่นี่!</p></div>')
+    +'<div style="height:12px"></div><div class="nav-tabs"><div class="tab" onclick="map()">‹ กลับ</div>'+(lb.length?'<div class="tab" onclick="clearLB()">🗑️ ล้าง</div>':"")+'</div></div>';}
+
+/* ====== PERSIST + TIMER + KEYBOARD ====== */
+function getLB(){try{return JSON.parse(localStorage.getItem("cg_lb")||"[]");}catch(e){return[];}}
+function saveProfile(){try{let lb=getLB();const i=lb.findIndex(e=>e.name===state.player);const av=["F","C","B","A","S"],keys=Object.keys(state.ranks),sc=Object.values(state.ranks).reduce((a,r)=>a+av.indexOf(r),0),overall=keys.length?av[Math.round(sc/keys.length)]:"-";
+  const entry={name:state.player,score:state.totalScore,badges:state.badges.size,rank:overall,date:Date.now()};
+  if(i>=0){if(state.totalScore>=lb[i].score)lb[i]=entry;}else lb.push(entry);localStorage.setItem("cg_lb",JSON.stringify(lb));
+  localStorage.setItem("cg_p_"+state.player,JSON.stringify({badges:[].slice.call(state.badges),ranks:state.ranks,score:state.totalScore,pre:state.preScore,post:state.postScore}));}catch(e){}}
+function loadProfile(){try{const p=JSON.parse(localStorage.getItem("cg_p_"+state.player)||"null");if(p){state.badges=new Set(p.badges||[]);if(p.pre!=null)state.preScore=p.pre;if(p.post!=null)state.postScore=p.post;}}catch(e){}}
+function clearLB(){if(confirm("ล้างกระดานคะแนน?")){localStorage.removeItem("cg_lb");leaderboard();}}
+function startTimer(){clearInterval(state.timerId);state.timerId=setInterval(function(){state.tLeft--;const t=document.getElementById("timer");if(!t){clearInterval(state.timerId);return;}t.textContent="0:"+String(Math.max(0,state.tLeft)).padStart(2,"0");t.classList.toggle("low",state.tLeft<=10);if(state.tLeft<=0){clearInterval(state.timerId);timeoutAnswer();}},1000);}
+document.addEventListener("keydown",function(e){const typing=e.target.tagName==="INPUT"||e.target.tagName==="TEXTAREA";
+  if((state.screen==="card"||state.screen==="boss")&&!state.answered&&!typing){if(e.key==="i"||e.key==="I"){doInspect();return;}if(e.key==="c"||e.key==="C"){doCross();return;}const n=parseInt(e.key),mech=curMech();if(n>=1&&n<=mechBtn[mech].length)answer(mechBtn[mech][n-1][2]);}
+  else if(state.screen==="evidlock"&&!typing){const n=parseInt(e.key),opts=app.querySelectorAll(".eopt");if(n>=1&&n<=opts.length&&opts[0]&&opts[0].style.pointerEvents!=="none")lockEvidence(n-1);}
+  else if(state.screen==="feedback"&&e.key==="Enter"){const b=app.querySelector(".btn-main");if(b)b.click();}
+  else if(state.screen==="quiz"&&!typing){const n=parseInt(e.key),opts=app.querySelectorAll(".qopt");if(n>=1&&n<=opts.length&&opts[0]&&opts[0].style.pointerEvents!=="none")answerQuiz(n-1);}});
+
+/* ====== ACADEMY HUB (New Entry Point) ====== */
+function academy(){state.screen="boot";setAccent("61,225,255","#3de1ff");
+  app.innerHTML='<div class="topglow"></div><div class="screen fade">'
+    +'<div class="kicker">Learning Platform · v1.0</div><div class="logo gradtext">GUARDIAN<br>ACADEMY</div>'
+    +'<div class="tagline">แพลตฟอร์มเรียนรู้ไซเบอร์ครบวงจร · 5 เฟส</div>'
+    +'<span class="field-lbl">โปรไฟล์ผู้เล่น</span><input class="inp" id="pName" placeholder="ชื่อของคุณ" maxlength="16">'
+    +'<div class="glasscard"><h3>🔐 การคุ้มครองข้อมูล (ตัวอย่าง PDPA จริง)</h3><p>เก็บเฉพาะ <b>ชื่อ</b> ไว้ใน <b>เครื่องนี้เท่านั้น</b> ลบได้ทุกเมื่อ (4 เสา consent: เสรี ชัดแจ้ง เฉพาะเจาะจง ถอนได้)</p>'
+    +'<div class="chk" id="consent" tabindex="0" role="checkbox" aria-checked="false"><div class="box">✓</div><div class="lbl">ฉันยินยอม</div></div>'
+    +'<button class="btn btn-ghost" style="font-size:.69rem;padding:9px" onclick="wipeMe()">🗑️ ลบข้อมูลของฉัน</button></div>'
+    +'<span class="field-lbl">ระดับความยาก</span><div class="seg" id="diff"><div class="opt" data-d="easy">ง่าย</div><div class="opt on" data-d="normal">ปกติ</div><div class="opt" data-d="hard">ยาก</div></div>'
+    +'<div class="seg"><div class="opt on" id="sndOn" onclick="setSnd(true)">🔊</div><div class="opt" id="sndOff" onclick="setSnd(false)">🔇</div><div class="opt" onclick="setFont(-1)">A−</div><div class="opt" onclick="setFont(1)">A＋</div></div>'
+    +'<button class="btn btn-main" id="go">▶ เข้าสู่ Academy</button></div>';
+  document.getElementById("diff").onclick=function(e){const o=e.target.closest(".opt");if(!o)return;[].forEach.call(e.currentTarget.children,c=>c.classList.remove("on"));o.classList.add("on");sfx("click");state.diffKey=o.dataset.d;};
+  var con=document.getElementById("consent");con.onclick=function(){state.consent=!state.consent;con.classList.toggle("on",state.consent);con.setAttribute("aria-checked",state.consent);sfx("click");};
+  con.onkeydown=function(e){if(e.key===" "||e.key==="Enter"){e.preventDefault();con.click();}};
+  document.getElementById("go").onclick=function(){ac();var nm=(document.getElementById("pName").value||"").trim();if(!state.consent){toast("🔐","กรุณายินยอมก่อน — นี่คือตัวอย่าง consent ตาม PDPA!");return;}state.player=nm||"ผู้เล่น";loadProfile();sfx("click");playBGM();academyHub();};}
+
+function academyHub(){state.screen="menu";setAccent("61,225,255","#3de1ff");
+  // unlock logic
+  if(state.discoverDone)state.phase[2]=true;
+  if(state.lessonsCompleted.size>=4)state.phase[3]=true;
+  if(Object.keys(state.ranks).length>0)state.phase[4]=true;
+  var phases=[
+    {n:1,nm:"DISCOVER",sub:"ลองก่อนเรียน (Productive Failure)",ico:"🔍",c:"#3de1ff",done:state.discoverDone},
+    {n:2,nm:"LEARN",sub:"บทเรียน Micro-lesson + Skill Tree ("+state.lessonsCompleted.size+"/"+LESSONS.length+")",ico:"📖",c:"#6b8bff",done:state.lessonsCompleted.size>=LESSONS.length},
+    {n:3,nm:"PLAY",sub:"ลงสนามจริง — เกม Cyber Guardian เต็มรูปแบบ",ico:"⚔️",c:"#2bffb0",done:!!state.ranks[4]},
+    {n:4,nm:"REFLECT",sub:"สะท้อนการเรียนรู้ + สอนเพื่อน + Radar",ico:"🪞",c:"#c06bff",done:state.teachScore!==null},
+    {n:5,nm:"APPLY",sub:"ใช้ในชีวิตจริง (Daily Challenge + URL Scanner)",ico:"🌍",c:"#ff6bd6",done:false}
+  ];
+  app.innerHTML='<div class="topglow"></div><div class="screen fade">'
+    +'<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px"><div><div class="mono" style="font-size:.63rem;color:var(--dim)">ผู้เล่น</div><div style="font-family:var(--display);font-weight:700;font-size:1.1rem">👤 '+state.player+'</div></div><div style="text-align:right"><div class="mono" style="font-size:.63rem;color:var(--dim)">คะแนนรวม</div><div class="gradtext" style="font-family:var(--display);font-weight:800;font-size:1.5rem">'+state.totalScore+'</div></div></div>'
+    +'<div class="stagger">'+phases.map(function(p){var open=state.phase[p.n];return '<div class="phasecard '+(open?"":"lock")+'" style="--c:'+p.c+'" '+(open?'onclick="goPhase('+p.n+')" tabindex="0"':"")+'><div class="num" style="color:'+p.c+'">'+p.ico+'</div><div><h4>เฟส '+p.n+': '+p.nm+'</h4><div class="sub">'+p.sub+'</div></div><div class="check">'+(p.done?"✅":open?"›":"🔒")+'</div></div>';}).join("")+'</div>'
+    +'<div class="nav-tabs"><div class="tab" onclick="leaderboard()">🏆</div><div class="tab" onclick="badgesScreen()">🎖️ '+state.badges.size+'</div><div class="tab" onclick="howto()">❓</div><div class="tab" onclick="academy()">⚙️</div></div></div>';}
+function goPhase(n){sfx("click");if(n===1)discover();else if(n===2)skillTree();else if(n===3)preTestPrompt();else if(n===4)reflect();else if(n===5)applyPhase();}
+
+/* ====== PHASE 1: DISCOVER (Productive Failure) ====== */
+var DISC_IX=[{lv:1,i:0},{lv:2,i:1},{lv:2,i:3},{lv:3,i:3}]; // 4 scenarios: deepfake, safe email, phishing sms, pdpa tick
+function discover(){state.screen="menu";setAccent("255,192,70","#ffc046");
+  app.innerHTML='<div class="topglow"></div><div class="screen fade" style="text-align:center"><div class="kicker">Phase 1: Discover</div>'
+    +'<div class="logo gradtext" style="font-size:30px">🔍 ลองก่อนเรียน</div>'
+    +'<div class="glasscard" style="text-align:left"><p>ลองตัดสินใจ 4 สถานการณ์ <b>โดยไม่ต้องมีความรู้ก่อน</b> — ผิดไม่เป็นไร! เป้าหมายคือดูว่า <b>คุณมีจุดบอดตรงไหน</b> แล้วเฟสถัดไปจะเติมเต็ม</p></div>'
+    +'<button class="btn btn-main" onclick="discStart()">▶ เริ่มสำรวจ</button><div style="height:9px"></div><button class="btn btn-ghost" onclick="academyHub()">‹ กลับ</button></div>';}
+var discState={idx:0,correct:0,results:[]};
+function discStart(){discState={idx:0,correct:0,results:[]};discCard();}
+function discCard(){state.screen="discover";var di=DISC_IX[discState.idx],s=LV[di.lv].d[di.i],mech=LV[di.lv].mech;
+  app.innerHTML='<div class="topglow"></div><div class="screen fade"><div class="kicker">สำรวจ '+(discState.idx+1)+'/'+DISC_IX.length+'</div><div class="sc-title" style="margin-bottom:12px">'+s.ti+'</div>'+evidence(s,mech)
+    +'<div style="margin-top:16px;display:flex;gap:10px;flex-wrap:wrap;justify-content:center">'+mechBtn[mech].map(function(b,i){return '<button class="abtn '+b[1]+'" onclick="discAnswer(\''+b[2]+'\','+di.lv+','+di.i+')"><span class="kb">'+(i+1)+'</span>'+b[0]+'</button>';}).join("")+'</div></div>';}
+function discAnswer(c,lv,idx){var s=LV[lv].d[idx],mech=LV[lv].mech,r=evaluate(s,c,mech);discState.results.push({ti:s.ti,ok:r.ok,truth:r.truth});if(r.ok)discState.correct++;sfx(r.ok?"correct":"wrong");
+  app.innerHTML='<div class="topglow"></div><div class="feedback fade"><div class="fbv '+(r.ok?"ok":"no")+'">'+(r.ok?"✓ ถูก!":"✗ พลาด")+'</div><div class="fbtruth">คำตอบที่ถูก: '+r.truth+'</div>'
+    +'<div class="glasscard" style="margin-top:14px"><p>'+(r.ok?"เก่งมาก! คุณจับได้ — ในเฟสถัดไปจะเรียนว่า <b>ทำไม</b> ถึงเป็นแบบนี้":"ไม่เป็นไร! คนส่วนใหญ่พลาดข้อนี้เหมือนกัน — ในเฟสถัดไปจะเรียนว่า <b>ทำไม</b> และจะไม่พลาดอีก")+'</p></div>'
+    +'<button class="btn btn-main" onclick="discNext()">ต่อไป ›</button></div>';}
+function discNext(){discState.idx++;if(discState.idx<DISC_IX.length)discCard();else discResult();}
+function discResult(){state.discoverDone=true;state.phase[2]=true;saveProfile();confetti();
+  app.innerHTML='<div class="topglow"></div><div class="end fade"><div class="kicker">Phase 1 Complete</div><div class="rankbig reveal" style="color:var(--amber)">'+discState.correct+'/'+DISC_IX.length+'</div><div class="endt">สำรวจจุดบอด</div>'
+    +'<div class="glasscard" style="text-align:left"><p>'+(discState.correct<=2?'คุณได้ '+discState.correct+' จาก '+DISC_IX.length+' ข้อ — <b>ไม่ต้องกังวล!</b> เฟส 2 จะสอนทุกอย่างที่พลาด ':'เก่งมาก! ได้ '+discState.correct+' ข้อ — เฟส 2 จะทำให้เข้าใจ <b>ลึกขึ้น</b> ')+'</p>'
+    +'<p style="margin-top:8px">'+discState.results.map(function(r){return (r.ok?"✅":"❌")+" "+r.ti+" → "+r.truth;}).join("<br>")+'</p></div>'
+    +'<button class="btn btn-main" onclick="skillTree()">▶ เฟส 2: เรียนรู้ ›</button><div style="height:9px"></div><button class="btn btn-ghost" onclick="academyHub()">‹ กลับ</button></div>';}
+
+/* ====== PHASE 2: LEARN (Micro-lessons + Skill Tree) ====== */
+function skillTree(){state.screen="menu";setAccent("107,139,255","#6b8bff");
+  app.innerHTML='<div class="topglow"></div><div class="screen fade"><div class="kicker">Phase 2: Learn</div><div class="logo gradtext" style="font-size:28px">📖 Skill Tree</div>'
+    +'<div class="tagline">เรียนจบ 4+ บทเรียน เพื่อปลดล็อกเฟส 3 (เล่นจริง) · จบแล้ว '+state.lessonsCompleted.size+'/'+LESSONS.length+'</div>'
+    +'<div class="stagger">'+LESSONS.map(function(l){var done=state.lessonsCompleted.has(l.id);return '<div class="lessoncard '+(done?"done":"")+'" onclick="lesson(\''+l.id+'\')"><span class="lic">'+l.ico+'</span><span class="lnm">'+l.nm+'</span>'+(done?'<span class="ldone" style="margin-left:auto">✅</span>':"")+'</div>';}).join("")+'</div>'
+    +(state.lessonsCompleted.size>=4?'<button class="btn btn-main" onclick="goPhase(3)">▶ พร้อมแล้ว! ไปเฟส 3 ›</button><div style="height:9px"></div>':"")
+    +'<button class="btn btn-ghost" onclick="academyHub()">‹ กลับ</button></div>';}
+
+function lesson(id){state.screen="lesson";var l=LESSONS.find(function(x){return x.id===id;});if(!l)return;
+  app.innerHTML='<div class="topglow"></div><div class="lpage fade"><div class="kicker">Micro-lesson</div><div class="logo gradtext" style="font-size:26px">'+l.ico+' '+l.nm+'</div>'
+    +'<div class="hook">'+l.hook+'</div>'
+    +'<div class="glasscard"><h3>📝 สิ่งที่ต้องรู้</h3><ul class="pts">'+l.pts.map(function(p){return '<li>'+p+'</li>';}).join("")+'</ul></div>'
+    +'<div class="exbox"><div class="exgood"><b>ตัวอย่างที่ถูก:</b><br>'+l.good+'</div><div class="exbad"><b>ตัวอย่างที่ผิด:</b><br>'+l.bad+'</div></div>'
+    +'<button class="btn btn-main" onclick="lessonCheck(\''+l.id+'\')">📋 ทดสอบความเข้าใจ</button><div style="height:9px"></div><button class="btn btn-ghost" onclick="skillTree()">‹ กลับ Skill Tree</button></div>';}
+
+function lessonCheck(id){state.screen="lcheck";var l=LESSONS.find(function(x){return x.id===id;});if(!l)return;var q=l.check;
+  app.innerHTML='<div class="topglow"></div><div class="screen fade"><div class="kicker">Check: '+l.nm+'</div>'
+    +'<div class="glasscard" style="margin-bottom:18px"><p style="color:var(--txt);font-size:1rem;line-height:1.7">'+q.q+'</p></div>'
+    +'<div>'+q.o.map(function(o,i){return '<button class="qopt" data-i="'+i+'" onclick="lcheckAns(\''+id+'\','+i+')"><span class="qk">'+(i+1)+'</span><span>'+o+'</span></button>';}).join("")+'</div></div>';}
+function lcheckAns(id,i){var l=LESSONS.find(function(x){return x.id===id;});if(!l)return;var q=l.check,opts=document.querySelectorAll(".qopt");[].forEach.call(opts,function(o){o.style.pointerEvents="none";});
+  opts[i].classList.add(i===q.a?"right":"wrong");if(i!==q.a)opts[q.a].classList.add("right");
+  if(i===q.a){state.lessonsCompleted.add(id);if(state.lessonsCompleted.size>=4)state.phase[3]=true;sfx("correct");toast(l.ico,"เข้าใจแล้ว: "+l.nm);saveProfile();setTimeout(skillTree,1200);}
+  else{sfx("wrong");setTimeout(function(){toast("💡","ลองอ่านบทเรียนอีกครั้ง แล้วทดสอบใหม่");lesson(id);},1500);}}
+
+/* ====== PHASE 4: REFLECT ====== */
+function reflect(){state.screen="menu";setAccent("192,107,255","#c06bff");
+  app.innerHTML='<div class="topglow"></div><div class="screen fade"><div class="kicker">Phase 4: Reflect</div><div class="logo gradtext" style="font-size:28px">🪞 สะท้อนการเรียนรู้</div><div class="tagline">ทบทวนผลงาน วิเคราะห์จุดแข็ง-จุดอ่อน สอนเพื่อน</div>'
+    +'<div class="stagger">'
+    +'<div class="lessoncard" onclick="portfolio()"><span class="lic">📊</span><span class="lnm">Reasoning Portfolio — ดูผลงานทุกข้อ</span></div>'
+    +'<div class="lessoncard" onclick="radar()"><span class="lic">📡</span><span class="lnm">Radar Chart — จุดแข็ง/จุดอ่อน 6 ด้าน</span></div>'
+    +'<div class="lessoncard" onclick="tbStart()"><span class="lic">🎓</span><span class="lnm">สอนเพื่อน (Teach-Back) '+(state.teachScore!==null?"✅ "+state.teachScore+"/"+TEACHBACK.length:"")+'</span></div>'
+    +(state.postScore===null?'<div class="lessoncard" onclick="startQuiz(\'post\')"><span class="lic">📝</span><span class="lnm">แบบทดสอบหลังเรียน</span></div>':"")
+    +'</div><button class="btn btn-ghost" onclick="academyHub()">‹ กลับ</button></div>';}
+
+/* ====== PORTFOLIO ====== */
+function portfolio(){state.screen="menu";
+  var log=state.playLog,confOk=0,confWrong=0;
+  log.forEach(function(r){if(r.ok&&r.conf>60)confOk++;if(!r.ok&&r.conf>60)confWrong++;});
+  app.innerHTML='<div class="topglow"></div><div class="screen fade"><div class="kicker">Reasoning Portfolio</div><div class="logo gradtext" style="font-size:24px">📊 บันทึกการตัดสินใจ</div>'
+    +(log.length?'<div style="overflow-x:auto"><table class="plog"><tr><th>#</th><th>สถานการณ์</th><th>ตัดสิน</th><th>ถูก?</th><th>มั่นใจ</th><th>เวลา</th><th>เครื่องมือ</th><th>เหตุผล</th></tr>'
+    +log.map(function(r,i){var tools=[];if(r.inspect)tools.push("🔍");if(r.cross)tools.push("🌐");if(r.hint)tools.push("💡");
+      return '<tr class="'+(r.ok?"ok":"no")+'"><td>'+(i+1)+'</td><td>'+r.ti+'</td><td>'+r.choice+'</td><td>'+(r.ok?"✅":"❌")+'</td><td>'+r.conf+'%</td><td>'+r.time+'วิ</td><td>'+(tools.join("")||"–")+'</td><td>'+(r.evidOk?"🎯":"–")+'</td></tr>';}).join("")
+    +'</table></div>'
+    +'<div class="statgrid" style="margin-top:16px"><div class="stat"><div class="n">'+log.filter(function(r){return r.ok;}).length+'/'+log.length+'</div><div class="l">ตอบถูก</div></div><div class="stat"><div class="n" style="color:'+(confWrong>0?"var(--red)":"var(--green)")+'">'+confWrong+'</div><div class="l">มั่นใจสูง+ผิด ⚠️</div></div><div class="stat"><div class="n">'+log.filter(function(r){return r.evidOk;}).length+'</div><div class="l">เหตุผลถูก 🎯</div></div></div>'
+    :'<div class="glasscard"><p>ยังไม่มีข้อมูล — ไปเล่นเฟส 3 ก่อนแล้วกลับมาดูที่นี่</p></div>')
+    +'<button class="btn btn-ghost" onclick="reflect()">‹ กลับ</button></div>';}
+
+/* ====== RADAR CHART ====== */
+function radar(){state.screen="menu";var log=state.playLog,n=log.length||1;
+  var lat=log.filter(function(r){return r.cross;}).length/n*100;
+  var url=log.filter(function(r){return r.ok;}).length/n*100;
+  var pdpa=url; // simplified
+  var meta=100-log.filter(function(r){return !r.ok&&r.conf>60;}).length/n*100;
+  var spd=log.reduce(function(a,r){return a+(r.ok?(CONFIG.time[state.diffKey]-r.time):0);},0)/(log.filter(function(r){return r.ok;}).length||1);spd=Math.min(100,spd*2.5);
+  var rsn=log.filter(function(r){return r.evidOk;}).length/n*100;
+  var vals=[lat,url,pdpa,meta,spd,rsn],labels=["Lateral\nReading","URL\nAnalysis","PDPA","Meta-\ncognition","Speed","Reasoning"];
+  var cx=150,cy=150,R=110;
+  var svg='<svg viewBox="0 0 300 300" width="300" height="300" style="max-width:100%">';
+  // grid
+  for(var g=1;g<=4;g++){var gr=R*g/4;var pts=[];for(var j=0;j<6;j++){var ag=Math.PI*2*j/6-Math.PI/2;pts.push((cx+gr*Math.cos(ag))+","+(cy+gr*Math.sin(ag)));}svg+='<polygon points="'+pts.join(" ")+'" fill="none" stroke="rgba(120,160,230,.15)" stroke-width="1"/>';}
+  // axes + labels
+  for(var j=0;j<6;j++){var ag=Math.PI*2*j/6-Math.PI/2;var ex=cx+R*Math.cos(ag),ey=cy+R*Math.sin(ag);svg+='<line x1="'+cx+'" y1="'+cy+'" x2="'+ex+'" y2="'+ey+'" stroke="rgba(120,160,230,.2)"/>';
+    var lx=cx+(R+22)*Math.cos(ag),ly=cy+(R+22)*Math.sin(ag);var lb=labels[j].split("\n");svg+='<text x="'+lx+'" y="'+ly+'" text-anchor="middle" dominant-baseline="middle" fill="#8a9bc0" font-size="9">'+lb[0]+'</text>';if(lb[1])svg+='<text x="'+lx+'" y="'+String(ly+11)+'" text-anchor="middle" fill="#8a9bc0" font-size="9">'+lb[1]+'</text>';}
+  // data polygon
+  var dpts=[];for(var j=0;j<6;j++){var ag=Math.PI*2*j/6-Math.PI/2;var r=R*vals[j]/100;dpts.push((cx+r*Math.cos(ag))+","+(cy+r*Math.sin(ag)));}
+  svg+='<polygon points="'+dpts.join(" ")+'" fill="rgba(61,225,255,.2)" stroke="#3de1ff" stroke-width="2"/>';
+  for(var j=0;j<6;j++){var ag=Math.PI*2*j/6-Math.PI/2;var r=R*vals[j]/100;svg+='<circle cx="'+(cx+r*Math.cos(ag))+'" cy="'+(cy+r*Math.sin(ag))+'" r="4" fill="#3de1ff"/>';}
+  svg+='</svg>';
+  app.innerHTML='<div class="topglow"></div><div class="screen fade"><div class="kicker">Skill Radar</div><div class="logo gradtext" style="font-size:24px">📡 จุดแข็ง / จุดอ่อน</div>'
+    +'<div class="radar-wrap">'+svg+'</div>'
+    +'<div class="glasscard"><h3>การวิเคราะห์</h3><p>'
+    +(lat<40?'🌐 <b>Lateral Reading</b> — ลองใช้ปุ่ม "ตรวจแหล่ง" ให้มากขึ้น มันคือเครื่องมือทรงพลังที่สุด<br>':'')
+    +(meta<60?'🧠 <b>Metacognition</b> — คุณมั่นใจสูงแต่ผิดบ่อย ลองชะลอ + ตรวจสอบก่อนตัดสิน<br>':'')
+    +(rsn<50?'🎯 <b>Reasoning</b> — ลองฝึกเลือก "หลักฐานชี้ขาด" ให้ตรง จะช่วยให้คิดเป็นระบบขึ้น<br>':'')
+    +(lat>=40&&meta>=60&&rsn>=50?'👏 ทุกด้านอยู่ในเกณฑ์ดี! ลองท้าทายตัวเองด้วยระดับยากขึ้น':'')
+    +'</p></div><button class="btn btn-ghost" onclick="reflect()">‹ กลับ</button></div>';}
+
+/* ====== TEACH-BACK ====== */
+var tbIdx=0,tbScore=0;
+function tbStart(){tbIdx=0;tbScore=0;tbQuestion();}
+function tbQuestion(){state.screen="teachback";var q=TEACHBACK[tbIdx];
+  app.innerHTML='<div class="topglow"></div><div class="screen fade"><div class="kicker">Teach-Back '+(tbIdx+1)+'/'+TEACHBACK.length+'</div>'
+    +'<div class="tb-npc"><div class="av">👤</div><div class="bubble"><b>'+q.npc+' ถาม:</b> '+q.q+'</div></div>'
+    +'<div class="glasscard"><h3>คุณจะอธิบายว่าอย่างไร?</h3></div>'
+    +'<div>'+q.o.map(function(o,i){return '<button class="qopt" onclick="tbAnswer('+i+')"><span class="qk">'+(i+1)+'</span><span>'+o+'</span></button>';}).join("")+'</div></div>';}
+function tbAnswer(i){var q=TEACHBACK[tbIdx],opts=document.querySelectorAll(".qopt");[].forEach.call(opts,function(o){o.style.pointerEvents="none";});
+  opts[i].classList.add(i===q.a?"right":"wrong");if(i!==q.a)opts[q.a].classList.add("right");if(i===q.a){tbScore++;sfx("correct");}else sfx("wrong");
+  setTimeout(function(){tbIdx++;if(tbIdx<TEACHBACK.length)tbQuestion();else tbResult();},1000);}
+function tbResult(){state.teachScore=tbScore;saveProfile();if(tbScore===TEACHBACK.length)confetti();
+  app.innerHTML='<div class="topglow"></div><div class="end fade"><div class="kicker">Teach-Back Complete</div><div class="rankbig reveal" style="color:var(--green)">'+tbScore+'/'+TEACHBACK.length+'</div><div class="endt">สอนเพื่อนได้!</div>'
+    +'<div class="glasscard"><p>'+(tbScore>=4?'ยอดเยี่ยม! คุณอธิบายได้ถูกต้องเกือบหมด — <b>ถ้าสอนคนอื่นเข้าใจได้ แปลว่ารู้จริง</b> (Bloom ระดับสูงสุด)':tbScore>=3?"ดีมาก! ยังมีจุดที่ทบทวนได้ ลองเล่นเฟส 3 อีกครั้งแล้วกลับมาสอนใหม่":"ลองกลับไปเรียนในเฟส 2 แล้วมาสอนเพื่อนอีกครั้ง — ยิ่งสอนยิ่งเข้าใจ!")+'</p></div>'
+    +'<button class="btn btn-main" onclick="reflect()">‹ กลับ Phase 4</button></div>';}
+
+/* ====== PHASE 5: APPLY (placeholder + URL Scanner) ====== */
+function applyPhase(){state.screen="menu";setAccent("255,107,214","#ff6bd6");
+  app.innerHTML='<div class="topglow"></div><div class="screen fade"><div class="kicker">Phase 5: Apply</div><div class="logo gradtext" style="font-size:28px">🌍 ใช้ในชีวิตจริง</div>'
+    +'<div class="glasscard"><h3>🔗 URL Scanner</h3><p>วาง URL ที่เจอในชีวิตจริง แล้วดูว่าน่าสงสัยไหม</p></div>'
+    +'<input class="inp" id="scanUrl" placeholder="วาง URL ที่นี่ เช่น https://example.com">'
+    +'<button class="btn btn-main" onclick="scanUrl()">🔍 วิเคราะห์ URL</button><div id="scanResult" style="margin-top:14px"></div>'
+    +'<div class="glasscard" style="margin-top:18px"><h3>📅 Daily Challenge (Coming Soon)</h3><p>ทุกวันจะมีโจทย์ใหม่จากสถานการณ์จริง — กลับมาฝึกทุกวันเพื่อ Spaced Repetition!</p></div>'
+    +'<button class="btn btn-ghost" onclick="academyHub()">‹ กลับ</button></div>';}
+function scanUrl(){var url=(document.getElementById("scanUrl").value||"").trim(),out=document.getElementById("scanResult");if(!url){out.innerHTML='<div class="glasscard"><p>กรุณาวาง URL</p></div>';return;}
+  var flags=[];try{var u=new URL(url);if(u.protocol==="http:")flags.push("⚠️ http:// ไม่เข้ารหัส (ควรเป็น https)");
+    var host=u.hostname;if(/\d/.test(host.replace(/\./g,"")))flags.push("⚠️ domain มีตัวเลขปน — ตรวจว่าเป็น Typosquatting ไหม");
+    var tld=host.split(".").pop();if(["xyz","top","click","buzz","loan","win"].indexOf(tld)>=0)flags.push("🔴 TLD ."+tld+" มักพบในเว็บหลอกลวง");
+    if(host.indexOf("-")>=0)flags.push("⚠️ domain มีขีด (-) — อาจแอบอ้างเป็นเว็บอื่น");
+    if(!flags.length)flags.push("✅ ไม่พบสัญญาณผิดปกติเบื้องต้น — แต่ยังควรตรวจ domain จริงด้วย Lateral Reading");}
+  catch(e){flags.push("❌ URL ไม่ถูกรูปแบบ — ตรวจว่ามี https:// นำหน้า");}
+  out.innerHTML='<div class="glasscard"><h3>ผลวิเคราะห์</h3><p>Domain: <b>'+url+'</b></p><p>'+flags.join("<br>")+'</p><p style="margin-top:8px;font-size:.72rem;color:var(--dim)">⚠️ นี่เป็นการวิเคราะห์เบื้องต้นเท่านั้น ควร Lateral Reading เพิ่มเติมเสมอ</p></div>';}
+
+/* ====== Override map() to return to academyHub ====== */
+var _origMap = map;
+map = function(){_origMap();
+  // Replace the boot button in nav-tabs with academyHub
+  var tabs=app.querySelector(".nav-tabs");if(tabs){var btns=tabs.querySelectorAll(".tab");if(btns.length>=4)btns[3].setAttribute("onclick","academyHub()");btns[3].textContent="🏠 Academy";}};
+
+/* ====== Override certificate to include academyHub link ====== */
+var _origCert = certificate;
+certificate = function(){_origCert();
+  var node=document.createElement("div");node.style.marginTop="9px";node.innerHTML='<button class="btn btn-ghost" onclick="academyHub()">🏠 กลับ Academy Hub</button>';app.querySelector(".end").appendChild(node);};
+
+/* ====== PERSISTENCE update for new fields ====== */
+var _origSave = saveProfile;
+saveProfile = function(){_origSave();try{var p=JSON.parse(localStorage.getItem("cg_p_"+state.player)||"{}");
+  p.discoverDone=state.discoverDone;p.lessonsCompleted=[].slice.call(state.lessonsCompleted);p.teachScore=state.teachScore;p.playLog=state.playLog;
+  localStorage.setItem("cg_p_"+state.player,JSON.stringify(p));}catch(e){}};
+var _origLoad = loadProfile;
+loadProfile = function(){_origLoad();try{var p=JSON.parse(localStorage.getItem("cg_p_"+state.player)||"null");
+  if(p){if(p.discoverDone)state.discoverDone=true;if(p.lessonsCompleted)state.lessonsCompleted=new Set(p.lessonsCompleted);if(p.teachScore!=null)state.teachScore=p.teachScore;if(p.playLog)state.playLog=p.playLog;}}catch(e){}};
+
+academy();
+</script>
+</body>
+</html>
