@@ -52,6 +52,14 @@
   .glasscard::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:linear-gradient(var(--accent),var(--accent2))}
   .glasscard h3{font-family:var(--mono);color:var(--accent);font-size:.69rem;letter-spacing:2px;margin-bottom:10px;text-transform:uppercase}
   .glasscard p{font-size:.875rem;line-height:1.75;color:var(--dim)}.glasscard b{color:var(--txt)}
+  .edition{text-align:center;font-family:var(--thai);font-size:1.18rem;font-weight:800;background:linear-gradient(135deg,#fff 5%,var(--cyan) 45%,var(--purple) 95%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;margin-top:6px;letter-spacing:.5px}
+  .editbadge{text-align:center;display:block;margin:8px auto 0;width:fit-content;background:rgba(192,107,255,.14);border:1px solid rgba(192,107,255,.5);color:var(--pink);font-family:var(--mono);font-size:.62rem;letter-spacing:3px;text-transform:uppercase;padding:3px 14px;border-radius:20px}
+  .subjbadge{text-align:center;display:block;margin:14px auto 6px;width:fit-content;background:rgba(61,225,255,.12);border:1px solid var(--line2);color:var(--cyan);font-size:.82rem;font-weight:700;padding:5px 18px;border-radius:20px}
+  .featrow{display:flex;gap:6px;flex-wrap:wrap;justify-content:center;margin:16px 0 6px}
+  .featchip{display:flex;flex-direction:column;align-items:center;gap:4px;background:var(--glass2);border:1px solid var(--line);border-radius:11px;padding:9px 5px;min-width:58px;flex:1}
+  .featchip .fi{font-size:19px;filter:drop-shadow(0 2px 6px rgba(var(--accent-rgb),.5))}
+  .featchip .ft{font-size:.55rem;color:var(--dim);text-align:center;letter-spacing:.4px;line-height:1.25;font-family:var(--mono)}
+  .levelup{text-align:center;font-family:var(--mono);font-size:.6rem;letter-spacing:4px;color:var(--cyan);text-transform:uppercase;margin-top:10px;opacity:.9}
   .field-lbl{font-family:var(--mono);font-size:.63rem;color:var(--dim);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:7px;display:block}
   .inp{font-family:var(--thai);width:100%;padding:13px 15px;border:1px solid var(--line);border-radius:12px;background:rgba(8,12,26,.6);color:var(--txt);font-size:.875rem;transition:.2s;margin-bottom:14px}
   .inp:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(var(--accent-rgb),.15)}.inp::placeholder{color:var(--dim2)}
@@ -74,6 +82,17 @@
   .lvlcard .rk{margin-left:auto;font-family:var(--mono);font-size:.81rem;font-weight:700;padding:6px 12px;border-radius:10px;border:1px solid var(--line2);color:var(--dim)}
   .lvlcard .rk.has{color:var(--c);border-color:var(--c)}
   .hud{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:12px 18px;background:rgba(6,9,20,.65);border-bottom:1px solid var(--line);font-family:var(--mono);font-size:.66rem}
+  .lvlprog{height:6px;background:rgba(8,16,28,.7);position:relative;overflow:hidden}
+   .lvlprog{height:17px;background:rgba(8,16,28,.8);position:relative;overflow:hidden;border-bottom:1px solid var(--line)}
+  .lvlprog>i{display:block;height:100%;background:linear-gradient(90deg,rgba(var(--accent-rgb),.95),var(--cyan));transition:width .55s cubic-bezier(.2,.8,.2,1);box-shadow:0 0 14px rgba(var(--accent-rgb),.8)}
+  .lvlprog-txt{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:.6rem;font-family:var(--mono);font-weight:700;color:#fff;text-shadow:0 1px 3px rgba(0,0,0,.9);letter-spacing:.5px}
+  .hubprog{background:var(--glass2);border:1px solid var(--line);border-radius:14px;padding:13px 16px;margin-bottom:18px}
+  .hubprog-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:9px;font-size:.78rem;font-weight:700}
+  .hubprog-head span:first-child{color:var(--txt)}
+  .hubprog-pct{font-family:var(--mono);font-size:.72rem;color:var(--cyan)}
+  .hubprog-bar{height:12px;background:rgba(8,16,28,.85);border-radius:8px;overflow:hidden;position:relative}
+  .hubprog-bar>i{display:block;height:100%;background:linear-gradient(90deg,#3de1ff,#6b8bff,#ffc046,#c06bff,#2bffb0);background-size:200% 100%;border-radius:8px;transition:width .7s cubic-bezier(.2,.8,.2,1);box-shadow:0 0 16px rgba(61,225,255,.6);animation:hubFlow 4s linear infinite}
+  @keyframes hubFlow{0%{background-position:0% 50%}100%{background-position:200% 50%}}
   .hud .tag{color:var(--accent);font-weight:700;letter-spacing:.5px}.hud .spacer{flex:1}
   .meter{display:flex;align-items:center;gap:6px}.meter .lab{color:var(--dim);font-size:.56rem}
   .bar{width:74px;height:8px;background:rgba(8,16,28,.8);border-radius:6px;overflow:hidden;position:relative}
@@ -87,6 +106,8 @@
   @keyframes flame{to{transform:scale(1.12)}}
   .iconbtn{cursor:pointer;background:none;border:none;color:var(--dim);font-size:.9rem;transition:.2s;padding:3px}
   .iconbtn:hover{color:var(--accent);transform:scale(1.15)}
+  .simtag{display:inline-block;background:rgba(61,225,255,.16);border:1px solid rgba(61,225,255,.4);color:var(--accent);font-size:.72rem;font-weight:700;padding:1px 8px;border-radius:10px;margin-right:5px}
+  .simcap{font-size:.74rem;color:var(--muted);background:rgba(255,192,70,.08);border-left:3px solid var(--amber);padding:6px 9px;border-radius:0 6px 6px 0;margin-top:8px;line-height:1.4}
   .timer{font-weight:700;font-size:.9rem;color:var(--amber);min-width:46px;text-align:right}.timer.low{color:var(--red);animation:pulse .6s infinite}
   @keyframes pulse{50%{opacity:.4}}
   .game{display:grid;grid-template-columns:1.5fr 1fr;min-height:380px}@media(max-width:680px){.game{grid-template-columns:1fr}}
@@ -100,7 +121,7 @@
   .corner{position:absolute;width:15px;height:15px;border:2px solid var(--accent);opacity:.7}
   .corner.tl{top:9px;left:9px;border-right:0;border-bottom:0}.corner.tr{top:9px;right:9px;border-left:0;border-bottom:0}.corner.bl{bottom:9px;left:9px;border-right:0;border-top:0}.corner.br{bottom:9px;right:9px;border-left:0;border-top:0}
   .anomaly{opacity:0;transition:opacity .4s}.viewport.inspect .anomaly{opacity:1}
-  .uimg{max-width:100%;max-height:180px;border-radius:8px;position:relative;z-index:1}
+  .uimg{max-width:100%;max-height:230px;width:auto;height:auto;object-fit:contain;flex:0 0 auto;display:block;margin:0 auto;border-radius:8px;position:relative;z-index:1}50%{opacity:1}}
   .datacard{background:rgba(8,14,28,.6);border:1px solid var(--line);border-radius:12px;padding:13px;font-size:.78rem}
   .datarow{display:flex;gap:8px;padding:5px 0;border-bottom:1px solid rgba(90,130,200,.1)}.datarow:last-child{border:0}
   .datarow .k{color:var(--dim);min-width:84px;font-family:var(--mono);font-size:.66rem}.datarow .v{color:var(--txt);flex:1}
@@ -270,35 +291,35 @@ function sfx(n){if(!state.sound)return;
   else if(n==="msg")beep(880,.05,"sine",.04);else if(n==="combo")beep(660+state.streak*40,.1,"square",.07);}
 
 /* ====== DATA ====== */
-const mechBtn={b2:[["✓ REAL","a-green","REAL"],["✗ DEEPFAKE","a-red","DEEPFAKE"]],
-  phish:[["✓ ALLOW","a-green","ALLOW"],["✗ BLOCK","a-red","BLOCK"]],
-  v3:[["✓ COMPLIANT","a-green","COMPLIANT"],["⚠ NEEDS CONSENT","a-amber","NEEDS_CONSENT"],["✗ VIOLATION","a-red","VIOLATION"]]};
+const mechBtn={b2:[["✓ ของจริง","a-green","REAL"],["✗ ปลอม (Deepfake)","a-red","DEEPFAKE"]],
+  phish:[["✓ ปลอดภัย","a-green","ALLOW"],["✗ บล็อก","a-red","BLOCK"]],
+  v3:[["✓ ถูกต้อง","a-green","COMPLIANT"],["⚠ ต้องขอความยินยอม","a-amber","NEEDS_CONSENT"],["✗ ละเมิด","a-red","VIOLATION"]]};
 const sevRank={COMPLIANT:0,NEEDS_CONSENT:1,VIOLATION:2};
 const LV={
 1:{name:"DEEPFAKE MATRIX",sub:"จับผิดสื่อ AI ดัดแปลง",ico:"🎭",mech:"b2",rgb:"61,225,255",c:"#3de1ff",d:[
-  {ty:"ภาพวิดีโอ",ti:"ใบหน้าที่ถูกเปลี่ยน",sb:"นักการเมือง 'ประกาศ' ยกเลิก VAT — แชร์ใน LINE",an:"DEEPFAKE",cl:["ไม่มีสำนักข่าวอื่นรายงาน","ขอบขมับเบลอ","ม่านตาไม่เท่ากัน"],hi:["เริ่มจากแหล่งที่มา: ข่าวใหญ่จริงสำนักข่าวหลักควรรายงานพร้อมกันไหม?","ค่อยดูภาพ: รอยต่อขอบผมเบลอไหม?","AI ใหม่ลบ artifact ได้ แต่แหล่งปลอมยาก — เชื่อแหล่งนี้แค่ไหน?"],ex:"<b>Face-swap Deepfake</b> — Lateral Reading คือคำตอบ: ไม่มีแหล่งทางการยืนยัน + artifact (ขอบเบลอ ม่านตาไม่สมมาตร) เป็นตัวช่วยรอง",dr:()=>'<ellipse cx="65" cy="82" rx="50" ry="58" fill="#c39e76"/><ellipse cx="65" cy="24" rx="46" ry="24" fill="#7a5230"/><rect x="30" y="60" width="24" height="15" rx="3" fill="#0a0505"/><circle cx="41" cy="68" r="6" fill="#3a2818"/><rect x="76" y="61" width="22" height="13" rx="3" fill="#0a0505"/><circle cx="87" cy="68" r="4" fill="#3a2818"/><path d="M44 102 Q65 110 86 100" stroke="#7a5440" stroke-width="2.5" fill="none"/><g class="anomaly"><rect x="26" y="40" width="22" height="40" fill="none" stroke="#ff4d6d" stroke-dasharray="4,3" rx="3"/><circle cx="41" cy="68" r="9" fill="none" stroke="#ffc046"/><circle cx="87" cy="68" r="6" fill="none" stroke="#ffc046"/></g>'},
-  {ty:"คลิปเสียง",ti:"เสียงครูที่คุณรู้จัก",sb:"เสียง 'ครู' ขอโอนค่าทัศนศึกษา 'ด่วนวันนี้'",an:"DEEPFAKE",cl:["ช่องทางผิดปกติ ไม่ผ่านโรงเรียน","พูด 25 วิ ไม่หายใจ","ไม่มี ambient noise"],hi:["ครูจริงขอโอนเงินผ่านคลิปเสียง หรือผ่านช่องทางทางการ?","กด INSPECT ดูคลื่น — 25 วิ ไม่หายใจได้ไหม?","วิธีชัวร์สุดคือโทรกลับยืนยัน — คลิปนี้น่าเชื่อแค่ไหน?"],ex:"<b>Voice Clone + Social Engineering</b> — ยืนยันแหล่งก่อน (โทรกลับช่องทางทางการ) เบาะแสเสริม: ไม่มีช่องหายใจ + เร่งด่วนคือกลลวง",dr:()=>{let b="";for(let i=0;i<46;i++){const x=8+i*2.6,h=10+Math.abs(Math.sin(i*.9))*9;b+='<rect x="'+x+'" y="'+(75-h/2)+'" width="1.6" height="'+h+'" fill="#2bffb0" opacity=".8"/>';}return '<rect x="4" y="40" width="122" height="70" rx="4" fill="#020a08" stroke="#0a4030"/>'+b+'<g class="anomaly"><rect x="6" y="42" width="120" height="66" fill="none" stroke="#ff4d6d" stroke-dasharray="4,3"/></g>';}},
-  {ty:"ภาพถ่าย",ti:"ภาพนี้จริงนะ?",sb:"ภาพงาน Tech Expo นักธุรกิจ โพสต์โดยเพจ verified",an:"REAL",cl:["มีหลายแหล่งยืนยันงานจริง","แสง-เงาสอดคล้อง","ไม่พบ artifact"],hi:["ค้นว่ามีแหล่งอื่นรายงานงานนี้ไหม — ยืนยันได้หลายที่บอกอะไร?","INSPECT หาของผิดปกติ — ถ้าไม่เจอ + แหล่งน่าเชื่อ บอกอะไร?","จับแพะ (จริงเป็นปลอม) ก็สร้าง misinformation — มั่นใจแค่ไหน?"],ex:"<b>ภาพจริง (REAL)</b> — ความสงสัยต้องมีหลักฐาน เมื่อหลายแหล่งยืนยัน + ไม่พบ artifact ควรตัดสินจริง การระแวงทุกอย่างก็เป็นปัญหา",dr:()=>'<rect x="14" y="36" width="102" height="78" rx="6" fill="#0a1620"/><ellipse cx="56" cy="78" rx="22" ry="28" fill="#caa884"/><circle cx="49" cy="74" r="2.5" fill="#1a1008"/><circle cx="63" cy="74" r="2.5" fill="#1a1008"/><path d="M49 88 Q56 92 63 88" stroke="#6a4a35" stroke-width="1.5" fill="none"/><circle cx="98" cy="48" r="6" fill="#ffe08a" opacity=".5"/>'},
-  {ty:"คลิปโฆษณา",ti:"ดาราที่ไม่เคยโฆษณา",sb:"ดาราแนะนำ Crypto 'รับรองกำไร 300% ใน 2 สัปดาห์'",an:"DEEPFAKE",cl:["ดาราไม่เคยประกาศเรื่องนี้","กระพริบตา 2 ครั้ง/15วิ","'กำไร 300%' = red flag"],hi:["ตรวจแหล่ง: ดาราเคยประกาศร่วมโครงการนี้ในช่องทางทางการไหม?","INSPECT นับกระพริบตา — 15 วิ กี่ครั้ง?","'กำไร 300%' สมเหตุสมผลไหม? รวมกับแหล่งตรวจไม่ได้บอกอะไร?"],ex:"<b>Face-swap หลอกลงทุน</b> — ตรวจแหล่ง (ดาราไม่เคยประกาศ) + 'กำไร 300%' คือ red flag การเงิน เสริม: กระพริบต่ำ + ปากไม่ sync",dr:()=>'<ellipse cx="65" cy="80" rx="38" ry="44" fill="#d2ab82"/><ellipse cx="65" cy="44" rx="34" ry="18" fill="#2a1a10"/><rect x="44" y="66" width="18" height="6" rx="3" fill="#0a0505"/><rect x="68" y="66" width="18" height="6" rx="3" fill="#0a0505"/><g class="anomaly"><rect x="44" y="62" width="42" height="14" fill="none" stroke="#ffc046" stroke-dasharray="3,2" rx="2"/></g>'},
-  {ty:"คลิปวิดีโอ",ti:"คลิปในกลุ่มไลน์ห้อง",sb:"นักเรียน 'ยอมรับโกงข้อสอบ' ส่งจากบัญชีไม่รู้จัก",an:"DEEPFAKE",cl:["แหล่งไม่ระบุตัวตน","ขอบหูเบลอ","ปากไม่ sync"],hi:["ใครส่ง? บัญชีไม่มีตัวตน ไม่รู้ที่มา — เชื่อได้ไหม?","INSPECT ดูใบหูและคอตอนหันหน้า","ถ้าปลอมแล้วถูกแชร์ ทำลายชีวิตเพื่อน — คนแชร์ต่อผิดอะไร?"],ex:"<b>Deepfake เพื่อ Cyberbullying</b> — แหล่งนิรนามคือ red flag เสริม: หูเบลอ ปากไม่ sync และการสร้าง/แชร์ละเมิด PDPA + พ.ร.บ.คอมพ์ฯ ม.16",dr:()=>'<ellipse cx="62" cy="80" rx="36" ry="42" fill="#c49a72"/><ellipse cx="62" cy="46" rx="32" ry="17" fill="#1a120a"/><ellipse cx="28" cy="78" rx="6" ry="9" fill="#b88a62"/><rect x="44" y="68" width="15" height="6" rx="3" fill="#0a0505"/><rect x="66" y="68" width="15" height="6" rx="3" fill="#0a0505"/><g class="anomaly"><ellipse cx="28" cy="78" rx="9" ry="12" fill="none" stroke="#ff4d6d" stroke-dasharray="3,2"/></g>'}]},
+  {isCustom:true,img:"https://i.postimg.cc/zDtF2cnF/345d9cbd-0657-4297-b02d-e0f16b84d6bc.png",ty:"ภาพวิดีโอ",ti:"ใบหน้าที่ถูกเปลี่ยน",sb:"นักการเมือง 'ประกาศ' ยกเลิก VAT — แชร์ใน LINE",an:"DEEPFAKE",cl:["ไม่มีสำนักข่าวอื่นรายงาน","ขอบขมับเบลอ","ม่านตาไม่เท่ากัน"],hi:["เริ่มจากแหล่งที่มา: ข่าวใหญ่จริงสำนักข่าวหลักควรรายงานพร้อมกันไหม?","ค่อยดูภาพ: รอยต่อขอบผมเบลอไหม?","AI ใหม่ลบ artifact ได้ แต่แหล่งปลอมยาก — เชื่อแหล่งนี้แค่ไหน?"],ex:"<b>Face-swap Deepfake</b> — Lateral Reading คือคำตอบ: ไม่มีแหล่งทางการยืนยัน + artifact (ขอบเบลอ ม่านตาไม่สมมาตร) เป็นตัวช่วยรอง",dr:()=>'<ellipse cx="65" cy="82" rx="50" ry="58" fill="#c39e76"/><ellipse cx="65" cy="24" rx="46" ry="24" fill="#7a5230"/><rect x="30" y="60" width="24" height="15" rx="3" fill="#0a0505"/><circle cx="41" cy="68" r="6" fill="#3a2818"/><rect x="76" y="61" width="22" height="13" rx="3" fill="#0a0505"/><circle cx="87" cy="68" r="4" fill="#3a2818"/><path d="M44 102 Q65 110 86 100" stroke="#7a5440" stroke-width="2.5" fill="none"/><g class="anomaly"><rect x="26" y="40" width="22" height="40" fill="none" stroke="#ff4d6d" stroke-dasharray="4,3" rx="3"/><circle cx="41" cy="68" r="9" fill="none" stroke="#ffc046"/><circle cx="87" cy="68" r="6" fill="none" stroke="#ffc046"/></g>'},
+  {isCustom:true,img:"https://i.postimg.cc/BbYpxhCZ/37eae5cc-7504-41cd-9bea-d95da2f07633.png",ty:"คลิปเสียง",ti:"เสียงครูที่คุณรู้จัก",sb:"เสียง 'ครู' ขอโอนค่าทัศนศึกษา 'ด่วนวันนี้'",an:"DEEPFAKE",cl:["ช่องทางผิดปกติ ไม่ผ่านโรงเรียน","พูด 25 วิ ไม่หายใจ","ไม่มี ambient noise"],hi:["ครูจริงขอโอนเงินผ่านคลิปเสียง หรือผ่านช่องทางทางการ?","กด INSPECT ดูคลื่น — 25 วิ ไม่หายใจได้ไหม?","วิธีชัวร์สุดคือโทรกลับยืนยัน — คลิปนี้น่าเชื่อแค่ไหน?"],ex:"<b>Voice Clone + Social Engineering</b> — ยืนยันแหล่งก่อน (โทรกลับช่องทางทางการ) เบาะแสเสริม: ไม่มีช่องหายใจ + เร่งด่วนคือกลลวง",dr:()=>{let b="";for(let i=0;i<46;i++){const x=8+i*2.6,h=10+Math.abs(Math.sin(i*.9))*9;b+='<rect x="'+x+'" y="'+(75-h/2)+'" width="1.6" height="'+h+'" fill="#2bffb0" opacity=".8"/>';}return '<rect x="4" y="40" width="122" height="70" rx="4" fill="#020a08" stroke="#0a4030"/>'+b+'<g class="anomaly"><rect x="6" y="42" width="120" height="66" fill="none" stroke="#ff4d6d" stroke-dasharray="4,3"/></g>';}},
+  {isCustom:true,img:"https://i.postimg.cc/MZBdX8NM/da670c30-7a7e-4337-a19c-18500c13a3c1.png",ty:"ภาพถ่าย",ti:"ภาพนี้จริงนะ?",sb:"ภาพงาน Tech Expo นักธุรกิจ โพสต์โดยเพจ verified",an:"REAL",cl:["มีหลายแหล่งยืนยันงานจริง","แสง-เงาสอดคล้อง","ไม่พบ artifact"],hi:["ค้นว่ามีแหล่งอื่นรายงานงานนี้ไหม — ยืนยันได้หลายที่บอกอะไร?","INSPECT หาของผิดปกติ — ถ้าไม่เจอ + แหล่งน่าเชื่อ บอกอะไร?","จับแพะ (จริงเป็นปลอม) ก็สร้าง misinformation — มั่นใจแค่ไหน?"],ex:"<b>ภาพจริง (REAL)</b> — ความสงสัยต้องมีหลักฐาน เมื่อหลายแหล่งยืนยัน + ไม่พบ artifact ควรตัดสินจริง การระแวงทุกอย่างก็เป็นปัญหา",dr:()=>'<rect x="14" y="36" width="102" height="78" rx="6" fill="#0a1620"/><ellipse cx="56" cy="78" rx="22" ry="28" fill="#caa884"/><circle cx="49" cy="74" r="2.5" fill="#1a1008"/><circle cx="63" cy="74" r="2.5" fill="#1a1008"/><path d="M49 88 Q56 92 63 88" stroke="#6a4a35" stroke-width="1.5" fill="none"/><circle cx="98" cy="48" r="6" fill="#ffe08a" opacity=".5"/>'},
+  {isCustom:true,img:"https://i.postimg.cc/76hzrxkn/587a1069-ef12-48d2-baed-57349861841a.png",ty:"คลิปโฆษณา",ti:"ดาราที่ไม่เคยโฆษณา",sb:"ดาราแนะนำ Crypto 'รับรองกำไร 300% ใน 2 สัปดาห์'",an:"DEEPFAKE",cl:["ดาราไม่เคยประกาศเรื่องนี้","กระพริบตา 2 ครั้ง/15วิ","'กำไร 300%' = red flag"],hi:["ตรวจแหล่ง: ดาราเคยประกาศร่วมโครงการนี้ในช่องทางทางการไหม?","INSPECT นับกระพริบตา — 15 วิ กี่ครั้ง?","'กำไร 300%' สมเหตุสมผลไหม? รวมกับแหล่งตรวจไม่ได้บอกอะไร?"],ex:"<b>Face-swap หลอกลงทุน</b> — ตรวจแหล่ง (ดาราไม่เคยประกาศ) + 'กำไร 300%' คือ red flag การเงิน เสริม: กระพริบต่ำ + ปากไม่ sync",dr:()=>'<ellipse cx="65" cy="80" rx="38" ry="44" fill="#d2ab82"/><ellipse cx="65" cy="44" rx="34" ry="18" fill="#2a1a10"/><rect x="44" y="66" width="18" height="6" rx="3" fill="#0a0505"/><rect x="68" y="66" width="18" height="6" rx="3" fill="#0a0505"/><g class="anomaly"><rect x="44" y="62" width="42" height="14" fill="none" stroke="#ffc046" stroke-dasharray="3,2" rx="2"/></g>'},
+  {isCustom:true,img:"https://i.postimg.cc/PrvY3rXR/Gemini-Generated-Image-fq6sb2fq6sb2fq6s.png",ty:"คลิปวิดีโอ",ti:"คลิปในกลุ่มไลน์ห้อง",sb:"นักเรียน 'ยอมรับโกงข้อสอบ' ส่งจากบัญชีไม่รู้จัก",an:"DEEPFAKE",cl:["แหล่งไม่ระบุตัวตน","ขอบหูเบลอ","ปากไม่ sync"],hi:["ใครส่ง? บัญชีไม่มีตัวตน ไม่รู้ที่มา — เชื่อได้ไหม?","INSPECT ดูใบหูและคอตอนหันหน้า","ถ้าปลอมแล้วถูกแชร์ ทำลายชีวิตเพื่อน — คนแชร์ต่อผิดอะไร?"],ex:"<b>Deepfake เพื่อ Cyberbullying</b> — แหล่งนิรนามคือ red flag เสริม: หูเบลอ ปากไม่ sync และการสร้าง/แชร์ละเมิด PDPA + พ.ร.บ.คอมพ์ฯ ม.16",dr:()=>'<ellipse cx="62" cy="80" rx="36" ry="42" fill="#c49a72"/><ellipse cx="62" cy="46" rx="32" ry="17" fill="#1a120a"/><ellipse cx="28" cy="78" rx="6" ry="9" fill="#b88a62"/><rect x="44" y="68" width="15" height="6" rx="3" fill="#0a0505"/><rect x="66" y="68" width="15" height="6" rx="3" fill="#0a0505"/><g class="anomaly"><ellipse cx="28" cy="78" rx="9" ry="12" fill="none" stroke="#ff4d6d" stroke-dasharray="3,2"/></g>'}]},
 2:{name:"PHISHING GATEKEEPER",sub:"คัดกรอง URL/SMS ลวงโลก",ico:"🎣",mech:"phish",rgb:"43,255,176",c:"#2bffb0",d:[
-  {sndr:"+66 ไม่รู้จัก",ti:"เงินรางวัลธนาคาร",msg:"🎉 รับเงิน 5,000 บาท กดยืนยันภายใน 24 ชม.",url:[["https://","dim"],["scb-secure","warn"],[".","dim"],["verify-login","bad"],[".xyz","bad"],["/confirm","dim"]],ph:true,truedom:"verify-login.xyz (ไม่ใช่ธนาคาร)",cl:["domain จริง = verify-login.xyz","TLD .xyz ผิด","เร่งด่วน 24 ชม."],hi:["อ่าน URL ขวาไปซ้าย — ส่วนติด .xyz คือ domain จริง","ธนาคารใช้ TLD .xyz ไหม?","'24 ชม.' ทำให้รู้สึกยังไง?"],ex:"<b>Phishing → BLOCK (TP)</b> — domain จริง verify-login.xyz + TLD .xyz + เร่งด่วน"},
-  {sndr:"noreply@lazada.co.th",ti:"อีเมลยืนยันคำสั่งซื้อ",msg:"คำสั่งซื้อ #TH88142 ยืนยันแล้ว ติดตามพัสดุ",url:[["https://","dim"],["www.lazada.co.th","ok"],["/order/TH88142","dim"]],ph:false,truedom:"lazada.co.th (ร้านจริง)",cl:["domain ตรงร้านจริง",".co.th ถูก","ไม่ขอข้อมูล sensitive"],hi:["อย่าเพิ่งบล็อก! lazada.co.th ตรงเว็บจริงไหม?","ขอรหัสผ่าน/OTP ไหม?","บล็อกของจริงทำผู้ใช้เดือดร้อน"],ex:"<b>ปลอดภัย → ALLOW (TN)</b> — domain ตรง .co.th ถูก บล็อกของจริง = False Positive ทำลายความน่าเชื่อถือ"},
-  {sndr:"security@accounts-g00gle.com",ti:"g00gle ให้รีเซ็ตรหัส",msg:"ตรวจพบเข้าสู่ระบบผิดปกติ ยืนยันทันที",url:[["https://","dim"],["accounts-g00gle","bad"],[".com","dim"],["/reset","dim"]],ph:true,truedom:"ของจริงคือ accounts.google.com",cl:["g00gle ใช้เลข 0 แทน o","ใช้ - แทน .","Typosquatting"],hi:["ดู google — ตัวอักษรทุกตัวเป็นตัวหนังสือจริงไหม?","บางตัวเป็นเลขคล้ายตัวอักษร (Typosquatting)","Google จริงใช้ accounts.google.com"],ex:"<b>Phishing → BLOCK</b> — g00gle ใช้เลข 0 แทน o + ใช้ - แทน ."},
-  {sndr:"SMS อ้าง 'ไปรษณีย์ไทย'",ti:"พัสดุตกค้าง",msg:"พัสดุตกค้าง ชำระค่าธรรมเนียม 3 บาทที่ลิงก์",url:[["http://","bad"],["thaipost-delivery","warn"],[".top","bad"],["/pay","dim"]],ph:true,truedom:"ของจริงคือ thailandpost.co.th",cl:["http:// ไม่เข้ารหัส","TLD .top","ขอเงินน้อยหลอกเลขบัตร"],hi:["ดูตัวหน้าสุด — https หรือ http?","ไปรษณีย์ใช้ domain .top ไหม?","ทำไมขอแค่ 3 บาท?"],ex:"<b>Smishing → BLOCK</b> — http:// + .top + ขอเงินน้อยเพื่อล้วงเลขบัตร"},
-  {sndr:"kruwit@school.ac.th",ti:"ลิงก์ประชุมจากครู",msg:"นักเรียน เข้าห้องเรียนออนไลน์ 13:00 ที่ Google Meet",url:[["https://","dim"],["meet.google.com","ok"],["/abc-defg-hij","dim"]],ph:false,truedom:"meet.google.com (Google จริง)",cl:["meet.google.com จริง",".ac.th สถาบัน","บริบทสมเหตุสมผล"],hi:["ลิงก์มีตัวสุ่มดูแปลก — meet.google.com เป็นบริการจริงไหม?","รหัสห้อง abc-defg-hij ปกติของ Meet ไหม?","'แปลก' ≠ 'อันตราย'"],ex:"<b>ปลอดภัย → ALLOW</b> — meet.google.com จริง: แปลก ≠ อันตราย บล็อกคือ False Positive"},
-  {sndr:"อ้างเป็น PayPal",ti:"IDN Homograph (ขั้นสูง)",msg:"บัญชีถูกระงับ ยืนยันตัวตนเพื่อปลดล็อก",url:[["https://","dim"],["раypal","bad"],[".com","dim"],["/verify","dim"]],ph:true,truedom:"ของจริง paypal.com (ตัวนี้ใช้ซีริลลิก)",cl:["р а เป็นซีริลลิก!","ตาเปล่าแยกไม่ออก","Homograph Attack"],hi:["URL เหมือน paypal.com เป๊ะ — มีอักษรภาษาอื่นที่หน้าตาเหมือนไหม?","Homograph ใช้ซีริลลิกที่คล้ายอังกฤษ","วิธีกัน: พิมพ์ URL เอง"],ex:"<b>IDN Homograph → BLOCK</b> — р а เป็นซีริลลิกหน้าตาเหมือน p, a"}]},
+  {isCustom:true,img:"https://i.postimg.cc/RV2xcGhJ/ff97215f-cb7a-4f1f-9d29-646d736afc95.png",sndr:"+66 ไม่รู้จัก",ti:"เงินรางวัลธนาคาร",msg:"🎉 รับเงิน 5,000 บาท กดยืนยันภายใน 24 ชม.",url:[["https://","dim"],["scb-secure","warn"],[".","dim"],["verify-login","bad"],[".xyz","bad"],["/confirm","dim"]],ph:true,truedom:"verify-login.xyz (ไม่ใช่ธนาคาร)",cl:["domain จริง = verify-login.xyz","TLD .xyz ผิด","เร่งด่วน 24 ชม."],hi:["อ่าน URL ขวาไปซ้าย — ส่วนติด .xyz คือ domain จริง","ธนาคารใช้ TLD .xyz ไหม?","'24 ชม.' ทำให้รู้สึกยังไง?"],ex:"<b>Phishing → บล็อก (ตอบถูก/TP)</b> — domain จริง verify-login.xyz + TLD .xyz + เร่งด่วน"},
+  {isCustom:true,img:"https://i.postimg.cc/dVDXSCkJ/8c873c18-17b9-4d54-b5d6-252b0a59c72e.png",sndr:"noreply@lazada.co.th",ti:"อีเมลยืนยันคำสั่งซื้อ",msg:"คำสั่งซื้อ #TH88142 ยืนยันแล้ว ติดตามพัสดุ",url:[["https://","dim"],["www.lazada.co.th","ok"],["/order/TH88142","dim"]],ph:false,truedom:"lazada.co.th (ร้านจริง)",cl:["domain ตรงร้านจริง",".co.th ถูก","ไม่ขอข้อมูล sensitive"],hi:["อย่าเพิ่งบล็อก! lazada.co.th ตรงเว็บจริงไหม?","ขอรหัสผ่าน/OTP ไหม?","บล็อกของจริงทำผู้ใช้เดือดร้อน"],ex:"<b>ปลอดภัย → ปล่อยผ่าน (ตอบถูก/TN)</b> — domain ตรง .co.th ถูก บล็อกของจริง = False Positive ทำลายความน่าเชื่อถือ"},
+  {isCustom:true,img:"https://i.postimg.cc/XJKYPmGN/Gemini-Generated-Image-111n7o111n7o111n.png",sndr:"security@accounts-g00gle.com",ti:"g00gle ให้รีเซ็ตรหัส",msg:"ตรวจพบเข้าสู่ระบบผิดปกติ ยืนยันทันที",url:[["https://","dim"],["accounts-g00gle","bad"],[".com","dim"],["/reset","dim"]],ph:true,truedom:"ของจริงคือ accounts.google.com",cl:["g00gle ใช้เลข 0 แทน o","ใช้ - แทน .","Typosquatting"],hi:["ดู google — ตัวอักษรทุกตัวเป็นตัวหนังสือจริงไหม?","บางตัวเป็นเลขคล้ายตัวอักษร (Typosquatting)","Google จริงใช้ accounts.google.com"],ex:"<b>Phishing → บล็อก</b> — g00gle ใช้เลข 0 แทน o + ใช้ - แทน ."},
+  {isCustom:true,img:"https://i.postimg.cc/k5m4y7GY/10145a53-1631-48d0-b415-96db94442058.png",sndr:"SMS อ้าง 'ไปรษณีย์ไทย'",ti:"พัสดุตกค้าง",msg:"พัสดุตกค้าง ชำระค่าธรรมเนียม 3 บาทที่ลิงก์",url:[["http://","bad"],["thaipost-delivery","warn"],[".top","bad"],["/pay","dim"]],ph:true,truedom:"ของจริงคือ thailandpost.co.th",cl:["http:// ไม่เข้ารหัส","TLD .top","ขอเงินน้อยหลอกเลขบัตร"],hi:["ดูตัวหน้าสุด — https หรือ http?","ไปรษณีย์ใช้ domain .top ไหม?","ทำไมขอแค่ 3 บาท?"],ex:"<b>Smishing (SMS หลอกลวง) → บล็อก</b> — http:// + .top + ขอเงินน้อยเพื่อล้วงเลขบัตร"},
+  {isCustom:true,img:"https://i.postimg.cc/xqVCFQgn/5a6e9467-2cb6-4434-a233-20f54c33a5bb-(1).png",sndr:"kruwit@school.ac.th",ti:"ลิงก์ประชุมจากครู",msg:"นักเรียน เข้าห้องเรียนออนไลน์ 13:00 ที่ Google Meet",url:[["https://","dim"],["meet.google.com","ok"],["/abc-defg-hij","dim"]],ph:false,truedom:"meet.google.com (Google จริง)",cl:["meet.google.com จริง",".ac.th สถาบัน","บริบทสมเหตุสมผล"],hi:["ลิงก์มีตัวสุ่มดูแปลก — meet.google.com เป็นบริการจริงไหม?","รหัสห้อง abc-defg-hij ปกติของ Meet ไหม?","'แปลก' ≠ 'อันตราย'"],ex:"<b>ปลอดภัย → ปล่อยผ่าน</b> — meet.google.com จริง: แปลก ≠ อันตราย บล็อกคือ False Positive"},
+  {isCustom:true,img:"https://i.postimg.cc/W1JjKCCD/8d7610e6-b938-49dd-b081-169de1237c17.png",sndr:"อ้างเป็น PayPal",ti:"IDN Homograph (ขั้นสูง)",msg:"บัญชีถูกระงับ ยืนยันตัวตนเพื่อปลดล็อก",url:[["https://","dim"],["раypal","bad"],[".com","dim"],["/verify","dim"]],ph:true,truedom:"ของจริง paypal.com (ตัวนี้ใช้ซีริลลิก)",cl:["р а เป็นซีริลลิก!","ตาเปล่าแยกไม่ออก","Homograph Attack"],hi:["URL เหมือน paypal.com เป๊ะ — มีอักษรภาษาอื่นที่หน้าตาเหมือนไหม?","Homograph ใช้ซีริลลิกที่คล้ายอังกฤษ","วิธีกัน: พิมพ์ URL เอง"],ex:"<b>IDN Homograph → บล็อก</b> — р а เป็นซีริลลิกหน้าตาเหมือน p, a"}]},
 3:{name:"PDPA FIREWALL",sub:"ตัดสินคดีข้อมูล + Consent",ico:"⚖️",mech:"v3",rgb:"192,107,255",c:"#c06bff",d:[
-  {ctrl:"ร้านชานมไข่มุก",dat:"เบอร์โทร (ตอนสมัครสะสมแต้ม)",pur:"นำไปยิง SMS โฆษณา",con:"ขอแค่ 'เพื่อสะสมแต้ม'",bad:true,ti:"ร้านชานมเก็บเบอร์แล้วยิงโฆษณา",vd:"NEEDS_CONSENT",basis:"ต้องขอ consent สำหรับวัตถุประสงค์ใหม่ (ม.19/ม.21)",cl:["ใช้ผิดวัตถุประสงค์เดิม (ม.21)","ไม่ได้ขอเรื่องโฆษณา"],hi:["ขอเบอร์ 'เพื่อสะสมแต้ม' — ส่งโฆษณาคือวัตถุประสงค์เดียวกันไหม?","นึกถึงเสา 'เฉพาะเจาะจง' (ม.19)","ใช้เพื่อวัตถุประสงค์ใหม่ต้องขออะไร?"],ex:"<b>NEEDS CONSENT</b> — ม.21 ใช้ข้อมูลต้องตรงวัตถุประสงค์ที่แจ้ง การใช้เพื่อโฆษณาต้องขอความยินยอมแยก"},
-  {ctrl:"โรงพยาบาล",dat:"ประวัติการรักษา (ไม่ระบุตัวตนแล้ว)",pur:"ส่งมหาวิทยาลัยทำวิจัยสถิติ",con:"ขอจากผู้ป่วยถูก + ลบข้อมูลระบุตัวตน",bad:false,ti:"โรงพยาบาลส่งข้อมูลทำวิจัย",vd:"COMPLIANT",basis:"Anonymization อยู่นอกขอบเขต PDPA (ม.6) + มี consent",cl:["anonymized แล้ว (นอกขอบเขต ม.6)","มี consent ครบ"],hi:["ข้อมูล 'ไม่ระบุตัวตน' ยังเป็นข้อมูลส่วนบุคคลตาม ม.6 ไหม?","ขอความยินยอมผู้ป่วยก่อนไหม?","consent ครบ + ลบข้อมูลระบุตัว → ทำได้ไหม?"],ex:"<b>COMPLIANT</b> — anonymization จนระบุตัวไม่ได้ ไม่ถือเป็นข้อมูลส่วนบุคคล (ม.6) + มี consent"},
-  {ctrl:"โรงเรียน",dat:"รูปถ่าย + ชื่อเต็ม + เกรด นักเรียน",pur:"โพสต์เพจ Facebook สาธารณะ",con:"❌ ไม่ได้ขอจากนักเรียน/ผู้ปกครอง",bad:true,ti:"โรงเรียนโพสต์รูป+เกรดนักเรียน",vd:"VIOLATION",basis:"ไม่มีฐานกฎหมาย + ผู้เยาว์ต้องขอผู้ปกครอง (ม.20)",cl:["เผยแพร่สาธารณะไม่มีฐาน","ผู้เยาว์ (ม.20)"],hi:["เจตนาดี ≠ ถูกกฎหมาย — โรงเรียนถามก่อนไหม?","'เกรด' ควรให้คนทั้งโลกเห็นไหม?","ผู้เยาว์ต้องขอผู้ปกครอง (ม.20)"],ex:"<b>VIOLATION</b> — เผยแพร่สู่สาธารณะโดยไม่มีฐานกฎหมาย + ไม่ขอ consent + ผู้เยาว์ต้องขอผู้ปกครอง (ม.20)"},
-  {ctrl:"แอปเกมฟรี",dat:"รายชื่อผู้ติดต่อ + ตำแหน่ง",pur:"วิเคราะห์พฤติกรรม + ขายให้โฆษณา",con:"ติ๊กถูกมาให้ + 'ไม่ยอม=เล่นไม่ได้'",bad:true,ti:"แอปกดยอมรับ ติ๊กถูกมาให้แล้ว",vd:"NEEDS_CONSENT",basis:"consent ไม่สมบูรณ์ตามเงื่อนไข ม.19",cl:["ติ๊กล่วงหน้า (ขาดชัดแจ้ง)","บังคับ (ขาดเสรี ม.19)"],hi:["ดู 4 เสา (ม.19) — ช่องติ๊กไว้แล้วผิดเสาไหน?","'ไม่ยอม=เล่นไม่ได้' ขัด 'เสรี' ไหม?","consent ขาด 'ชัดแจ้ง'+'เสรี' ต้องทำอะไร?"],ex:"<b>NEEDS CONSENT</b> — consent ไม่สมบูรณ์ตาม ม.19: ขาดชัดแจ้ง (ติ๊กให้) + เสรี (บังคับ) ต้องขอใหม่"},
-  {ctrl:"ร้านค้าออนไลน์",dat:"ชื่อ-ที่อยู่-ประวัติสั่งซื้อ",pur:"เก็บออกใบกำกับภาษีตามกฎหมาย",con:"ไม่ได้ขอ consent",bad:false,ti:"ร้านค้าเก็บประวัติเพื่อภาษี",vd:"COMPLIANT",basis:"ฐานหน้าที่ตามกฎหมาย (ม.24)",cl:["มีฐานหน้าที่ตามกฎหมาย (ม.24)"],hi:["อย่าเพิ่งตัดสินผิดเพราะ 'ไม่ขอ consent' — ม.24 มีฐานอื่น","ต้องเก็บเพื่อภาษีตามสรรพากร — ขอ consent ไหม?","การปฏิบัติตามกฎหมายใช้แทน consent ได้"],ex:"<b>COMPLIANT (Trap!)</b> — ม.24 ประมวลผลได้โดยไม่ต้องขอ consent หากมีฐานอื่น เช่นหน้าที่ตามกฎหมาย (ภาษี)"},
-  {ctrl:"เพื่อนนักเรียน",dat:"แคปแชต + ชื่อ + เบอร์ เพื่อน",pur:"แชร์ลงกลุ่มไลน์เพื่อ 'ประจาน'",con:"❌ เจ้าตัวไม่รู้และไม่ยินยอม",bad:true,ti:"เพื่อนแชร์แชตส่วนตัวลงกลุ่ม",vd:"VIOLATION",basis:"ไม่มีฐาน + ละเมิดสิทธิเจ้าของข้อมูล",cl:["เผยแพร่ข้อมูลผู้อื่นโดยไม่ยินยอม","อาจหมิ่นประมาท"],hi:["PDPA ใช้แค่บริษัทใหญ่จริงไหม?","แชต เบอร์ รูป เพื่อน เป็นของใคร?","ถ้าเราถูกแชร์จะรู้สึกยังไง?"],ex:"<b>VIOLATION</b> — เผยแพร่ข้อมูลผู้อื่นโดยไม่ยินยอม + อาจหมิ่นประมาท/พ.ร.บ.คอมพ์ฯ เชื่อม Cyberbullying ด่าน 1"}]},
+  {isCustom:true,img:"https://i.postimg.cc/wv9CqjTH/5a90dc51-49eb-44c9-893a-b0bfbbe14160.png",ctrl:"ร้านชานมไข่มุก",dat:"เบอร์โทร (ตอนสมัครสะสมแต้ม)",pur:"นำไปยิง SMS โฆษณา",con:"ขอแค่ 'เพื่อสะสมแต้ม'",bad:true,ti:"ร้านชานมเก็บเบอร์แล้วยิงโฆษณา",vd:"NEEDS_CONSENT",basis:"ต้องขอ consent สำหรับวัตถุประสงค์ใหม่ (ม.19/ม.21)",cl:["ใช้ผิดวัตถุประสงค์เดิม (ม.21)","ไม่ได้ขอเรื่องโฆษณา"],hi:["ขอเบอร์ 'เพื่อสะสมแต้ม' — ส่งโฆษณาคือวัตถุประสงค์เดียวกันไหม?","นึกถึงเสา 'เฉพาะเจาะจง' (ม.19)","ใช้เพื่อวัตถุประสงค์ใหม่ต้องขออะไร?"],ex:"<b>ต้องขอความยินยอม</b> — ม.21 ใช้ข้อมูลต้องตรงวัตถุประสงค์ที่แจ้ง การใช้เพื่อโฆษณาต้องขอความยินยอมแยก"},
+  {isCustom:true,img:"https://i.postimg.cc/JhYNnTR8/ed3e713c-2518-4e65-b7ca-d453a1cdde5a.png",ctrl:"โรงพยาบาล",dat:"ประวัติการรักษา (ไม่ระบุตัวตนแล้ว)",pur:"ส่งมหาวิทยาลัยทำวิจัยสถิติ",con:"ขอจากผู้ป่วยถูก + ลบข้อมูลระบุตัวตน",bad:false,ti:"โรงพยาบาลส่งข้อมูลทำวิจัย",vd:"COMPLIANT",basis:"Anonymization อยู่นอกขอบเขต PDPA (ม.6) + มี consent",cl:["anonymized แล้ว (นอกขอบเขต ม.6)","มี consent ครบ"],hi:["ข้อมูล 'ไม่ระบุตัวตน' ยังเป็นข้อมูลส่วนบุคคลตาม ม.6 ไหม?","ขอความยินยอมผู้ป่วยก่อนไหม?","consent ครบ + ลบข้อมูลระบุตัว → ทำได้ไหม?"],ex:"<b>ถูกต้องตาม PDPA</b> — anonymization จนระบุตัวไม่ได้ ไม่ถือเป็นข้อมูลส่วนบุคคล (ม.6) + มี consent"},
+  {isCustom:true,img:"https://i.postimg.cc/cLHMSySs/f60371c0-83f7-4ed4-8502-def5029eba76.png",ctrl:"โรงเรียน",dat:"รูปถ่าย + ชื่อเต็ม + เกรด นักเรียน",pur:"โพสต์เพจ Facebook สาธารณะ",con:"❌ ไม่ได้ขอจากนักเรียน/ผู้ปกครอง",bad:true,ti:"โรงเรียนโพสต์รูป+เกรดนักเรียน",vd:"VIOLATION",basis:"ไม่มีฐานกฎหมาย + ผู้เยาว์ต้องขอผู้ปกครอง (ม.20)",cl:["เผยแพร่สาธารณะไม่มีฐาน","ผู้เยาว์ (ม.20)"],hi:["เจตนาดี ≠ ถูกกฎหมาย — โรงเรียนถามก่อนไหม?","'เกรด' ควรให้คนทั้งโลกเห็นไหม?","ผู้เยาว์ต้องขอผู้ปกครอง (ม.20)"],ex:"<b>ละเมิด PDPA</b> — เผยแพร่สู่สาธารณะโดยไม่มีฐานกฎหมาย + ไม่ขอ consent + ผู้เยาว์ต้องขอผู้ปกครอง (ม.20)"},
+  {ctrl:"แอปเกมฟรี",dat:"รายชื่อผู้ติดต่อ + ตำแหน่ง",pur:"วิเคราะห์พฤติกรรม + ขายให้โฆษณา",con:"ติ๊กถูกมาให้ + 'ไม่ยอม=เล่นไม่ได้'",bad:true,ti:"แอปกดยอมรับ ติ๊กถูกมาให้แล้ว",vd:"NEEDS_CONSENT",basis:"consent ไม่สมบูรณ์ตามเงื่อนไข ม.19",cl:["ติ๊กล่วงหน้า (ขาดชัดแจ้ง)","บังคับ (ขาดเสรี ม.19)"],hi:["ดู 4 เสา (ม.19) — ช่องติ๊กไว้แล้วผิดเสาไหน?","'ไม่ยอม=เล่นไม่ได้' ขัด 'เสรี' ไหม?","consent ขาด 'ชัดแจ้ง'+'เสรี' ต้องทำอะไร?"],ex:"<b>ต้องขอความยินยอม</b> — consent ไม่สมบูรณ์ตาม ม.19: ขาดชัดแจ้ง (ติ๊กให้) + เสรี (บังคับ) ต้องขอใหม่"},
+  {isCustom:true,img:"https://i.postimg.cc/9QZXzzVF/d1874990-ff51-452f-840d-b0ce750f0250.png",ctrl:"ร้านค้าออนไลน์",dat:"ชื่อ-ที่อยู่-ประวัติสั่งซื้อ",pur:"เก็บออกใบกำกับภาษีตามกฎหมาย",con:"ไม่ได้ขอ consent",bad:false,ti:"ร้านค้าเก็บประวัติเพื่อภาษี",vd:"COMPLIANT",basis:"ฐานหน้าที่ตามกฎหมาย (ม.24)",cl:["มีฐานหน้าที่ตามกฎหมาย (ม.24)"],hi:["อย่าเพิ่งตัดสินผิดเพราะ 'ไม่ขอ consent' — ม.24 มีฐานอื่น","ต้องเก็บเพื่อภาษีตามสรรพากร — ขอ consent ไหม?","การปฏิบัติตามกฎหมายใช้แทน consent ได้"],ex:"<b>ถูกต้องตาม PDPA (กับดัก!)</b> — ม.24 ประมวลผลได้โดยไม่ต้องขอ consent หากมีฐานอื่น เช่นหน้าที่ตามกฎหมาย (ภาษี)"},
+  {isCustom:true,img:"https://i.postimg.cc/MH6fmV65/c6446f70-0095-4321-89bc-61074130666a.png",ctrl:"เพื่อนนักเรียน",dat:"แคปแชต + ชื่อ + เบอร์ เพื่อน",pur:"แชร์ลงกลุ่มไลน์เพื่อ 'ประจาน'",con:"❌ เจ้าตัวไม่รู้และไม่ยินยอม",bad:true,ti:"เพื่อนแชร์แชตส่วนตัวลงกลุ่ม",vd:"VIOLATION",basis:"ไม่มีฐาน + ละเมิดสิทธิเจ้าของข้อมูล",cl:["เผยแพร่ข้อมูลผู้อื่นโดยไม่ยินยอม","อาจหมิ่นประมาท"],hi:["PDPA ใช้แค่บริษัทใหญ่จริงไหม?","แชต เบอร์ รูป เพื่อน เป็นของใคร?","ถ้าเราถูกแชร์จะรู้สึกยังไง?"],ex:"<b>ละเมิด PDPA</b> — เผยแพร่ข้อมูลผู้อื่นโดยไม่ยินยอม + อาจหมิ่นประมาท/พ.ร.บ.คอมพ์ฯ เชื่อม Cyberbullying ด่าน 1"}]},
 4:{name:"FINAL: THE CASCADE",sub:"เหตุการณ์เชื่อมโยง 3 ศาสตร์",ico:"👑",mech:"boss",rgb:"255,107,214",c:"#ff6bd6",stages:[
-  {mech:"b2",ty:"คลิปไวรัล",ti:"[บอส 1/3] ผอ.ประกาศปิดเทอม?",sb:"คลิป 'ผอ.โรงเรียน' ประกาศปิดเทอมก่อนกำหนด ระบาดในกลุ่มผู้ปกครอง",an:"DEEPFAKE",cl:["ไม่มีประกาศในเว็บ/เพจทางการ","เสียงไม่มีจังหวะหายใจ","ปากไม่ sync"],hi:["ตรวจช่องทางทางการของโรงเรียนก่อน — มีประกาศไหม?","INSPECT ฟังจังหวะหายใจในคลิป","ข่าวสำคัญแบบนี้ควรมาทางไหน?"],ex:"<b>ด่านบอส 1 — Deepfake</b> ตรวจแหล่งทางการก่อน: ไม่มีประกาศจริง = สัญญาณปลอมชัดเจน",dr:()=>'<ellipse cx="65" cy="80" rx="40" ry="46" fill="#cbb089"/><ellipse cx="65" cy="42" rx="36" ry="18" fill="#3a3a45"/><rect x="44" y="66" width="18" height="6" rx="3" fill="#0a0505"/><rect x="68" y="66" width="18" height="6" rx="3" fill="#0a0505"/><g class="anomaly"><rect x="40" y="60" width="50" height="18" fill="none" stroke="#ff4d6d" stroke-dasharray="3,2" rx="3"/></g>'},
-  {mech:"phish",ti:"[บอส 2/3] ลิงก์ในคลิป",sndr:"แนบมากับคลิปไวรัล",msg:"ลงทะเบียนรับเงินเยียวยาช่วงปิดเทอม คลิกด่วน!",url:[["http://","bad"],["moe-relief","warn"],[".click","bad"],["/register","dim"]],ph:true,truedom:"ของจริงคือ moe.go.th (กระทรวงศึกษาฯ)",cl:["http:// + TLD .click","กระทรวงใช้ .go.th","ฉวยโอกาสจากข่าวปลอม"],hi:["http หรือ https? กระทรวงใช้ TLD อะไร?","มิจฉาชีพมักฉวยกระแสข่าว — สังเกตจังหวะนี้","domain จริงของกระทรวงคือ?"],ex:"<b>ด่านบอส 2 — Phishing</b> มิจฉาชีพต่อยอดจากข่าวลวง: http + .click + อ้างหน่วยงานรัฐ ของจริง .go.th"},
-  {mech:"v3",ti:"[บอส 3/3] คุณจะเตือนเพื่อน?",ctrl:"ตัวคุณเอง",dat:"ภาพ ผอ. + ชื่อ-นามสกุล 'คนที่คุณเดาว่าสร้างคลิป'",pur:"โพสต์กล่าวหาในกลุ่ม เพื่อเตือนภัย",con:"❌ ไม่มีหลักฐาน + ไม่ขอความยินยอม",bad:true,vd:"VIOLATION",basis:"กล่าวหาโดยไม่มีหลักฐาน + เผยข้อมูลส่วนบุคคล",cl:["กล่าวหาโดยไม่มีหลักฐาน","เผยข้อมูลส่วนบุคคลผู้อื่น"],hi:["เตือนภัยทำได้ แต่ระบุชื่อ 'คนที่เดา' ทำได้ไหม?","คุณมีหลักฐานว่าใครสร้างจริงหรือเปล่า?","เตือนภัยโดยไม่ละเมิดใคร ทำยังไง?"],ex:"<b>ด่านบอส 3 — PDPA</b> เตือนภัยดี แต่การโพสต์กล่าวหาคนที่ 'เดา' พร้อมข้อมูลส่วนตัว = VIOLATION (+อาจหมิ่นประมาท) ที่ถูกคือเตือนแบบไม่ระบุตัวบุคคล + แจ้งโรงเรียน/ตำรวจ"}]}};
+  {isCustom:true,img:"https://i.postimg.cc/QtykCfk4/dd8f856e-fa7b-4979-bec3-68bffa244bb3.png",mech:"b2",ty:"คลิปไวรัล",ti:"[บอส 1/3] ผอ.ประกาศปิดเทอม?",sb:"คลิป 'ผอ.โรงเรียน' ประกาศปิดเทอมก่อนกำหนด ระบาดในกลุ่มผู้ปกครอง",an:"DEEPFAKE",cl:["ไม่มีประกาศในเว็บ/เพจทางการ","เสียงไม่มีจังหวะหายใจ","ปากไม่ sync"],hi:["ตรวจช่องทางทางการของโรงเรียนก่อน — มีประกาศไหม?","INSPECT ฟังจังหวะหายใจในคลิป","ข่าวสำคัญแบบนี้ควรมาทางไหน?"],ex:"<b>ด่านบอส 1 — Deepfake</b> ตรวจแหล่งทางการก่อน: ไม่มีประกาศจริง = สัญญาณปลอมชัดเจน",dr:()=>'<ellipse cx="65" cy="80" rx="40" ry="46" fill="#cbb089"/><ellipse cx="65" cy="42" rx="36" ry="18" fill="#3a3a45"/><rect x="44" y="66" width="18" height="6" rx="3" fill="#0a0505"/><rect x="68" y="66" width="18" height="6" rx="3" fill="#0a0505"/><g class="anomaly"><rect x="40" y="60" width="50" height="18" fill="none" stroke="#ff4d6d" stroke-dasharray="3,2" rx="3"/></g>'},
+  {isCustom:true,img:"https://i.postimg.cc/wMYMwJ6q/49a9b802-bd3a-40c4-b260-bfc8a3a103e4.png",mech:"phish",ti:"[บอส 2/3] ลิงก์ในคลิป",sndr:"แนบมากับคลิปไวรัล",msg:"ลงทะเบียนรับเงินเยียวยาช่วงปิดเทอม คลิกด่วน!",url:[["http://","bad"],["moe-relief","warn"],[".click","bad"],["/register","dim"]],ph:true,truedom:"ของจริงคือ moe.go.th (กระทรวงศึกษาฯ)",cl:["http:// + TLD .click","กระทรวงใช้ .go.th","ฉวยโอกาสจากข่าวปลอม"],hi:["http หรือ https? กระทรวงใช้ TLD อะไร?","มิจฉาชีพมักฉวยกระแสข่าว — สังเกตจังหวะนี้","domain จริงของกระทรวงคือ?"],ex:"<b>ด่านบอส 2 — Phishing</b> มิจฉาชีพต่อยอดจากข่าวลวง: http + .click + อ้างหน่วยงานรัฐ ของจริง .go.th"},
+  {isCustom:true,img:"https://i.postimg.cc/kXDzTHh0/d1026fd3-db48-4571-a70b-257bc67751bc.png",mech:"v3",ti:"[บอส 3/3] คุณจะเตือนเพื่อน?",ctrl:"ตัวคุณเอง",dat:"ภาพ ผอ. + ชื่อ-นามสกุล 'คนที่คุณเดาว่าสร้างคลิป'",pur:"โพสต์กล่าวหาในกลุ่ม เพื่อเตือนภัย",con:"❌ ไม่มีหลักฐาน + ไม่ขอความยินยอม",bad:true,vd:"VIOLATION",basis:"กล่าวหาโดยไม่มีหลักฐาน + เผยข้อมูลส่วนบุคคล",cl:["กล่าวหาโดยไม่มีหลักฐาน","เผยข้อมูลส่วนบุคคลผู้อื่น"],hi:["เตือนภัยทำได้ แต่ระบุชื่อ 'คนที่เดา' ทำได้ไหม?","คุณมีหลักฐานว่าใครสร้างจริงหรือเปล่า?","เตือนภัยโดยไม่ละเมิดใคร ทำยังไง?"],ex:"<b>ด่านบอส 3 — PDPA</b> เตือนภัยดี แต่การโพสต์กล่าวหาคนที่ 'เดา' พร้อมข้อมูลส่วนตัว = VIOLATION (+อาจหมิ่นประมาท) ที่ถูกคือเตือนแบบไม่ระบุตัวบุคคล + แจ้งโรงเรียน/ตำรวจ"}]}};
 
 const CASCADE={
   fn1:{t:"ภัยลุกลาม: ข่าวลวงแพร่!",p:"คุณเชื่อว่าคลิปเป็นของจริง — ตอนนี้ถูกแชร์ต่อ 2,400 ครั้งใน 1 ชั่วโมง มีคนตื่นตระหนก คุณจะทำอย่างไร?",o:[["โพสต์ชี้แจงพร้อมลิงก์แหล่งทางการ",true],["ลบโพสต์เงียบๆ ไม่บอกใคร",false]],ex:"การแก้ข่าวต้องโปร่งใส + อ้างแหล่ง การลบเงียบทำให้ข่าวลวงยังลอยอยู่"},
@@ -306,9 +327,9 @@ const CASCADE={
   fn3:{t:"ภัยลุกลาม: ข้อมูลรั่ว!",p:"คุณตัดสินว่าไม่ผิด — ข้อมูลถูกนำไปใช้ต่อ มีผู้เสียหายร้องเรียน คุณจะทำอย่างไร?",o:[["แจ้งเหตุ + ระงับการใช้ข้อมูลทันที",true],["อ้างว่าไม่ใช่ความรับผิดชอบ",false]],ex:"PDPA ม.37 ผู้ควบคุมข้อมูลต้องมีมาตรการรับมือเหตุละเมิด และแจ้งเหตุภายใน 72 ชม."}};
 
 const BADGES=[
-  {id:"eagle",em:"🦅",nm:"ตาเหยี่ยว",ds:"ผ่านด่าน Deepfake Rank S"},
+  {id:"eagle",em:"🦅",nm:"ตาเหยี่ยว",ds:"ผ่านด่าน Deepfake ระดับ S"},
   {id:"gate",em:"🛡️",nm:"ผู้พิทักษ์ประตู",ds:"Phishing ไม่มี FN เลย"},
-  {id:"privacy",em:"⚖️",nm:"ผู้พิทักษ์ข้อมูล",ds:"ผ่านด่าน PDPA Rank S"},
+  {id:"privacy",em:"⚖️",nm:"ผู้พิทักษ์ข้อมูล",ds:"ผ่านด่าน PDPA ระดับ S"},
   {id:"reason",em:"🎯",nm:"นักเหตุผล",ds:"ล็อกหลักฐานถูกทุกข้อ"},
   {id:"frugal",em:"💎",nm:"ประหยัด",ds:"จบด่านโดยเหลือ token"},
   {id:"speed",em:"⚡",nm:"สายฟ้า",ds:"ตอบถูกเหลือเวลา >30 วิ"},
@@ -326,7 +347,7 @@ const QUIZ=[
   {q:"Consent ที่ถูกต้องตาม PDPA ต้องเป็นอย่างไร?",o:["ติ๊กถูกมาให้ล่วงหน้า","เจ้าของข้อมูลยินยอมเอง ชัดแจ้ง เสรี ถอนได้","ยินยอมครั้งเดียวใช้ได้ทุกเรื่อง"],a:1},
   {q:"ร้านขอเบอร์ 'เพื่อสะสมแต้ม' แล้วนำไปยิง SMS โฆษณา ถือว่า?",o:["ทำได้ เพราะมีเบอร์อยู่แล้ว","ต้องขอความยินยอมใหม่ เป็นวัตถุประสงค์ใหม่","ผิดร้ายแรงต้องติดคุก"],a:1},
   {q:"เพื่อนแคปแชตส่วนตัวของเราไปแชร์ประจาน ถือว่า?",o:["ไม่ผิด PDPA ใช้กับบริษัทเท่านั้น","ละเมิด PDPA และอาจหมิ่นประมาท","ผิดเฉพาะถ้าเสียหายมาก"],a:1}];
-/* ====== LESSONS (Phase 2 Micro-lessons) ====== */
+/* ====== LESSONS (ระยะ 2 บทเรียนย่อย) ====== */
 const LESSONS=[
 {id:"lateral",nm:"Lateral Reading",ico:"🌐",cat:"deepfake",
   hook:"AI สร้าง Deepfake เนียนจนจับ artifact ไม่ได้แล้ว — แต่มีวิธีที่ดีกว่าและใช้ได้ตลอดชีวิต",
@@ -365,7 +386,7 @@ const LESSONS=[
   bad:"❌ เห็นลิงก์ที่มีตัวสุ่ม → ดูแปลก → บล็อกหมดเลยให้ปลอดภัย → False Positive!",
   check:{q:"การบล็อกลิงก์ของจริงเพราะดูแปลก เรียกว่า?",o:["False Negative","True Positive","False Positive (กล่าวหาของจริงผิด)"],a:2}}];
 
-/* ====== TEACH-BACK (Phase 4) ====== */
+/* ====== TEACH-BACK (ระยะ 4) ====== */
 const TEACHBACK=[
   {npc:"เพื่อน",q:"ทำไม g00gle ถึงอันตราย มันก็เหมือน google นี่?",o:["เพราะมีตัวเลข 0 แทนตัว o ซ่อนอยู่ เรียกว่า Typosquatting — ดูเหมือนเว็บจริงแต่เป็นเว็บปลอม","เพราะ google เป็นเว็บอันตราย","เพราะ URL ยาวเกินไป"],a:0},
   {npc:"น้อง",q:"PDPA ใช้กับแค่บริษัทใหญ่ใช่ไหม? ฉันเป็นเด็ก ไม่เกี่ยว",o:["ใช่ PDPA ใช้กับบริษัทเท่านั้น","ไม่ใช่ PDPA คุ้มครองข้อมูลส่วนบุคคลของทุกคน ถ้าเพื่อนเอาแชตเราไปแชร์ก็ละเมิดได้","PDPA ใช้กับผู้ใหญ่เท่านั้น"],a:1},
@@ -377,7 +398,7 @@ const TEACHBACK=[
 const state={sound:true,diffKey:"normal",player:"",consent:false,custom:[],fontScale:16,
   unlocked:{1:true,2:false,3:false,4:false},ranks:{},totalScore:0,citizens:0,badges:new Set(),chatCount:0,
   preScore:null,postScore:null,qIdx:0,qScore:0,qMode:"pre",cascData:null,
-  phase:{1:true,2:false,3:false,4:false},discoverDone:false,lessonsCompleted:new Set(),confidence:50,playLog:[],teachScore:null,
+  phase:{1:true,2:false,3:false,4:false,5:false},discoverDone:false,lessonsCompleted:new Set(),confidence:50,playLog:[],teachScore:null,
   lvl:1,idx:0,bossStage:0,list:[],safety:100,trust:100,score:0,tokens:0,streak:0,maxStreak:0,
   tLeft:45,answered:false,inspect:false,crossed:false,hints:0,timerId:null,
   correct:0,reason:0,inspectAll:true,noHint:true,fnCount:0,lowMeter:100,pending:null,screen:"boot"};
@@ -448,6 +469,13 @@ function boot(){state.screen="boot";setAccent("61,225,255","#3de1ff");
     +'<div class="glasscard"><h3>🔐 การคุ้มครองข้อมูล (ตัวอย่าง PDPA จริง)</h3><p>เกมเก็บเฉพาะ <b>ชื่อ</b> ไว้ใน <b>เครื่องนี้เท่านั้น</b> เพื่อแสดงคะแนน ไม่ส่งออกที่ใด และ <b>ลบได้ทุกเมื่อ</b></p>'
     +'<div class="chk" id="consent" tabindex="0" role="checkbox" aria-checked="false"><div class="box">✓</div><div class="lbl">ฉันยินยอมให้เก็บชื่อไว้ในเครื่องนี้ (เสรี ชัดแจ้ง เฉพาะเจาะจง ถอนได้)</div></div>'
     +'<button class="btn btn-ghost" style="font-size:.69rem;padding:9px" onclick="wipeMe()">🗑️ ลบข้อมูลของฉัน</button></div>'
+    +'<div class="glasscard"><h3>📖 คู่มือการเล่น</h3>'
+    +'<p style="margin-bottom:7px">🎯 <b>เป้าหมาย:</b> ฝึกจับข่าวลวง Deepfake · ภัยหลอกลวง Phishing · รู้สิทธิตามกฎหมาย PDPA</p>'
+    +'<p style="margin-bottom:7px">🗺️ <b>5 ระยะ:</b> สำรวจ → เรียนรู้ → ฝึกเล่น → สะท้อนผล → นำไปใช้จริง</p>'
+    +'<p style="margin-bottom:7px">📊 <b>มาตรวัด 2 ตัว:</b> 🛡️ ความปลอดภัย (อย่าปล่อยภัยหลุด) และ 🤝 ความน่าเชื่อถือ (อย่ากล่าวหาของจริง) — ต้องสมดุลทั้งคู่</p>'
+    +'<p style="margin-bottom:7px">🔅 <b>แต้มตรวจสอบ:</b> ใช้กด 🔍 ตรวจสอบ (ดูจุดผิดปกติ) และ 🌐 ตรวจแหล่ง — มีจำกัด ใช้ให้คุ้ม</p>'
+    +'<p style="margin-bottom:7px">🎬 <b>ภาพ คลิป และเสียงในคำถามเป็นสื่อจำลองเพื่อการเรียนรู้</b> มิใช่ของจริง — ให้สังเกตจุดผิดปกติแล้วตัดสินว่าจริงหรือปลอม</p>'
+    +'<p>✅ <b>วิธีตอบ:</b> เลื่อนแถบ "ความมั่นใจ" แล้วกดเลือกคำตอบ (กดปุ่มเลข 1-3 ได้) · สอบถามผู้ช่วย "น้องคำนวณ" ได้ฟรีทุกเมื่อ</p></div>'
     +'<span class="field-lbl">ระดับความยาก</span><div class="seg" id="diff"><div class="opt" data-d="easy">ง่าย·60วิ·🔅16</div><div class="opt on" data-d="normal">ปกติ·45วิ·🔅12</div><div class="opt" data-d="hard">ยาก·30วิ·🔅9</div></div>'
     +'<span class="field-lbl">เสียง · ขนาดอักษร</span><div class="seg"><div class="opt on" id="sndOn" onclick="setSnd(true)">🔊 เปิด</div><div class="opt" id="sndOff" onclick="setSnd(false)">🔇 ปิด</div><div class="opt" onclick="setFont(-1)">A−</div><div class="opt" onclick="setFont(1)">A＋</div></div>'
     +'<details><summary>▸ สำหรับครู: เพิ่มรูปฝึก Deepfake เอง</summary><p style="font-size:.69rem;color:var(--dim);margin:6px 0">อัปโหลดรูป + กำหนดเฉลย → เพิ่มเป็นข้อในด่าน 1</p><label class="btn btn-ghost" style="font-size:.69rem;padding:9px" for="upl">＋ อัปโหลดรูป</label><input id="upl" type="file" accept="image/*" multiple style="display:none"><div class="thumbs" id="thumbs"></div></details>'
@@ -469,7 +497,7 @@ function startFlow(){ac();const nm=(document.getElementById("pName").value||"").
 function howto(){state.screen="menu";
   app.innerHTML='<div class="topglow"></div><div class="screen fade"><div class="kicker">How to Play</div><div class="logo gradtext" style="font-size:30px">❓ วิธีเล่น</div>'
     +'<div class="glasscard"><h3>2 มาตรวัดที่ต้องบาลานซ์</h3><p>🛡️ <b>ความปลอดภัย</b> — ลดเมื่อ "ปล่อยภัยหลุด" (เชื่อของปลอม/ปล่อย phishing)<br>🤝 <b>ความน่าเชื่อถือ</b> — ลดเมื่อ "กล่าวหา/บล็อกของจริงเกินเหตุ"<br>ตัวใดหมด = แพ้! บทเรียน: คิดวิเคราะห์ ≠ ระแวงทุกอย่าง</p></div>'
-    +'<div class="glasscard"><h3>ทรัพยากร เวลาตรวจสอบ (token)</h3><p>มี token จำกัดต่อด่าน ใช้กับ 🔍 INSPECT (1), 🌐 ตรวจแหล่ง (2), 💡 คำใบ้ (1) — เลือกตรวจให้คุ้ม! (พิมพ์ถามน้องคำนวณเองฟรี)</p></div>'
+    +'<div class="glasscard"><h3>ทรัพยากร เวลาตรวจสอบ (token)</h3><p>มี token จำกัดต่อด่าน ใช้กับ 🔍 ตรวจสอบ (1), 🌐 ตรวจแหล่ง (2), 💡 คำใบ้ (1) — เลือกตรวจให้คุ้ม! (พิมพ์ถามน้องคำนวณเองฟรี)</p></div>'
     +'<div class="glasscard"><h3>ล็อกหลักฐาน + Streak</h3><p>หลังตัดสิน เลือก "หลักฐานชี้ขาด" ถูก = โบนัส 🎯 · ตอบถูกติดกันได้ Streak 🔥 คูณคะแนน · เล่นด้วยคีย์บอร์ดได้ (1/2/3, i, c, Enter)</p></div>'
     +'<button class="btn btn-ghost" onclick="boot()">‹ กลับ</button></div>';}
 
@@ -503,18 +531,20 @@ function map(){state.screen="menu";setAccent("61,225,255","#3de1ff");
   if(state.ranks[1]&&state.ranks[2]&&state.ranks[3])state.unlocked[4]=true;
   function card(id){const L=LV[id],open=state.unlocked[id],rk=state.ranks[id];
     return '<div class="lvlcard '+(open?"":"lock")+' '+(id===4?"boss":"")+'" style="--c:'+L.c+'" '+(open?'onclick="lvlIntro('+id+')" role="button" tabindex="0" onkeydown="if(event.key===\'Enter\')lvlIntro('+id+')"':"")+'><div class="ico">'+(open?L.ico:"🔒")+'</div><div><h4>'+L.name+'</h4><div class="sub">'+L.sub+'</div></div><div class="rk '+(rk?"has":"")+'">'+(rk?rk:open?"พร้อม":id===4?"ผ่าน 1-3 ก่อน":"ล็อก")+'</div></div>';}
+  var doneCount=phases.filter(function(p){return p.done;}).length;var progPct=Math.round(doneCount/5*100);
   app.innerHTML='<div class="topglow"></div><div class="screen fade">'
     +'<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px"><div><div class="mono" style="font-size:.63rem;color:var(--dim)">ผู้เล่น</div><div style="font-family:var(--display);font-weight:700;font-size:1.1rem">👤 '+state.player+'</div></div><div style="text-align:right"><div class="mono" style="font-size:.63rem;color:var(--dim)">คะแนนรวม</div><div class="gradtext" style="font-family:var(--display);font-weight:800;font-size:1.5rem">'+state.totalScore+'</div></div></div>'
+    +'<div class="hubprog"><div class="hubprog-head"><span>🎯 ความก้าวหน้าการเรียนรู้</span><span class="hubprog-pct">'+doneCount+'/5 ระยะ · '+progPct+'%</span></div><div class="hubprog-bar"><i style="width:'+progPct+'%"></i></div></div>'
     +'<div class="stagger">'+card(1)+card(2)+card(3)+card(4)+'</div>'
     +(state.ranks[4]?'<button class="btn btn-main" style="background:linear-gradient(135deg,var(--amber),#ff9628);color:#1a1000;margin-top:6px" onclick="certificate()">🎓 ใบประกาศนียบัตร</button><div style="height:9px"></div>'+(state.postScore===null?'<button class="btn btn-ghost" onclick="startQuiz(\'post\')">📝 แบบทดสอบหลังเรียน</button><div style="height:9px"></div>':""):"")
-    +'<div class="nav-tabs"><div class="tab" onclick="leaderboard()">🏆 อันดับ</div><div class="tab" onclick="badgesScreen()">🎖️ ('+state.badges.size+'/'+BADGES.length+')</div><div class="tab" onclick="howto()">❓</div><div class="tab" onclick="boot()">⚙️</div></div></div>';}
+    +'<div class="nav-tabs"><div class="tab" onclick="academyHub()">🏠 หน้าหลัก</div><div class="tab" onclick="leaderboard()">🏆 อันดับ</div><div class="tab" onclick="badgesScreen()">🎖️ ('+state.badges.size+'/'+BADGES.length+')</div><div class="tab" onclick="howto()">❓</div><div class="tab" onclick="boot()">⚙️</div></div></div>';}
 
 function lvlIntro(id){if(!state.unlocked[id])return;sfx("click");const L=LV[id];setAccent(L.rgb,L.c);state.screen="menu";
   const brief={1:'วิเคราะห์สื่อ 5 ชิ้น REAL/DEEPFAKE — เริ่มจากตรวจ <b>แหล่งที่มา</b> (🌐 ใช้ token) แล้ว INSPECT หา artifact เสริม',
     2:'คัดกรอง packet 6 ชิ้น ALLOW/BLOCK — ปล่อยภัยหลุด = ปลอดภัยลดหนัก, บล็อกของจริง = น่าเชื่อถือลด',
     3:'สวมบท DPO ตัดสิน 6 คดี 3 ทาง เทียบ 4 เสา consent (อ้าง PDPA จริง) — ตัดสินผ่อนเกินไป=ปลอดภัยลด, เข้มเกินไป=น่าเชื่อถือลด',
     4:'<b>ด่านบอส!</b> เหตุการณ์เดียวยาว 3 ช่วง: คลิป Deepfake → ลิงก์ Phishing → ตัดสิน PDPA ใช้ทุกสกิล มาตรวัด & token ใช้ร่วมกันทั้งด่าน'}[id];
-  app.innerHTML='<div class="topglow"></div><div class="screen fade" style="text-align:center"><div class="kicker">'+(id===4?"Final Mission":"Mission 0"+id)+'</div>'
+  app.innerHTML='<div class="topglow"></div><div class="screen fade" style="text-align:center"><div class="kicker">'+(id===4?"ด่านบอส":"ด่าน "+id)+'</div>'
     +'<div style="font-size:58px;margin:14px 0;filter:drop-shadow(0 0 24px '+L.c+')">'+L.ico+'</div><div class="logo gradtext" style="font-size:clamp(24px,6.5vw,42px)">'+L.name+'</div>'
     +'<div class="glasscard" style="text-align:left;margin-top:16px"><p>'+brief+'</p></div>'
     +'<button class="btn btn-main" onclick="initLevel('+id+')">▶ เริ่ม'+(id===4?"ด่านบอส":"ด่าน")+'</button><div style="height:9px"></div><button class="btn btn-ghost" onclick="map()">‹ กลับแผนที่</button></div>';}
@@ -525,15 +555,16 @@ function loadCard(){state.screen=isBoss()?"boss":"card";const L=LV[state.lvl],s=
   state.tLeft=CONFIG.time[state.diffKey];state.hints=0;state.answered=false;state.inspect=false;state.crossed=false;
   const sa=state.safety,tr=state.trust;
   app.innerHTML='<div class="topglow"></div><div class="fade">'
-    +'<div class="hud"><span class="tag">'+L.ico+' '+(isBoss()?"BOSS "+(state.bossStage+1)+"/3":(curIdx()+1)+"/"+curLen())+'</span><span class="spacer"></span>'
+    +'<div class="hud"><span class="tag">'+L.ico+' '+(isBoss()?"บอส "+(state.bossStage+1)+"/3":(curIdx()+1)+"/"+curLen())+'</span><span class="spacer"></span>'
     +'<span class="meter" title="ความปลอดภัย"><span class="lab">🛡️</span><span class="bar"><i id="bSafe" style="width:'+sa+'%;background:'+meterColor(sa)+'"></i></span><span class="pct" id="pSafe" style="color:'+meterColor(sa)+'">'+sa+'</span></span>'
     +'<span class="meter" title="ความน่าเชื่อถือ"><span class="lab">🤝</span><span class="bar"><i id="bTrust" style="width:'+tr+'%;background:'+meterColor(tr)+'"></i></span><span class="pct" id="pTrust" style="color:'+meterColor(tr)+'">'+tr+'</span></span>'
     +'<span class="chip tok" title="เวลาตรวจสอบ"><span id="tok">🔅 '+state.tokens+'</span></span>'
     +'<span class="chip streak '+(state.streak>=CONFIG.comboStep?"hot":"")+'" id="streakChip">🔥 x'+comboMult().toFixed(1)+'</span>'
     +'<button class="iconbtn" id="muteBtn" onclick="toggleMute()">'+(state.sound?"🔊":"🔇")+'</button>'
     +'<span class="timer" id="timer">0:'+String(state.tLeft).padStart(2,"0")+'</span></div>'
-    +'<div class="game"><div class="evidence"><div class="plabel">'+(mech==="phish"?"Packet Inspector":mech==="v3"?"Case File":"Evidence Scanner")+'</div><div class="sc-title">'+s.ti+'</div>'+evidence(s,mech)+'<div id="srcSlot"></div>'
-    +'<div class="verifyrow"><button class="vbtn" id="inspectBtn" onclick="doInspect()">🔍 INSPECT<span class="cost">−1 token</span></button><button class="vbtn src" id="crossBtn" onclick="doCross()">🌐 ตรวจแหล่ง<span class="cost">−2 token</span></button></div><div class="clues" id="clues"></div></div>'
+    +'<div class="lvlprog" title="ความคืบหน้าด่าน"><i style="width:'+Math.round((curIdx()+1)/curLen()*100)+'%"></i><span class="lvlprog-txt">ข้อ '+(curIdx()+1)+'/'+curLen()+' · '+Math.round((curIdx()+1)/curLen()*100)+'%</span></div>'
+    +'<div class="game"><div class="evidence"><div class="plabel">'+(mech==="phish"?"ตรวจสอบข้อความ":mech==="v3"?"แฟ้มกรณีศึกษา":"เครื่องสแกนหลักฐาน")+'</div><div class="sc-title">'+s.ti+'</div>'+evidence(s,mech)+'<div id="srcSlot"></div>'
+    +'<div class="verifyrow"><button class="vbtn" id="inspectBtn" onclick="doInspect()">🔍 ตรวจสอบ<span class="cost">−1 token</span></button><button class="vbtn src" id="crossBtn" onclick="doCross()">🌐 ตรวจแหล่ง<span class="cost">−2 token</span></button></div><div class="clues" id="clues"></div></div>'
     +'<div class="chat"><div class="plabel">น้องคำนวณ AI</div><div class="chatwin" id="chatwin"></div>'
     +'<div style="display:flex;gap:6px;overflow-x:auto;padding-bottom:2px"><button class="quickbtn" onclick="quickAsk(\'ใบ้หน่อย\')">💡 คำใบ้ (−1)</button><button class="quickbtn" onclick="quickAsk(\''+(mech==="b2"?"ตรวจ deepfake ยังไง":mech==="phish"?"อ่าน url ยังไง":"4 เสา consent")+'\')">📖 เทคนิค</button></div>'
     +'<div class="chatform"><input class="chatin" id="chatin" placeholder="พิมพ์ถาม (ฟรี)..." onkeydown="if(event.key===\'Enter\')sendChat()"><button class="chatsend" onclick="sendChat()">▶</button></div></div></div>'
@@ -543,11 +574,18 @@ function loadCard(){state.screen=isBoss()?"boss":"card";const L=LV[state.lvl],s=
   startTimer();}
 
 function evidence(s,mech){
-  if(mech==="b2"){const vis=s.isCustom?'<img class="uimg" src="'+s.img+'" alt="">':'<svg width="150" height="138" viewBox="0 0 130 130" style="position:relative;z-index:1">'+(s.dr?s.dr():"")+'</svg>';
-    return '<div class="sc-sub">['+s.ty+'] '+s.sb+'</div><div class="viewport" id="viewport"><div class="scan"></div><span class="corner tl"></span><span class="corner tr"></span><span class="corner bl"></span><span class="corner br"></span>'+vis+'</div>';}
+  if(mech==="b2"){var svgFb='<svg width="150" height="138" viewBox="0 0 130 130" style="position:relative;z-index:1">'+(s.dr?s.dr():"")+'</svg>';
+    const vis=s.isCustom?'<img class="uimg" src="'+s.img+'" alt="ภาพสื่อจำลอง" onerror="this.style.display=\'none\';var fb=this.parentNode.querySelector(\'.imgfb\');if(fb)fb.style.display=\'flex\'"><div class="imgfb" style="display:none;flex-direction:column;align-items:center;gap:6px">'+(s.dr?svgFb:'')+'<div style="font-size:.7rem;color:var(--dim);text-align:center;max-width:240px">📷 รูปออนไลน์ — เปิดในเบราว์เซอร์ที่มีอินเทอร์เน็ตเพื่อแสดงรูปจริง</div></div>':svgFb;
+    return '<div class="sc-sub"><span class="simtag">🎬 สื่อจำลอง · '+s.ty+'</span> '+s.sb+'</div><div class="viewport" id="viewport"><div class="scan"></div><span class="corner tl"></span><span class="corner tr"></span><span class="corner bl"></span><span class="corner br"></span>'+vis+'</div><div class="simcap">⚠️ ภาพ/เสียงนี้เป็นการจำลองเพื่อการเรียนรู้ มิใช่ของจริง — สังเกตจุดผิดปกติ (กด 🔍 ตรวจสอบ) แล้วตัดสินว่าเป็นของจริงหรือปลอม</div>';}
   if(mech==="phish"){const url=s.url.map(p=>'<span class="u-'+p[1]+'">'+p[0]+'</span>').join("");
-    return '<div class="datacard"><div class="datarow"><span class="k">ผู้ส่ง</span><span class="v" style="color:#ff9a6e">'+s.sndr+'</span></div><div class="msgbox">'+s.msg+'</div><div class="datarow"><span class="k">URL</span></div><div class="urlbox">'+url+'</div></div>';}
-  return '<div class="datacard"><div class="datarow"><span class="k">ผู้ควบคุม</span><span class="v">'+s.ctrl+'</span></div><div class="datarow"><span class="k">เก็บอะไร</span><span class="v">'+s.dat+'</span></div><div class="datarow"><span class="k">วัตถุประสงค์</span><span class="v">'+s.pur+'</span></div><div class="datarow"><span class="k">ความยินยอม</span><span class="v" style="color:'+(s.bad?"var(--red)":"var(--green)")+'">'+s.con+'</span></div></div>';}
+    var dcP='<div class="datacard"><div class="datarow"><span class="k">ผู้ส่ง</span><span class="v" style="color:#ff9a6e">'+s.sndr+'</span></div><div class="msgbox">'+s.msg+'</div><div class="datarow"><span class="k">URL</span></div><div class="urlbox">'+url+'</div></div>';
+    var tagP='<div class="sc-sub"><span class="simtag">📩 ข้อความจำลอง</span> ตรวจสอบผู้ส่งและที่อยู่เว็บ (URL) ให้ละเอียด</div>';
+    if(s.isCustom&&s.img)return tagP+'<img class="uimg" src="'+s.img+'" alt="ข้อความจำลอง" onerror="this.style.display=\'none\';var f=this.parentNode.querySelector(\'.imgfb\');if(f)f.style.display=\'block\'"><div class="imgfb" style="display:none">'+dcP+'</div>';
+    return tagP+dcP;}
+  var dcD='<div class="datacard"><div class="datarow"><span class="k">ผู้ควบคุม</span><span class="v">'+s.ctrl+'</span></div><div class="datarow"><span class="k">เก็บอะไร</span><span class="v">'+s.dat+'</span></div><div class="datarow"><span class="k">วัตถุประสงค์</span><span class="v">'+s.pur+'</span></div><div class="datarow"><span class="k">ความยินยอม</span><span class="v" style="color:'+(s.bad?"var(--red)":"var(--green)")+'">'+s.con+'</span></div></div>';
+  var tagD='<div class="sc-sub"><span class="simtag">📋 กรณีศึกษาจำลอง</span> พิจารณาว่าการขอข้อมูลถูกต้องตาม PDPA หรือไม่</div>';
+  if(s.isCustom&&s.img)return tagD+'<img class="uimg" src="'+s.img+'" alt="กรณีศึกษาจำลอง" onerror="this.style.display=\'none\';var f=this.parentNode.querySelector(\'.imgfb\');if(f)f.style.display=\'block\'"><div class="imgfb" style="display:none">'+dcD+'</div>';
+  return tagD+dcD;}
 
 function botSay(t){const w=document.getElementById("chatwin");if(!w)return;const d=document.createElement("div");d.className="bub bot";d.innerHTML='<div class="who">น้องคำนวณ</div>'+t;w.appendChild(d);w.scrollTop=w.scrollHeight;sfx("msg");}
 function meSay(t){const w=document.getElementById("chatwin");if(!w)return;const d=document.createElement("div");d.className="bub me";d.textContent=t;w.appendChild(d);w.scrollTop=w.scrollHeight;}
@@ -591,7 +629,7 @@ function answer(c){if(state.answered||(state.screen!=="card"&&state.screen!=="bo
 
 function timeoutAnswer(){if(state.answered)return;state.answered=true;clearInterval(state.timerId);state.streak=0;shake();
   state.safety=clamp(state.safety-pen(CONFIG.timeoutPen));state.lowMeter=Math.min(state.lowMeter,state.safety,state.trust);sfx(state.safety<=0?"breach":"wrong");
-  const s=cur(),mech=curMech();const truth=mech==="b2"?(s.an==="REAL"?"ของจริง":"สื่อปลอม"):mech==="phish"?(s.ph?"Phishing":"ปลอดภัย"):({COMPLIANT:"ถูกต้อง",NEEDS_CONSENT:"ต้องขอ consent",VIOLATION:"ละเมิด"})[s.vd];
+  const s=cur(),mech=curMech();const truth=mech==="b2"?(s.an==="REAL"?"ของจริง":"สื่อปลอม"):mech==="phish"?(s.ph?"Phishing":"ปลอดภัย"):({COMPLIANT:"ถูกต้อง",NEEDS_CONSENT:"ต้องขอความยินยอม",VIOLATION:"ละเมิด"})[s.vd];
   state.pending={ok:false,err:"fn",truth:truth,lab:"หมดเวลา!"};feedback(s);}
 
 function evidLock(r,s){state.screen="evidlock";
@@ -616,7 +654,7 @@ function mitigate(i,good){const cas=state.cascData;if(good){state.safety=clamp(s
 function feedback(s){state.screen="feedback";const r=state.pending,dead=state.safety<=0||state.trust<=0,last=curIdx()>=curLen()-1;
   app.innerHTML='<div class="topglow"></div><div class="feedback fade"><div class="fbv '+(r.ok?"ok":"no")+'">'+(r.ok?"✓ ถูกต้อง":"✗ ผิดพลาด")+'</div>'
     +(r.lab?'<div class="fbtruth">'+r.lab+'</div>':"")+'<div class="fbtruth">คำตอบที่ถูก: '+r.truth+'</div>'
-    +'<div class="fbmeters"><span class="fbm" style="color:'+meterColor(state.safety)+'">🛡️ ปลอดภัย '+state.safety+'</span><span class="fbm" style="color:'+meterColor(state.trust)+'">🤝 น่าเชื่อถือ '+state.trust+'</span>'+(state.streak>1?'<span class="fbm" style="color:var(--amber)">🔥 Streak '+state.streak+'</span>':"")+'</div>'
+    +'<div class="fbmeters"><span class="fbm" style="color:'+meterColor(state.safety)+'">🛡️ ปลอดภัย '+state.safety+'</span><span class="fbm" style="color:'+meterColor(state.trust)+'">🤝 น่าเชื่อถือ '+state.trust+'</span>'+(state.streak>1?'<span class="fbm" style="color:var(--amber)">🔥 ต่อเนื่อง '+state.streak+' ครั้ง!</span>':"")+'</div>'
     +'<div class="fbex"><b>// บทวิเคราะห์</b><br>'+s.ex+'</div>'
     +(dead?'<button class="btn btn-main" style="background:linear-gradient(135deg,var(--red),#c0304a);color:#fff" onclick="levelFail()">ดูผล ›</button>':'<button class="btn btn-main" onclick="'+(last?"levelDone()":"nextCard()")+'">'+(last?'จบด่าน › <span style=opacity:.6>[Enter]</span>':'ต่อไป › <span style=opacity:.6>[Enter]</span>')+'</button>')+'</div>';}
 function nextCard(){if(isBoss())state.bossStage++;else state.idx++;loadCard();}
@@ -629,7 +667,7 @@ function levelDone(){state.screen="menu";const avg=Math.round((state.safety+stat
   if(state.lvl===4)award("boss");if(state.noHint)award("solo");if(state.tokens>0)award("frugal");
   if(state.maxStreak>=CONFIG.comboStep)award("combo");if(state.lowMeter<30&&avg>0)award("comeback");if(state.safety>=80&&state.trust>=80)award("balance");
   if(rank==="S"||state.lvl===4)confetti();const L=LV[state.lvl],next=state.lvl+1;
-  app.innerHTML='<div class="topglow"></div><div class="end fade"><div class="kicker">'+(state.lvl===4?"Final":"Mission 0"+state.lvl)+' Report</div>'
+  app.innerHTML='<div class="topglow"></div><div class="end fade"><div class="kicker">'+(state.lvl===4?"ด่านบอส":"ด่าน "+state.lvl)+' รายงาน</div>'
     +'<div class="rankbig reveal" style="color:'+rankColor(rank)+';text-shadow:0 0 40px '+rankColor(rank)+'">'+rank+'</div><div class="endt" style="color:'+L.c+'">'+L.name+' CLEARED</div>'
     +'<div class="statgrid"><div class="stat pop"><div class="n">'+state.correct+'/'+curLen()+'</div><div class="l">ตอบถูก</div></div><div class="stat pop" style="animation-delay:.1s"><div class="n">'+state.reason+'/'+curLen()+'</div><div class="l">เหตุผลถูก</div></div><div class="stat pop" style="animation-delay:.2s"><div class="n">'+state.score+'</div><div class="l">คะแนน</div></div></div>'
     +'<div class="statgrid"><div class="stat"><div class="n" style="color:'+meterColor(state.safety)+'">'+state.safety+'</div><div class="l">🛡️ ปลอดภัย</div></div><div class="stat"><div class="n" style="color:'+meterColor(state.trust)+'">'+state.trust+'</div><div class="l">🤝 น่าเชื่อถือ</div></div><div class="stat"><div class="n">x'+state.maxStreak+'</div><div class="l">🔥 Streak สูงสุด</div></div></div>'
@@ -658,7 +696,7 @@ function badgesScreen(){state.screen="menu";
 function leaderboard(){state.screen="menu";const lb=getLB().sort((a,b)=>b.score-a.score),top3=lb.slice(0,3),rest=lb.slice(0,12),medal=["🥇","🥈","🥉"];
   let podium="";if(top3.length){const order=[1,0,2];podium='<div class="podium">'+order.map(i=>top3[i]?'<div class="pod p'+(i+1)+'"><div class="av">'+medal[i]+'</div><div class="pn">'+top3[i].name+'</div><div class="ps">'+top3[i].score+'</div></div>':"").join("")+'</div>';}
   app.innerHTML='<div class="topglow"></div><div class="screen fade"><div class="kicker">Class Leaderboard</div><div class="logo gradtext" style="font-size:30px">🏆 กระดานคะแนน</div><div class="tagline">การแข่งขันในห้อง · บันทึกในเครื่องนี้</div>'
-    +(lb.length?podium:"")+(lb.length?'<div class="stagger">'+rest.map((e,i)=>'<div class="lbrow '+(e.name===state.player?"me":"")+'"><div class="pos">'+(i<3?medal[i]:"#"+(i+1))+'</div><div><div class="nm">'+e.name+'</div><div class="meta">'+(e.badges||0)+' เหรียญ · Rank '+(e.rank||"-")+'</div></div><div style="flex:1"></div><div class="sc">'+e.score+'</div></div>').join("")+'</div>':'<div class="glasscard"><p>ยังไม่มีคะแนน — เล่นจบด่านแล้วชื่อคุณจะขึ้นที่นี่!</p></div>')
+    +(lb.length?podium:"")+(lb.length?'<div class="stagger">'+rest.map((e,i)=>'<div class="lbrow '+(e.name===state.player?"me":"")+'"><div class="pos">'+(i<3?medal[i]:"#"+(i+1))+'</div><div><div class="nm">'+e.name+'</div><div class="meta">'+(e.badges||0)+' เหรียญ · ระดับ '+(e.rank||"-")+'</div></div><div style="flex:1"></div><div class="sc">'+e.score+'</div></div>').join("")+'</div>':'<div class="glasscard"><p>ยังไม่มีคะแนน — เล่นจบด่านแล้วชื่อคุณจะขึ้นที่นี่!</p></div>')
     +'<div style="height:12px"></div><div class="nav-tabs"><div class="tab" onclick="map()">‹ กลับ</div>'+(lb.length?'<div class="tab" onclick="clearLB()">🗑️ ล้าง</div>':"")+'</div></div>';}
 
 /* ====== PERSIST + TIMER + KEYBOARD ====== */
@@ -679,44 +717,59 @@ document.addEventListener("keydown",function(e){const typing=e.target.tagName===
 /* ====== ACADEMY HUB (New Entry Point) ====== */
 function academy(){state.screen="boot";setAccent("61,225,255","#3de1ff");
   app.innerHTML='<div class="topglow"></div><div class="screen fade">'
-    +'<div class="kicker">Learning Platform · v1.0</div><div class="logo gradtext">GUARDIAN<br>ACADEMY</div>'
-    +'<div class="tagline">แพลตฟอร์มเรียนรู้ไซเบอร์ครบวงจร · 5 เฟส</div>'
+    +'<div class="kicker">⚔️ Learning Platform</div><div class="logo gradtext">GUARDIAN<br>ACADEMY</div>'
+    +'<div class="editbadge">Cyber Guardian Edition</div>'
+    +'<div class="edition">🛡️ ภารกิจพิทักษ์โลกดิจิทัล</div>'
+    +'<div class="tagline">เรียนรู้ · วิเคราะห์ · ตัดสินใจ · ปกป้องข้อมูล</div>'
+    +'<div class="subjbadge">📘 สำหรับรายวิชา วิทยาการคำนวณ ม.4</div>'
     +'<span class="field-lbl">โปรไฟล์ผู้เล่น</span><input class="inp" id="pName" placeholder="ชื่อของคุณ" maxlength="16">'
     +'<div class="glasscard"><h3>🔐 การคุ้มครองข้อมูล (ตัวอย่าง PDPA จริง)</h3><p>เก็บเฉพาะ <b>ชื่อ</b> ไว้ใน <b>เครื่องนี้เท่านั้น</b> ลบได้ทุกเมื่อ (4 เสา consent: เสรี ชัดแจ้ง เฉพาะเจาะจง ถอนได้)</p>'
     +'<div class="chk" id="consent" tabindex="0" role="checkbox" aria-checked="false"><div class="box">✓</div><div class="lbl">ฉันยินยอม</div></div>'
     +'<button class="btn btn-ghost" style="font-size:.69rem;padding:9px" onclick="wipeMe()">🗑️ ลบข้อมูลของฉัน</button></div>'
     +'<span class="field-lbl">ระดับความยาก</span><div class="seg" id="diff"><div class="opt" data-d="easy">ง่าย</div><div class="opt on" data-d="normal">ปกติ</div><div class="opt" data-d="hard">ยาก</div></div>'
     +'<div class="seg"><div class="opt on" id="sndOn" onclick="setSnd(true)">🔊</div><div class="opt" id="sndOff" onclick="setSnd(false)">🔇</div><div class="opt" onclick="setFont(-1)">A−</div><div class="opt" onclick="setFont(1)">A＋</div></div>'
-    +'<button class="btn btn-main" id="go">▶ เข้าสู่ Academy</button></div>';
+    +'<div class="featrow">'
+    +'<div class="featchip"><span class="fi">🎮</span><span class="ft">GAME-BASED<br>LEARNING</span></div>'
+    +'<div class="featchip"><span class="fi">🌳</span><span class="ft">SKILL<br>TREE</span></div>'
+    +'<div class="featchip"><span class="fi">🤖</span><span class="ft">AI<br>MENTOR</span></div>'
+    +'<div class="featchip"><span class="fi">🏅</span><span class="ft">RANK &<br>BADGE</span></div>'
+    +'<div class="featchip"><span class="fi">📜</span><span class="ft">CERTIFICATE<br>& REPORT</span></div>'
+    +'</div>'
+    +'<button class="btn btn-main" id="go">🚀 LEVEL UP — เข้าสู่ Academy</button>'
+    +'<div class="levelup">Level Up Your Cyber Future</div></div>';
   document.getElementById("diff").onclick=function(e){const o=e.target.closest(".opt");if(!o)return;[].forEach.call(e.currentTarget.children,c=>c.classList.remove("on"));o.classList.add("on");sfx("click");state.diffKey=o.dataset.d;};
   var con=document.getElementById("consent");con.onclick=function(){state.consent=!state.consent;con.classList.toggle("on",state.consent);con.setAttribute("aria-checked",state.consent);sfx("click");};
   con.onkeydown=function(e){if(e.key===" "||e.key==="Enter"){e.preventDefault();con.click();}};
-  document.getElementById("go").onclick=function(){ac();var nm=(document.getElementById("pName").value||"").trim();if(!state.consent){toast("🔐","กรุณายินยอมก่อน — นี่คือตัวอย่าง consent ตาม PDPA!");return;}state.player=nm||"ผู้เล่น";loadProfile();sfx("click");playBGM();academyHub();};}
+  document.getElementById("go").onclick=function(){ac();var nm=(document.getElementById("pName").value||"").trim();if(!state.consent){toast("🔐","กรุณายินยอมก่อน — นี่คือตัวอย่าง consent ตาม PDPA!");return;}state.player=nm||"ผู้เล่น";/* เริ่มเซสชันใหม่สด: ไม่ดึงความคืบหน้าเก่ามาแสดงติ๊กถูก */state.discoverDone=false;state.lessonsCompleted=new Set();state.teachScore=null;state.playLog=[];state.ranks={};state.unlocked={1:true,2:false,3:false,4:false};state.phase={1:true,2:false,3:false,4:false,5:false};state.totalScore=0;state.preScore=null;state.postScore=null;sfx("click");playBGM();academyHub();};}
 
 function academyHub(){state.screen="menu";setAccent("61,225,255","#3de1ff");
   // unlock logic
-  if(state.discoverDone)state.phase[2]=true;
-  if(state.lessonsCompleted.size>=4)state.phase[3]=true;
-  if(Object.keys(state.ranks).length>0)state.phase[4]=true;
+  // ปลดล็อกตามลำดับขั้น 1→2→3→4→5 (แต่ละระยะต้องจบก่อนจึงเปิดถัดไป)
+  if(state.discoverDone)state.phase[2]=true;                                  // จบระยะ 1 → เปิดระยะ 2
+  if(state.lessonsCompleted.size>=4)state.phase[3]=true;                      // เรียน 4+ บท → เปิดระยะ 3
+  if(state.ranks[1]&&state.ranks[2]&&state.ranks[3])state.phase[4]=true;      // ผ่านครบ 3 ด่าน → เปิดระยะ 4
+  if(state.ranks[1]&&state.ranks[2]&&state.ranks[3])state.phase[5]=true;      // ผ่านครบ 3 ด่าน → เปิดระยะ 5 (ใช้จริงได้หลังเล่นจบ)
   var phases=[
     {n:1,nm:"DISCOVER",sub:"ลองก่อนเรียน (Productive Failure)",ico:"🔍",c:"#3de1ff",done:state.discoverDone},
-    {n:2,nm:"LEARN",sub:"บทเรียน Micro-lesson + Skill Tree ("+state.lessonsCompleted.size+"/"+LESSONS.length+")",ico:"📖",c:"#6b8bff",done:state.lessonsCompleted.size>=LESSONS.length},
-    {n:3,nm:"PLAY",sub:"ลงสนามจริง — เกม Cyber Guardian เต็มรูปแบบ",ico:"⚔️",c:"#2bffb0",done:!!state.ranks[4]},
-    {n:4,nm:"REFLECT",sub:"สะท้อนการเรียนรู้ + สอนเพื่อน + Radar",ico:"🪞",c:"#c06bff",done:state.teachScore!==null},
-    {n:5,nm:"APPLY",sub:"ใช้ในชีวิตจริง (Daily Challenge + URL Scanner)",ico:"🌍",c:"#ff6bd6",done:false}
+    {n:2,nm:"LEARN",sub:"บทเรียน บทเรียนย่อย + ผังทักษะ ("+state.lessonsCompleted.size+"/"+LESSONS.length+")",ico:"📖",c:"#6b8bff",done:state.lessonsCompleted.size>=LESSONS.length},
+    {n:3,nm:"PLAY",sub:"ลงสนามจริง — เกม Cyber Guardian เต็มรูปแบบ",ico:"⚔️",c:"#ffc046",done:!!(state.ranks[1]&&state.ranks[2]&&state.ranks[3])},
+    {n:4,nm:"REFLECT",sub:"สะท้อนการเรียนรู้ + สอนเพื่อน + แผนภูมิเรดาร์",ico:"🧠",c:"#c06bff",done:state.teachScore!==null},
+    {n:5,nm:"APPLY",sub:"ใช้ในชีวิตจริง (Daily Challenge + URL Scanner)",ico:"🌐",c:"#2bffb0",done:false}
   ];
+  var doneCount=phases.filter(function(p){return p.done;}).length;var progPct=Math.round(doneCount/5*100);
   app.innerHTML='<div class="topglow"></div><div class="screen fade">'
     +'<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px"><div><div class="mono" style="font-size:.63rem;color:var(--dim)">ผู้เล่น</div><div style="font-family:var(--display);font-weight:700;font-size:1.1rem">👤 '+state.player+'</div></div><div style="text-align:right"><div class="mono" style="font-size:.63rem;color:var(--dim)">คะแนนรวม</div><div class="gradtext" style="font-family:var(--display);font-weight:800;font-size:1.5rem">'+state.totalScore+'</div></div></div>'
-    +'<div class="stagger">'+phases.map(function(p){var open=state.phase[p.n];return '<div class="phasecard '+(open?"":"lock")+'" style="--c:'+p.c+'" '+(open?'onclick="goPhase('+p.n+')" tabindex="0"':"")+'><div class="num" style="color:'+p.c+'">'+p.ico+'</div><div><h4>เฟส '+p.n+': '+p.nm+'</h4><div class="sub">'+p.sub+'</div></div><div class="check">'+(p.done?"✅":open?"›":"🔒")+'</div></div>';}).join("")+'</div>'
+    +'<div class="hubprog"><div class="hubprog-head"><span>🎯 ความก้าวหน้าการเรียนรู้</span><span class="hubprog-pct">'+doneCount+'/5 ระยะ · '+progPct+'%</span></div><div class="hubprog-bar"><i style="width:'+progPct+'%"></i></div></div>'
+    +'<div class="stagger">'+phases.map(function(p){var open=state.phase[p.n];return '<div class="phasecard '+(open?"":"lock")+'" style="--c:'+p.c+'" '+(open?'onclick="goPhase('+p.n+')" tabindex="0"':"")+'><div class="num" style="color:'+p.c+'">'+p.ico+'</div><div><h4>ระยะ '+p.n+': '+p.nm+'</h4><div class="sub">'+p.sub+'</div></div><div class="check">'+(p.done?"✅":open?"›":"🔒")+'</div></div>';}).join("")+'</div>'
     +'<div class="nav-tabs"><div class="tab" onclick="leaderboard()">🏆</div><div class="tab" onclick="badgesScreen()">🎖️ '+state.badges.size+'</div><div class="tab" onclick="howto()">❓</div><div class="tab" onclick="academy()">⚙️</div></div></div>';}
 function goPhase(n){sfx("click");if(n===1)discover();else if(n===2)skillTree();else if(n===3)preTestPrompt();else if(n===4)reflect();else if(n===5)applyPhase();}
 
 /* ====== PHASE 1: DISCOVER (Productive Failure) ====== */
 var DISC_IX=[{lv:1,i:0},{lv:2,i:1},{lv:2,i:3},{lv:3,i:3}]; // 4 scenarios: deepfake, safe email, phishing sms, pdpa tick
 function discover(){state.screen="menu";setAccent("255,192,70","#ffc046");
-  app.innerHTML='<div class="topglow"></div><div class="screen fade" style="text-align:center"><div class="kicker">Phase 1: Discover</div>'
+  app.innerHTML='<div class="topglow"></div><div class="screen fade" style="text-align:center"><div class="kicker">ระยะ 1: สำรวจ</div>'
     +'<div class="logo gradtext" style="font-size:30px">🔍 ลองก่อนเรียน</div>'
-    +'<div class="glasscard" style="text-align:left"><p>ลองตัดสินใจ 4 สถานการณ์ <b>โดยไม่ต้องมีความรู้ก่อน</b> — ผิดไม่เป็นไร! เป้าหมายคือดูว่า <b>คุณมีจุดบอดตรงไหน</b> แล้วเฟสถัดไปจะเติมเต็ม</p></div>'
+    +'<div class="glasscard" style="text-align:left"><p>ลองตัดสินใจ 4 สถานการณ์ <b>โดยไม่ต้องมีความรู้ก่อน</b> — ผิดไม่เป็นไร! เป้าหมายคือดูว่า <b>คุณมีจุดบอดตรงไหน</b> แล้วระยะถัดไปจะเติมเต็ม</p></div>'
     +'<button class="btn btn-main" onclick="discStart()">▶ เริ่มสำรวจ</button><div style="height:9px"></div><button class="btn btn-ghost" onclick="academyHub()">‹ กลับ</button></div>';}
 var discState={idx:0,correct:0,results:[]};
 function discStart(){discState={idx:0,correct:0,results:[]};discCard();}
@@ -725,21 +778,21 @@ function discCard(){state.screen="discover";var di=DISC_IX[discState.idx],s=LV[d
     +'<div style="margin-top:16px;display:flex;gap:10px;flex-wrap:wrap;justify-content:center">'+mechBtn[mech].map(function(b,i){return '<button class="abtn '+b[1]+'" onclick="discAnswer(\''+b[2]+'\','+di.lv+','+di.i+')"><span class="kb">'+(i+1)+'</span>'+b[0]+'</button>';}).join("")+'</div></div>';}
 function discAnswer(c,lv,idx){var s=LV[lv].d[idx],mech=LV[lv].mech,r=evaluate(s,c,mech);discState.results.push({ti:s.ti,ok:r.ok,truth:r.truth});if(r.ok)discState.correct++;sfx(r.ok?"correct":"wrong");
   app.innerHTML='<div class="topglow"></div><div class="feedback fade"><div class="fbv '+(r.ok?"ok":"no")+'">'+(r.ok?"✓ ถูก!":"✗ พลาด")+'</div><div class="fbtruth">คำตอบที่ถูก: '+r.truth+'</div>'
-    +'<div class="glasscard" style="margin-top:14px"><p>'+(r.ok?"เก่งมาก! คุณจับได้ — ในเฟสถัดไปจะเรียนว่า <b>ทำไม</b> ถึงเป็นแบบนี้":"ไม่เป็นไร! คนส่วนใหญ่พลาดข้อนี้เหมือนกัน — ในเฟสถัดไปจะเรียนว่า <b>ทำไม</b> และจะไม่พลาดอีก")+'</p></div>'
+    +'<div class="glasscard" style="margin-top:14px"><p>'+(r.ok?"เก่งมาก! คุณจับได้ — ในระยะถัดไปจะเรียนว่า <b>ทำไม</b> ถึงเป็นแบบนี้":"ไม่เป็นไร! คนส่วนใหญ่พลาดข้อนี้เหมือนกัน — ในระยะถัดไปจะเรียนว่า <b>ทำไม</b> และจะไม่พลาดอีก")+'</p></div>'
     +'<button class="btn btn-main" onclick="discNext()">ต่อไป ›</button></div>';}
 function discNext(){discState.idx++;if(discState.idx<DISC_IX.length)discCard();else discResult();}
 function discResult(){state.discoverDone=true;state.phase[2]=true;saveProfile();confetti();
-  app.innerHTML='<div class="topglow"></div><div class="end fade"><div class="kicker">Phase 1 Complete</div><div class="rankbig reveal" style="color:var(--amber)">'+discState.correct+'/'+DISC_IX.length+'</div><div class="endt">สำรวจจุดบอด</div>'
-    +'<div class="glasscard" style="text-align:left"><p>'+(discState.correct<=2?'คุณได้ '+discState.correct+' จาก '+DISC_IX.length+' ข้อ — <b>ไม่ต้องกังวล!</b> เฟส 2 จะสอนทุกอย่างที่พลาด ':'เก่งมาก! ได้ '+discState.correct+' ข้อ — เฟส 2 จะทำให้เข้าใจ <b>ลึกขึ้น</b> ')+'</p>'
+  app.innerHTML='<div class="topglow"></div><div class="end fade"><div class="kicker">จบระยะ 1</div><div class="rankbig reveal" style="color:var(--amber)">'+discState.correct+'/'+DISC_IX.length+'</div><div class="endt">สำรวจจุดบอด</div>'
+    +'<div class="glasscard" style="text-align:left"><p>'+(discState.correct<=2?'คุณได้ '+discState.correct+' จาก '+DISC_IX.length+' ข้อ — <b>ไม่ต้องกังวล!</b> ระยะ 2 จะสอนทุกอย่างที่พลาด ':'เก่งมาก! ได้ '+discState.correct+' ข้อ — ระยะ 2 จะทำให้เข้าใจ <b>ลึกขึ้น</b> ')+'</p>'
     +'<p style="margin-top:8px">'+discState.results.map(function(r){return (r.ok?"✅":"❌")+" "+r.ti+" → "+r.truth;}).join("<br>")+'</p></div>'
-    +'<button class="btn btn-main" onclick="skillTree()">▶ เฟส 2: เรียนรู้ ›</button><div style="height:9px"></div><button class="btn btn-ghost" onclick="academyHub()">‹ กลับ</button></div>';}
+    +'<button class="btn btn-main" onclick="skillTree()">▶ ระยะ 2: เรียนรู้ ›</button><div style="height:9px"></div><button class="btn btn-ghost" onclick="academyHub()">‹ กลับ</button></div>';}
 
 /* ====== PHASE 2: LEARN (Micro-lessons + Skill Tree) ====== */
 function skillTree(){state.screen="menu";setAccent("107,139,255","#6b8bff");
-  app.innerHTML='<div class="topglow"></div><div class="screen fade"><div class="kicker">Phase 2: Learn</div><div class="logo gradtext" style="font-size:28px">📖 Skill Tree</div>'
-    +'<div class="tagline">เรียนจบ 4+ บทเรียน เพื่อปลดล็อกเฟส 3 (เล่นจริง) · จบแล้ว '+state.lessonsCompleted.size+'/'+LESSONS.length+'</div>'
+  app.innerHTML='<div class="topglow"></div><div class="screen fade"><div class="kicker">ระยะ 2: เรียนรู้</div><div class="logo gradtext" style="font-size:28px">📖 ผังทักษะ (Skill Tree)</div>'
+    +'<div class="tagline">เรียนจบ 4+ บทเรียน เพื่อปลดล็อกระยะ 3 (เล่นจริง) · จบแล้ว '+state.lessonsCompleted.size+'/'+LESSONS.length+'</div>'
     +'<div class="stagger">'+LESSONS.map(function(l){var done=state.lessonsCompleted.has(l.id);return '<div class="lessoncard '+(done?"done":"")+'" onclick="lesson(\''+l.id+'\')"><span class="lic">'+l.ico+'</span><span class="lnm">'+l.nm+'</span>'+(done?'<span class="ldone" style="margin-left:auto">✅</span>':"")+'</div>';}).join("")+'</div>'
-    +(state.lessonsCompleted.size>=4?'<button class="btn btn-main" onclick="goPhase(3)">▶ พร้อมแล้ว! ไปเฟส 3 ›</button><div style="height:9px"></div>':"")
+    +(state.lessonsCompleted.size>=4?'<button class="btn btn-main" onclick="goPhase(3)">▶ พร้อมแล้ว! ไประยะ 3 ›</button><div style="height:9px"></div>':"")
     +'<button class="btn btn-ghost" onclick="academyHub()">‹ กลับ</button></div>';}
 
 function lesson(id){state.screen="lesson";var l=LESSONS.find(function(x){return x.id===id;});if(!l)return;
@@ -760,11 +813,11 @@ function lcheckAns(id,i){var l=LESSONS.find(function(x){return x.id===id;});if(!
 
 /* ====== PHASE 4: REFLECT ====== */
 function reflect(){state.screen="menu";setAccent("192,107,255","#c06bff");
-  app.innerHTML='<div class="topglow"></div><div class="screen fade"><div class="kicker">Phase 4: Reflect</div><div class="logo gradtext" style="font-size:28px">🪞 สะท้อนการเรียนรู้</div><div class="tagline">ทบทวนผลงาน วิเคราะห์จุดแข็ง-จุดอ่อน สอนเพื่อน</div>'
+  app.innerHTML='<div class="topglow"></div><div class="screen fade"><div class="kicker">ระยะ 4: สะท้อน</div><div class="logo gradtext" style="font-size:28px">🧠 สะท้อนการเรียนรู้</div><div class="tagline">ทบทวนผลงาน วิเคราะห์จุดแข็ง-จุดอ่อน สอนเพื่อน</div>'
     +'<div class="stagger">'
-    +'<div class="lessoncard" onclick="portfolio()"><span class="lic">📊</span><span class="lnm">Reasoning Portfolio — ดูผลงานทุกข้อ</span></div>'
-    +'<div class="lessoncard" onclick="radar()"><span class="lic">📡</span><span class="lnm">Radar Chart — จุดแข็ง/จุดอ่อน 6 ด้าน</span></div>'
-    +'<div class="lessoncard" onclick="tbStart()"><span class="lic">🎓</span><span class="lnm">สอนเพื่อน (Teach-Back) '+(state.teachScore!==null?"✅ "+state.teachScore+"/"+TEACHBACK.length:"")+'</span></div>'
+    +'<div class="lessoncard" onclick="portfolio()"><span class="lic">📊</span><span class="lnm">แฟ้มสะสมการให้เหตุผล (Reasoning Portfolio) — ดูผลงานทุกข้อ</span></div>'
+    +'<div class="lessoncard" onclick="radar()"><span class="lic">📡</span><span class="lnm">แผนภูมิเรดาร์ (Radar Chart) — จุดแข็ง/จุดอ่อน 6 ด้าน</span></div>'
+    +'<div class="lessoncard" onclick="tbStart()"><span class="lic">🎓</span><span class="lnm">การสอนย้อนกลับ (Teach-Back) '+(state.teachScore!==null?"✅ "+state.teachScore+"/"+TEACHBACK.length:"")+'</span></div>'
     +(state.postScore===null?'<div class="lessoncard" onclick="startQuiz(\'post\')"><span class="lic">📝</span><span class="lnm">แบบทดสอบหลังเรียน</span></div>':"")
     +'</div><button class="btn btn-ghost" onclick="academyHub()">‹ กลับ</button></div>';}
 
@@ -778,7 +831,7 @@ function portfolio(){state.screen="menu";
       return '<tr class="'+(r.ok?"ok":"no")+'"><td>'+(i+1)+'</td><td>'+r.ti+'</td><td>'+r.choice+'</td><td>'+(r.ok?"✅":"❌")+'</td><td>'+r.conf+'%</td><td>'+r.time+'วิ</td><td>'+(tools.join("")||"–")+'</td><td>'+(r.evidOk?"🎯":"–")+'</td></tr>';}).join("")
     +'</table></div>'
     +'<div class="statgrid" style="margin-top:16px"><div class="stat"><div class="n">'+log.filter(function(r){return r.ok;}).length+'/'+log.length+'</div><div class="l">ตอบถูก</div></div><div class="stat"><div class="n" style="color:'+(confWrong>0?"var(--red)":"var(--green)")+'">'+confWrong+'</div><div class="l">มั่นใจสูง+ผิด ⚠️</div></div><div class="stat"><div class="n">'+log.filter(function(r){return r.evidOk;}).length+'</div><div class="l">เหตุผลถูก 🎯</div></div></div>'
-    :'<div class="glasscard"><p>ยังไม่มีข้อมูล — ไปเล่นเฟส 3 ก่อนแล้วกลับมาดูที่นี่</p></div>')
+    :'<div class="glasscard"><p>ยังไม่มีข้อมูล — ไปเล่นระยะ 3 ก่อนแล้วกลับมาดูที่นี่</p></div>')
     +'<button class="btn btn-ghost" onclick="reflect()">‹ กลับ</button></div>';}
 
 /* ====== RADAR CHART ====== */
@@ -802,7 +855,7 @@ function radar(){state.screen="menu";var log=state.playLog,n=log.length||1;
   svg+='<polygon points="'+dpts.join(" ")+'" fill="rgba(61,225,255,.2)" stroke="#3de1ff" stroke-width="2"/>';
   for(var j=0;j<6;j++){var ag=Math.PI*2*j/6-Math.PI/2;var r=R*vals[j]/100;svg+='<circle cx="'+(cx+r*Math.cos(ag))+'" cy="'+(cy+r*Math.sin(ag))+'" r="4" fill="#3de1ff"/>';}
   svg+='</svg>';
-  app.innerHTML='<div class="topglow"></div><div class="screen fade"><div class="kicker">Skill Radar</div><div class="logo gradtext" style="font-size:24px">📡 จุดแข็ง / จุดอ่อน</div>'
+  app.innerHTML='<div class="topglow"></div><div class="screen fade"><div class="kicker">แผนภูมิทักษะ (Skill Radar)</div><div class="logo gradtext" style="font-size:24px">📡 จุดแข็ง / จุดอ่อน</div>'
     +'<div class="radar-wrap">'+svg+'</div>'
     +'<div class="glasscard"><h3>การวิเคราะห์</h3><p>'
     +(lat<40?'🌐 <b>Lateral Reading</b> — ลองใช้ปุ่ม "ตรวจแหล่ง" ให้มากขึ้น มันคือเครื่องมือทรงพลังที่สุด<br>':'')
@@ -824,12 +877,12 @@ function tbAnswer(i){var q=TEACHBACK[tbIdx],opts=document.querySelectorAll(".qop
   setTimeout(function(){tbIdx++;if(tbIdx<TEACHBACK.length)tbQuestion();else tbResult();},1000);}
 function tbResult(){state.teachScore=tbScore;saveProfile();if(tbScore===TEACHBACK.length)confetti();
   app.innerHTML='<div class="topglow"></div><div class="end fade"><div class="kicker">Teach-Back Complete</div><div class="rankbig reveal" style="color:var(--green)">'+tbScore+'/'+TEACHBACK.length+'</div><div class="endt">สอนเพื่อนได้!</div>'
-    +'<div class="glasscard"><p>'+(tbScore>=4?'ยอดเยี่ยม! คุณอธิบายได้ถูกต้องเกือบหมด — <b>ถ้าสอนคนอื่นเข้าใจได้ แปลว่ารู้จริง</b> (Bloom ระดับสูงสุด)':tbScore>=3?"ดีมาก! ยังมีจุดที่ทบทวนได้ ลองเล่นเฟส 3 อีกครั้งแล้วกลับมาสอนใหม่":"ลองกลับไปเรียนในเฟส 2 แล้วมาสอนเพื่อนอีกครั้ง — ยิ่งสอนยิ่งเข้าใจ!")+'</p></div>'
-    +'<button class="btn btn-main" onclick="reflect()">‹ กลับ Phase 4</button></div>';}
+    +'<div class="glasscard"><p>'+(tbScore>=4?'ยอดเยี่ยม! คุณอธิบายได้ถูกต้องเกือบหมด — <b>ถ้าสอนคนอื่นเข้าใจได้ แปลว่ารู้จริง</b> (Bloom ระดับสูงสุด)':tbScore>=3?"ดีมาก! ยังมีจุดที่ทบทวนได้ ลองเล่นระยะ 3 อีกครั้งแล้วกลับมาสอนใหม่":"ลองกลับไปเรียนในระยะ 2 แล้วมาสอนเพื่อนอีกครั้ง — ยิ่งสอนยิ่งเข้าใจ!")+'</p></div>'
+    +'<button class="btn btn-main" onclick="reflect()">‹ กลับระยะ 4</button></div>';}
 
 /* ====== PHASE 5: APPLY (placeholder + URL Scanner) ====== */
 function applyPhase(){state.screen="menu";setAccent("255,107,214","#ff6bd6");
-  app.innerHTML='<div class="topglow"></div><div class="screen fade"><div class="kicker">Phase 5: Apply</div><div class="logo gradtext" style="font-size:28px">🌍 ใช้ในชีวิตจริง</div>'
+  app.innerHTML='<div class="topglow"></div><div class="screen fade"><div class="kicker">ระยะ 5: นำไปใช้</div><div class="logo gradtext" style="font-size:28px">🌍 ใช้ในชีวิตจริง</div>'
     +'<div class="glasscard"><h3>🔗 URL Scanner</h3><p>วาง URL ที่เจอในชีวิตจริง แล้วดูว่าน่าสงสัยไหม</p></div>'
     +'<input class="inp" id="scanUrl" placeholder="วาง URL ที่นี่ เช่น https://example.com">'
     +'<button class="btn btn-main" onclick="scanUrl()">🔍 วิเคราะห์ URL</button><div id="scanResult" style="margin-top:14px"></div>'
@@ -853,7 +906,7 @@ map = function(){_origMap();
 /* ====== Override certificate to include academyHub link ====== */
 var _origCert = certificate;
 certificate = function(){_origCert();
-  var node=document.createElement("div");node.style.marginTop="9px";node.innerHTML='<button class="btn btn-ghost" onclick="academyHub()">🏠 กลับ Academy Hub</button>';app.querySelector(".end").appendChild(node);};
+  var node=document.createElement("div");node.style.marginTop="9px";node.innerHTML='<button class="btn btn-ghost" onclick="academyHub()">🏠 กลับหน้าหลัก</button>';app.querySelector(".end").appendChild(node);};
 
 /* ====== PERSISTENCE update for new fields ====== */
 var _origSave = saveProfile;
